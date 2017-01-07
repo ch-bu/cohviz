@@ -10,4 +10,4 @@ Clone the repository to your machine. You should have [Docker](https://docs.dock
 sudo chown -R $USER:$USER .
 ```
 
-Afterwards, fire up the application. Your application should be running on `localhost:8000`. 
+Afterwards, fire up the application with `docker-compose up`. Your application should be running on `localhost:8000`. 
