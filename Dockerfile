@@ -1,18 +1,27 @@
-FROM python:3-onbuild
+FROM python:2.7
 
-Run \
-	apt-get update && \
-	apt-get -y upgrade && \
-	apt-get install -y nginx && \
-	pip install -r requirements.txt
+# Non-executed command of images' author
+MAINTAINER Christian Burkhart
 
-RUN useradd -md /bin/bash christian
-USER christian
-WORKDIR /home/christian
+# Set environment variable
+ENV PYTHONUNBUFFERED 1
 
-#ADD home/christian/.bash_aliases /home/christian/.bash_aliases
+# Make new directory
+RUN mkdir /code
 
-EXPOSE 5000
+# Set /code as working directory
+# CMD is executed here
+WORKDIR /code
+
+# Add python package list to code dir
+ADD requirements.txt /code/
+
+# Install python packages
+RUN pip install -r requirements.txt
+
+# Add content of local machine directory
+# to /code directory
+ADD . /code/
 
 #ENTRYPOINT /bin/bash
 #CMD [ "bash"]
