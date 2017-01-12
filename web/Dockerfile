@@ -21,4 +21,4 @@ RUN pip install -r requirements.txt
 
 # Add content of local machine directory
 # to /code directory
-ADD . /code/
+# ADD . /code/
