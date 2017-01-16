@@ -24,4 +24,4 @@ RUN pip install -r requirements.txt
 # ADD . /code/
 
 # Run migrations
-RUN python manage.py migrate
+# RUN python ./code/manage.py migrate

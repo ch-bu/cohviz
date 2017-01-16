@@ -1,21 +1,28 @@
 version: '2'
 services:
-  db:
-    image: postgres
-    volumes: 
-      - /data:/var/lib/postgrsql/data
   web:
+    restart: always
     build: ./web
-    command: python manage.py runserver 0.0.0.0:8000
+    expose:
+      - "8000"
+    links:
+      - postgres:postgres
     volumes:
       - ./web:/code
+      - /usr/src/app/static
+    command: /usr/local/bin/gunicorn mysite.wsgi:application -w 2 -b :8000
+  nginx:
+    restart: always
+    build: ./nginx/
     ports:
-      - "8000:8000"
-    depends_on:
-      - db
-  # nginx:
-  #   image: nginx
-  #   ports:
-  #     - "80:80"
-  #   depends_on:
-  #     - web
+      - "80:80"
+    volumes:
+      - /www/static
+    volumes_from:
+      - web
+  postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    volumes: 
+      - /data:/var/lib/postgrsql/data
