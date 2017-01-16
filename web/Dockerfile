@@ -22,3 +22,6 @@ RUN pip install -r requirements.txt
 # Add content of local machine directory
 # to /code directory
 # ADD . /code/
+
+# Run migrations
+RUN python manage.py migrate
