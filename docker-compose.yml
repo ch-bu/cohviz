@@ -6,7 +6,7 @@ services:
     expose:
       - "8000"
     links:
-      - postgres:postgres
+      - "postgres:postgres"
     volumes:
       - ./web:/code
       - /usr/src/app/static
@@ -21,7 +21,7 @@ services:
     volumes_from:
       - web
     links:
-      - web:web
+      - "web:web"
   postgres:
     restart: always
     image: postgres
