@@ -1,5 +1,5 @@
 server {
-	liste 80;
+	listen 80;
 	server_name example.org;
 	charset utf-8;
 
