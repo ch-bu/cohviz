@@ -20,7 +20,10 @@ services:
       - /www/static
     volumes_from:
       - web
+    links:
+      - web:web
   postgres:
+    restart: always
     image: postgres
     ports:
       - "5432:5432"
