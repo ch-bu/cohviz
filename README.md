@@ -1,6 +1,6 @@
 # Docker webapp
 
-This is a docker-compose project that I use for my web applications. It runs [nginx](https://www.nginx.com/resources/wiki/, [gunicorn](http://gunicorn.org/, [django](https://www.djangoproject.com/) and [Postgres](https://www.postgresql.org/). 
+This is a docker-compose project that I use for my web applications. It runs [nginx](https://www.nginx.com/resources/wiki/), [gunicorn](http://gunicorn.org/), [django](https://www.djangoproject.com/) and [postgres](https://www.postgresql.org/). 
 
 # How to run locally
 
