@@ -15,6 +15,10 @@ WORKDIR /code
 
 ENV HOME /code
 
+# Install packages
+RUN apt-get update -y
+RUN apt-get install vim -y
+
 # Add python package list to code dir
 ADD requirements.txt /code/
 
