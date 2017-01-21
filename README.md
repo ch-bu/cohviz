@@ -1,6 +1,6 @@
 # Docker webapp
 
-Docker webapp is a docker image that uses Django and [Postgres](https://www.postgresql.org/). 
+This is a docker-compose project that I use for my web applications. It runs [nginx](https://www.nginx.com/resources/wiki/, [gunicorn](http://gunicorn.org/, [django](https://www.djangoproject.com/) and [Postgres](https://www.postgresql.org/). 
 
 # How to run locally
 
@@ -10,4 +10,16 @@ Clone the repository to your machine. You should have [Docker](https://docs.dock
 sudo chown -R $USER:$USER .
 ```
 
-Afterwards, fire up the application with `docker-compose up`. Your application should be running on `localhost:8000`. 
+Afterwards, fire up the application:
+
+```
+docker-compose up
+```
+
+Your application should be running on `localhost:8080`. 
+
+In order to stop the application run
+
+```
+docker-compose stop
+```
