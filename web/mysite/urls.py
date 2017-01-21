@@ -19,6 +19,6 @@ from mywebapp.views import index
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^test/', include('mywebapp.urls')),
-    url(r'^$', index, name='index')
+    url(r'^$', include('mywebapp.urls')),
+    # url(r'^$', index, name='index')
 ]
