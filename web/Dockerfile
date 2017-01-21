@@ -13,6 +13,8 @@ RUN mkdir /code
 # CMD is executed here
 WORKDIR /code
 
+ENV HOME /code
+
 # Add python package list to code dir
 ADD requirements.txt /code/
 
