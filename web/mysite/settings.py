@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'mywebapp'
 ]
 
 MIDDLEWARE = [
@@ -76,10 +77,11 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
          'ENGINE': 'django.db.backends.postgresql',
-         'NAME': 'postgres',
-         'USER': 'postgres',
-         'HOST': 'db',
-         'PORT': 5432,
+         'NAME': os.environ['DB_NAME'],
+         'USER': os.environ['DB_USER'],
+         'HOST': os.environ['DB_SERVICE'],
+         'PASSWORD': os.environ['DB_PASS'],
+         'PORT': os.environ['DB_PORT']
      }
 }
 
@@ -119,5 +121,5 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
-
+STATIC_ROOT = '/usr/src/app/static/'
 STATIC_URL = '/static/'

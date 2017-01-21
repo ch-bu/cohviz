@@ -13,6 +13,12 @@ RUN mkdir /code
 # CMD is executed here
 WORKDIR /code
 
+ENV HOME /code
+
+# Install packages
+RUN apt-get update -y
+RUN apt-get install vim -y
+
 # Add python package list to code dir
 ADD requirements.txt /code/
 
@@ -21,7 +27,7 @@ RUN pip install -r requirements.txt
 
 # Add content of local machine directory
 # to /code directory
-# ADD . /code/
+ADD . /code/
 
 # Run migrations
-RUN python manage.py migrate
+# RUN python ./code/manage.py migrate
