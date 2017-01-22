@@ -1,5 +1,6 @@
 version: '2'
 services:
+  # My web application running django and gunicorn
   web:
     restart: always
     build: ./web
@@ -12,6 +13,7 @@ services:
       - ./web:/code
       - ./web/static:/usr/src/app/static
     command: /usr/local/bin/gunicorn mysite.wsgi:application -w 2 -b :8000 --reload
+  # The web server
   nginx:
     restart: always
     build: ./nginx/
@@ -23,10 +25,11 @@ services:
       - web
     links:
       - "web:web"
+  # The database
   postgres:
     restart: always
-    image: postgres
+    build: ./postgres
     ports:
       - "5432:5432"
     volumes:
-      - /data:/var/lib/postgrsql/data
+      - ./postgres/data:/var/lib/postgrsql/data
