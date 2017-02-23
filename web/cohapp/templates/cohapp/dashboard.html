@@ -1,0 +1,25 @@
+{% extends 'cohapp/base_backend.html' %}
+
+{% block title %}CohherenceApp{% endblock %}
+
+{% load staticfiles %}
+
+{% block container %}
+
+
+<div class="row" id="dashboard">
+	<div class="center-align">
+		<h1>Dashboard</h1>
+	</div>
+
+	<div class="row">
+		<div id="experiments" class="col s12 m8 offset-m2 l8 offset-l2 responsive-table"></div>
+	</div>
+
+	<div class="row center-align">
+		<a href="{% url 'cohapp.views.new_experiment' %}" id="new-experiment-button" class="row waves-effect waves-light btn">Neues Experiment erstellen</a>
+		
+	</div>
+</div>
+
+{% endblock %}

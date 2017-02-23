@@ -1,6 +1,6 @@
-# Docker webapp
+# Cohviz
 
-This is a docker-compose project that I use for my web applications. It runs [nginx](https://www.nginx.com/resources/wiki/), [gunicorn](http://gunicorn.org/), [django](https://www.djangoproject.com/) and [postgres](https://www.postgresql.org/). 
+A dockerized web app that visualizes the cohesive structure of a text.
 
 # How to run locally
 

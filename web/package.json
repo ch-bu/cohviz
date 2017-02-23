@@ -1,0 +1,33 @@
+{
+  "name": "toolapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.11.4",
+    "babel-core": "^6.13.2",
+    "browser-sync": "^2.10.0",
+    "eslint-plugin-react": "^3.10.0",
+    "gulp": "^3.9.0",
+    "gulp-autoprefixer": "^3.1.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-declare": "^0.3.0",
+    "gulp-eslint": "^1.1.1",
+    "gulp-filter": "^4.0.0",
+    "gulp-handlebars": "^4.0.0",
+    "gulp-load-plugins": "^1.2.4",
+    "gulp-newer": "^1.2.0",
+    "gulp-sass": "^2.1.1",
+    "gulp-size": "^2.1.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-uglify": "^1.5.1",
+    "gulp-wrap": "^0.13.0",
+    "handlebars": "^4.0.5",
+    "main-bower-files": "^2.13.1"
+  }
+}

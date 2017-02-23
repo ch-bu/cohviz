@@ -1,0 +1,24 @@
+<table class="responsive-table highlight">
+	<thead>
+	  <tr>
+	      <th data-field="id">Person</th>
+	      <th data-field="name">Gruppe</th>
+	      <th data-field="price">Letzter Login</th>
+	      <th data-field="price">Messzeitpunkte</th>
+	      <th data-field="price">Nächster Messzeitpunkt</th>
+	  </tr>
+	</thead>
+
+	<tbody>
+		{{#each user}}
+			<tr class="table-row">
+				<td>{{user}}</td>
+				<td>{{group}}</td>
+				<td>{{last_login}}</td>
+				<td>{{nr_measurements}}</td>
+				<td>{{next_measure}}</td>
+			</tr>
+		{{/each}}
+	</tbody>
+</table>	
+

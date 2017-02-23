@@ -1,1 +1,6 @@
 **/*.pyc
+web/node_modules/
+web/bower_components/
+web/cohapp/coherenceanalyzer/RFTagger/
+web/cohapp/coherenceanalyzer/temp/
+web/cohapp/migrations/

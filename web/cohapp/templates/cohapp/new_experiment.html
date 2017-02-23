@@ -1,0 +1,38 @@
+{% extends 'cohapp/base_backend.html' %}
+
+
+{% block title %}Neues Experiment{% endblock %}
+
+{% load staticfiles %}
+
+{% block container %}
+
+<div id="new-experiment">
+	<div class="row">
+		<h1 class="center-align">Neues Experiment</h1>
+	</div>
+	
+	<div class="row">
+		<div class="col s11 m8 offset-m2 l4 offset-l4">
+
+			<div class="input-field">
+				<input autofocus placeholder="" id="experiment-name" type="text" class="validate">
+				<label for="experiment-name">Name des Experiments</label>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="row center-align">
+		<a id="save-experiment" class="waves-effect waves-light btn">Save experiment</a>
+	</div>
+
+	<div class="row" id="experiment-generator"></div>
+
+	<div class="row">
+		<div class="col s11 m8 offset-m2" id="experiment-table"></div>
+	</div>
+
+</div>
+
+{% endblock %}

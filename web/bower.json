@@ -1,0 +1,29 @@
+{
+  "name": "toolapp",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Christian Burkhart <burkhart.christian@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "materialize": "^0.97.7",
+    "backbone": "^1.3.3",
+    "underscore": "^1.8.3",
+    "skrollr": "scrollr#^0.6.30",
+    "medium-editor": "^5.21.1",
+    "handlebars": "4.0.5",
+    "typed.js": "typed-js#^1.1.4",
+    "jquery": "2.2.4",
+    "d3": "^4.2.7"
+  }
+}

@@ -1,0 +1,22 @@
+<table class="responsive-table highlight">
+	<thead>
+	  <tr>
+	      <th data-field="id">Gruppe</th>
+	      <th data-field="name">Messzeitpunkt</th>
+	      <th data-field="price">Treatment</th>
+	      <th data-field="price">Veröffentlichung</th>
+	  </tr>
+	</thead>
+
+	<tbody>
+		{{#each measurement}}
+			<tr class="table-row">
+				<td>{{nr_group}}</td>
+				<td>{{measure}}</td>
+				<td>{{group}}</td>
+				<td>{{publication}}</td>
+			</tr>
+		{{/each}}
+	</tbody>
+</table>	
+

@@ -1,0 +1,110 @@
+<!doctype html>
+	<head>
+	<meta name="author" content="Christian Burkhart">
+        <meta name="description" content="Coherence App">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="content-Type" content="text/html;charset=utf-8">
+
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,800,300' rel='stylesheet' type='text/css'>
+		<link href="https://fonts.googleapis.com/css?family=Playfair+Display" rel="stylesheet">
+
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.css" rel="stylesheet"> <!-- Footer -->
+
+        <!-- TODO Title variable !-->
+		<title>{% block title %}Webseite Studie{% endblock %}</title>
+
+		{% load staticfiles %}
+		<link rel="stylesheet" href="{% static 'cohapp/css/vendor/medium-editor.css' %}" type="text/css">
+		<link rel="stylesheet" href="{% static 'cohapp/css/vendor/materialize.css' %}" type="text/css">
+		<link rel="stylesheet" href="{% static 'cohapp/css/custom.css' %}" type="text/css">
+
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+	</head>
+	<body>
+
+
+		{% block header %}
+		<nav>
+		    <div class="nav-wrapper">
+		      <a href="{% url 'cohapp.views.index' %}"><img src="{% static 'cohapp/img/logo.png' %}" width="120" alt="logo"></a>
+		      <ul id="nav-mobile" class="right hide-on-med-and-down">
+		        <li><a href="#about">About</a></li>
+		        <li><a href="#howitworks">Wie es funktioniert?</a></li>
+		        <li><a href="#changelog">Changelog</a></li>
+		      </ul>
+		    </div>
+		 </nav>
+		{% endblock %}
+
+		<main>
+		{% block container %}
+		{% endblock %}
+		</main>
+
+		
+		{% block footer %}
+		<!-- *************** Footer ******************************* -->
+<!-- 		<footer class="footer">
+		  <div class="row full-width">
+		    <div class="small-12 medium-3 large-4 columns">
+		      <i class="fi-share"></i>
+		      <p>AnCoh analysiert die Kohäsion eines Textes durch eine Concept-Map. Die Concept-Map visualisiert die semantischen Verbindungen der Nomen eines Textes.</p>
+		    </div>
+		    <div class="small-12 medium-3 large-4 columns">
+		      <i class="fi-torsos-all"></i>
+		      <p>Das Tool entstand am Institut für Erziehungswissenschaft an der Albert-Ludwigs Universität Freiburg. Es ist offen für Forschungszwecke zugänglich.</p>
+		    </div>
+		    <div class="small-6 medium-6 large-4 columns">
+		      <h4>Mehr Informationen</h4>
+		      <ul class="footer-links">
+		        <li><a href="https://www.facebook.com/EZWUniFreiburg/">Facebook</a></li>
+		        <li><a href="http://www.ezw.uni-freiburg.de/">Institut für Erziehungswissenschaft</a></li>
+		      <ul>
+		    </div>
+		  </div>
+		</footer> -->
+		<footer class="page-footer">
+          <div class="container">
+            <div class="row">
+              <div class="col l6 s12">
+                <h5 class="white-text">Footer Content</h5>
+                <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
+              </div>
+              <div class="col l4 offset-l2 s12">
+                <h5 class="white-text">Links</h5>
+                <ul>
+                  <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
+                  <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
+                  <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
+                  <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="footer-copyright">
+            <div class="container">
+            © 2014 Copyright Text
+            <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+            </div>
+          </div>
+        </footer>
+		{% endblock %}
+
+		<!-- ***************** Scripts ******************************** -->
+		
+
+		{% block endscripts %}
+		<script src="{% static 'cohapp/js/vendor.js' %}"></script>
+		<script src="{% static 'cohapp/js/handlebars.js' %}"></script>
+		<script src="{% static 'cohapp/js/app.js' %}"></script>
+		<!-- <script type="text/javascript">
+	    	var s = skrollr.init();
+	    </script> -->
+		{% endblock %}
+
+		{% block endendscripts %}
+		
+		{% endblock %}
+	</body>
+</html>

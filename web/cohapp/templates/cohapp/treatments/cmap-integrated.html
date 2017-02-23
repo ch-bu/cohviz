@@ -1,0 +1,19 @@
+{% extends 'cohapp/base_experiment.html' %}
+
+{% block title %}Experiment{% endblock %}
+
+{% load staticfiles %}
+
+{% block container %}
+
+
+<div id="treatment-cmap-integrated" class="row">
+
+</div>
+
+{% endblock %}
+
+{% block endendscripts %}
+<script src="{% static 'cohapp/js/treatments/cmap-integrated.js' %}"></script>
+{% endblock %}
+

@@ -1,0 +1,22 @@
+<table class="responsive-table highlight">
+	<thead>
+	  <tr>
+	      <th data-field="id">Experiment</th>
+	      <th data-field="name">Versuchsgruppen</th>
+	      <th data-field="price">Messzeitpunkte</th>
+	      <th data-field="price">Erstellt am</th>
+	  </tr>
+	</thead>
+
+	<tbody>
+		{{#each experiment}}
+			<tr class="table-row" id="{{master_pw}}">
+				<td>{{name}}</td>
+				<td>{{nr_groups}}</td>
+				<td>{{nr_measurements}}</td>
+				<td>{{date}}</td>
+			</tr>
+		{{/each}}
+	</tbody>
+</table>	
+

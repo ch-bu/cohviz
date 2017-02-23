@@ -1,0 +1,302 @@
+// Color
+$color-two: #b92980;
+$color-two-hover: #7a1b55;
+$color-green: #29b962;
+$color-red: #b92938;
+$color-grey-light: #ada8aa;
+$color-soft-red: #ffe9ec;
+$text-color: #fff;
+
+// Variable declaration
+$menu_transition_time: 0.3s;
+$menu_height_not_scroll: 75px;
+$menu_height_scroll: 50px;
+
+// Login Variables
+// Default medium-gray color
+$medium-gray: #cacaca;
+// Default global padding
+$global-padding: 1rem;
+// Global value used for all elements that have a border radius.
+$global-radius: 3px;
+// Setting the form border color
+$form-border-color: $medium-gray;
+// Setting the form padding
+$form-padding: $global-padding;
+// Setting the form border radius
+$form-radius: $global-radius;
+
+
+// ******************* Mixins ***********************************
+
+/*
+ * SVG attributes
+ */
+@mixin svg-attributes() {
+
+    svg {
+      border: 1px solid #ededed;
+
+      @media print {
+        border: none;
+      }
+    }
+
+    .links line {
+      stroke: #ccc;
+    }
+
+    .node {
+      text {
+        // display: none;
+        opacity: 0;
+        font-size: 16px;
+        cursor: default;
+      }
+
+      circle {
+        pointer-events: all;
+        stroke: none;
+        stroke-width: 40px;
+      }
+    }
+
+    #map {
+      border: 2px #555 dashed;
+      width: 500px;
+      height: 400px;
+    }
+
+  }
+
+
+// ******************* Generell stuff *****************************
+
+body {
+  font-family: 'Open Sans', sans-serif;
+
+  @include svg-attributes();
+}
+
+/**
+ * Medium Editor for Landing page
+ */
+#editor-medium-editor {
+
+  min-height: 50vh;
+
+  #editor-textinput {
+    margin-top: 0.6em;
+    outline: 0px solid transparent;
+
+    p {
+      font-size: 1.6rem;
+    }
+
+    @media only screen and (max-width: 44em){
+      p {
+        font-size: 1.4rem;
+      }
+    }
+  }
+}
+
+/**
+ * Medium Editor full with
+ */
+#editor-full-wrapper {
+
+  height: 100vh;
+  max-height: 100%;
+  overflow: hidden;
+
+  #editor-full-medium-editor {
+    padding: 0 5px;
+    height: 85vh;
+    outline: 0px solid transparent;
+    overflow: auto;
+    border: 1px solid #ededed;
+  }
+
+  #editor-full-buttons {
+    height: 20vh;
+    text-align: center;
+  }
+
+  #editor-full-graph {
+    height: 80vh;
+  }
+}
+
+/**
+ * General stuff
+ */
+p {
+  font-size: 1.2rem;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: 'Playfair Display', serif;
+}
+
+// **************** Footer *************************
+
+
+// ************** Landing Page ***************************
+
+#landingview-info {
+  width: 100%;
+  background-color: rgb(247, 247, 247);
+}
+
+
+// ******************** Login Page ******************************
+#login {
+  margin-top: 5vh;
+  min-height: 70vh;
+
+  h4 {
+    margin-bottom: 30px;
+  }
+}
+
+
+// ******************** New Experiment Page **********************
+
+#new-experiment {
+  min-height: 70vh;
+
+  #experiment-table {
+    table {
+      tr.table-row {
+
+      }
+
+      td {
+        padding: 10px 5px;
+      }
+    }
+  }
+
+  #save-experiment {
+    margin: 20px;
+  }
+}
+
+// ********************* Dashboard **********************************
+
+#dashboard {
+  min-height: 70vh;
+
+  h1 {
+    margin-bottom: 40px;
+  }
+
+  table {
+    tr.table-row {
+      cursor: pointer;
+    }
+  }
+
+  #new-experiment-button {
+    margin-top: 30px;
+  }
+}
+
+
+// ******************** Experiment *********************************
+
+#experiment-single {
+  h1 {
+    margin-bottom: 50px;
+  }
+
+  min-height: 70vh;
+  
+  #users {
+  }
+
+  #new-user-button {
+    margin-top: 10px;
+  }
+}
+
+
+// ********************** User Login ***********************************
+
+#subject-login {
+  margin-top: 5vh;
+  min-height: 70vh;
+
+  h4 {
+    margin-bottom: 30px;
+  }
+
+  form {
+    p:last-of-type {
+      margin-bottom: 20px;
+    }
+
+    ul {
+      margin-bottom: 40px;
+    }
+  }
+}
+
+
+// ******************** Publication in Future template *********************
+
+#publication-future {
+  margin-top: 10vh;
+}
+
+
+// ******************* Treatments **************************************
+
+@mixin instruction-mixin($psize) {
+  p, ul {
+    font-size: $psize;
+  }
+
+  ul > li {
+    list-style-type: disc;
+    list-style-position: inside;
+  }
+}
+
+#treatment-simple-revision, #treatment-cmap, #treatment-cmap-integrated, #editor-double-text, #treatment-text-integrated {
+  height: 93vh;
+  
+  margin-top: 4vh;
+
+  #help, #helpreview {
+    position: fixed;
+    top: 1vh;
+    right: 2vw;
+    cursor: pointer;
+  }
+
+  #instruction {
+    margin-top: 5vh;
+
+    @include instruction-mixin(1.6em);
+  }
+}
+
+#editor-double-text {
+  p {
+    font-size: 1.4em;
+  }
+
+  #editor-edit, #editor-visualize-text {
+    padding: 0 8px;
+    height: 80vh;
+    outline: 0px solid transparent;
+    overflow: auto;
+    border: 1px solid #ededed;
+  }
+}
+
+#modal-help, #modal-revision {
+  @include instruction-mixin(1.2em);
+}
