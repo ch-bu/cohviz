@@ -78,11 +78,13 @@ WSGI_APPLICATION = 'toolapp.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'christian_db',
-        'USER': 'christian',
-        'PASSWORD': '1234'
-    }
+         'ENGINE': 'django.db.backends.postgresql',
+         'NAME': os.environ['DB_NAME'],
+         'USER': os.environ['DB_USER'],
+         'HOST': os.environ['DB_SERVICE'],
+         'PASSWORD': os.environ['DB_PASS'],
+         'PORT': os.environ['DB_PORT']
+     }
 }
 
 

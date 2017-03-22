@@ -18,32 +18,33 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.conf.urls import include, url
+from cohapp import views as cohviews
 
 # Temporary urls
 # http://stackoverflow.com/questions/1360101/how-to-generate-temporary-urls-in-django
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', 'cohapp.views.index', name='index'),
-    url(r'^dashboard/', 'cohapp.views.dashboard', name='dashboard'),
-    url(r'^login/', 'cohapp.views.login', name='login'),
+    url(r'^$', cohviews.index, name='index'),
+    url(r'^dashboard/', cohviews.dashboard, name='dashboard'),
+    url(r'^login/', cohviews.login, name='login'),
     url(r'^logout-subject/(?P<experiment_id>[0-9]+)',
-        'cohapp.views.logout_subject', name="logout-subject"),
-    url(r'^logout', 'cohapp.views.logout', name='logout'),
-    url(r'^new-experiment/', 'cohapp.views.new_experiment',
+        cohviews.logout_subject, name="logout-subject"),
+    url(r'^logout', cohviews.logout, name='logout'),
+    url(r'^new-experiment/', cohviews.new_experiment,
         name='new-experiment'),
     url(r'^api-auth/', include('rest_framework.urls',
                                namespace='rest_framework')),
-    url(r'^experiment/(?P<experiment_password>\w+)', 'cohapp.views.experiment',
+    url(r'^experiment/(?P<experiment_password>\w+)', cohviews.experiment,
         name='experiment'),
     url(r'^login-experiment/(?P<experiment_password>\w+)',
-        'cohapp.views.login_experiment', name='login_experiment'),
-    url(r'^login_exp_redirect/', 'cohapp.views.login_exp_redirect',
+        cohviews.login_experiment, name='login_experiment'),
+    url(r'^login_exp_redirect/', cohviews.login_exp_redirect,
         name='login_exp_redirect'),
     url(r'^run-experiment/(?P<experiment_password>\w+)',
-        'cohapp.views.run_experiment', name='run_experiment'),
+        cohviews.run_experiment, name='run_experiment'),
     url(r'^csv_text_export/(?P<experiment_password>\w+)',
-        'cohapp.views.csv_text_view', name='csv_text_export'),
+        cohviews.csv_text_view, name='csv_text_export'),
 
     url(r'^apis/user-specific/(?P<experiment_password>\w+)',
         apis.UserSpecificView.as_view()),

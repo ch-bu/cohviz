@@ -4,3 +4,14 @@ web/bower_components/
 web/cohapp/coherenceanalyzer/RFTagger/
 web/cohapp/coherenceanalyzer/temp/
 web/cohapp/migrations/
+
+cohviz.sublime-project
+cohviz.sublime-workspace
+
+web/.bash_history
+web/.dbshell
+web/.mongorc.js
+web/.vim/
+web/.viminfo
+web/cohapp/coherenceanalyzer/GN_V90_XML/
+web/cohapp/coherenceanalyzer/mongodb/
