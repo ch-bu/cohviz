@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.http import JsonResponse
 
-from coherenceanalyzer.coherenceanalyzer import CoherenceAnalyzer
+from coherenceanalyzer.coherenceanalyzer import analyzeTextCohesion
 
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
@@ -467,18 +467,18 @@ class TextAnalyzer(APIView):
         # Text is not empty
         else:
             # Analyze text
-            analyzer = CoherenceAnalyzer(text)
+            analyzer = analyzeTextCohesion(text)
 
         # Get number of coherent sentences
-        cohS = analyzer.get_coherence_sentences()
+        # cohS = analyzer.get_coherence_sentences()
 
-        response_data = {'word_pairs': analyzer.word_pairs,
-                         'numSentences': analyzer.get_num_sentences(),
-                         'cohSentences': cohS['coh_sen'],
-                         'cohNotSentences': cohS['coh_not_sen'],
-                         'clusters': analyzer.get_whole_clusters(),
-                         'numConcepts': analyzer.get_num_concepts(),
-                         'numClusters': analyzer.get_num_clusters(),
-                         'lemmaDic': analyzer.lemmaDic}
+        # response_data = {'word_pairs': analyzer.word_pairs,
+        #                  'numSentences': analyzer.get_num_sentences(),
+        #                  'cohSentences': cohS['coh_sen'],
+        #                  'cohNotSentences': cohS['coh_not_sen'],
+        #                  'clusters': analyzer.get_whole_clusters(),
+        #                  'numConcepts': analyzer.get_num_concepts(),
+        #                  'numClusters': analyzer.get_num_clusters(),
+        #                  'lemmaDic': analyzer.lemmaDic}
 
-        return Response(response_data, status=200)
+        return Response(analyzer, status=200)

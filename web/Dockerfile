@@ -40,5 +40,5 @@ ADD . /code/
 
 # Install pygermanet stuff
 # RUN mongod --dbpath /code/cohapp/coherenceanalyzer/mongodb &
-RUN mongod --dbpath /code/cohapp/coherenceanalyzer/mongodb/ &
-RUN python -m pygermanet.mongo_import /code/cohapp/coherenceanalyzer/GN_V90_XML/
+# RUN mongod --dbpath /code/cohapp/coherenceanalyzer/mongodb/ &
+# RUN python -m pygermanet.mongo_import /code/cohapp/coherenceanalyzer/GN_V90_XML/

@@ -1,693 +1,452 @@
 # encoding: utf-8
 
-import re
 import os
-import itertools
+import re
 import constants
 import subprocess
-import enchant
-import string
-import random
-from more_itertools import unique_everseen
-# https://github.com/wroberts/pygermanet#setup
+from pandas import DataFrame
+import numpy as np
 from pygermanet import load_germanet
-from enchant.checker import SpellChecker
-from collections import Counter
-
-
-class CoherenceAnalyzer:
-
-    def __init__(self, text):
-
-        # self.text is string
-        if type(text) == str or isinstance(text, unicode):
-            self.text = self.replace_unwanted_chars(text.strip())
-
-            # Check if string is empty
-            if not self.text:
-                raise ValueError('You string is empty.')
-
-            self.add_dot()
-            # self.spellcheck_text()
-            self.tags = self.get_tags()[0]
-            self.word_pairs = self.get_word_pairs()
-            self.lemmaDic = self.get_tags()[1]
-
-        # self.text is not a string
-        else:
-            raise TypeError('self.text is not a string')
-
-    def replace_unwanted_chars(self, text):
-        """
-        Replaces chars that mess up the data
-        analysis
-        """
-
-        new_text = text
-        # replacements = [r'[Bb]sp\.?\:?',
-        #                 r'[Dd]\.?[Hh]\.?',
-        #                 r'[zZ]\.?[Bb]\.?']
-
-        abbreviations = [(r'[Bb]sp\.?\:?', 'beispielsweise'),
-                         (r'[Dd]\.?[Hh]\.?', 'das heisst'),
-                         (r'[zZ]\.?[Bb]\.?', 'zum Beispiel'),
-                         (r'v\.\s[Cc]hr\.', 'vor Christus'),
-                         (r'[Bb]zw\.', 'beziehungsweise'),
-                         (r'ca\.', 'circa'),
-                         (r'u\.a', 'unter anderem'),
-                         (r'usw?\.', 'und so weiter')]
-
-        for abbreviation in abbreviations:
-            new_text = re.sub(abbreviation[0], abbreviation[1], new_text)
-
-        return new_text
-
-    def add_dot(self):
-        """
-        Adds a dot at the end of the text if no end of line character
-        can be found
-        """
-
-        # List of end_of_line_characters
-        end_of_line_chars = ['.', '!', '?']
-
-        # Check if last character in self.text is not an end-of-line-character
-        if not self.text[-1:] in end_of_line_chars:
-            # Add dot to self.text if true
-            self.text += '.'
-
-    def get_words(self):
-        """
-        Returns dict with words and counts
-        from pairs
-        """
-
-        words = {}
-        pairs = self.word_pairs
-
-        for pair in pairs:
-            # print(pair)
-            try:
-                words[pair[0]] = \
-                    words[pair[0]] + 1
-            except KeyError:
-                words[pair[0]] = 1
-
-            try:
-                words[pair[1]] \
-                    = words[pair[1]] + 1
-            except KeyError:
-                words[pair[1]] = 1
-
-        return words
-
-    def spellcheck_text(self):
-        """
-        Spellcheckes text and saves spellchecked text in
-        self.text.
-        """
-
-        # Variable declaration
-        errors = list()  # spelling errors
-        chkr = SpellChecker('de_DE')  # spellchecker for whole text
-        dic = enchant.Dict('de_DE')  # enchant dict
-
-        # Run spellchecker over whole text
-        chkr.set_text(self.text)
-
-        # Loop over every error
-        for err in chkr:
-            # Save error in errors list
-            errors.append(err.word)
-
-        # There are errors
-        if len(errors) > 0:
-            # Replace errors with proper word
-            for error in errors:
-
-                # Check if there is a substitute
-                try:
-                    self.text = self.text.replace(error, dic.suggest(error)[0])
-                except IndexError:
-                    pass
-
-    def remove_synonyms(self, tags_from_function, g):
-        """
-        Removes synonymes from self.tags
-
-        Returns:
-                Tags without synonyms
-        """
-
-        # List of tags
-        tags = tags_from_function
-
-        # List of all words
-        words = [tag[0] for tag in tags if tag[0] != '.']
-
-        # Count of all words
-        count = dict(Counter(words))
+from more_itertools import unique_everseen
+import itertools
+
+
+def getPOSElement(element, regex, tags):
+    """Returns an array with a boolean
+    value of the specified element.
+    If element exists, element is true.
+
+    Args:
+        element (String) - Element to be extracted
+        regex (reg)      - Regular Expression
+        tags (Array)     - List of word dictionaries
+    Returns:
+        Array of text elements
+    """
+
+    return [dict(tag.items() + {element: bool(re.match(regex,
+        tag['pos']))}.items()) for tag in tags]
+
+
+def getHypoHyperPairs(sentences, gn):
+    """Generates all hyponmys and hypernyms of
+    a list of nouns
+
+    Returns:
+        Array of hyponyms in lemma form
+    """
+
+    wordPairs = []
+
+    for val, sentence in enumerate(sentences):
+
+        if val != (len(sentences) - 1):
+            for word in sentences[val]:
+                if word['noun'] is True:
+                    # Init variables
+                    hypos = []
+                    hypers = []
+
+                    # Get all synsets of current word
+                    synsets = gn.synsets(word['lemma'])
+
+                    # Get all hyponyms of current word and append
+                    for synset in synsets:
+                        # Hyponyms
+                        for hypo in synset.hyponyms:
+                            for lemma in hypo.lemmas:
+                                hypos.append(lemma.orthForm)
+                        # Hypernyms
+                        for hyper in synset.hypernyms:
+                            for lemma in hyper.lemmas:
+                                hypers.append(lemma.orthForm)
+
+                    # Get next sentence
+                    nextSentence = [wordNext['lemma']
+                        for wordNext in sentences[val + 1] if wordNext['noun']]
+
+                    # Get nouns of current sentence
+                    sentence = [wordThis['lemma'] for wordThis in sentences[val]
+                        if wordThis['noun']]
+
+                    # Find common elements in hypos and next sentence
+                    intersections_hypo = list(set(hypos).intersection(nextSentence))
+
+                    # Find common elements in hypos and next sentence
+                    intersections_hyper = list(set(hypers).intersection(nextSentence))
+
+                    # Loop over every intersections and append
+                    for intersection in intersections_hypo:
+                        if intersection != word['orth']:
+                            wordPairs.append([word['lemma'], intersection,
+                                'hyponym'])
+
+                    # Loop over every intersections and append
+                    for intersection in intersections_hyper:
+                        if intersection != word['orth']:
+                            wordPairs.append([word['lemma'], intersection,
+                                'hypernym'])
+
+    return wordPairs
+
+
+def get_clusters(word_pairs):
+    """Calculates the number of computed
+    clusters"""
+
+    # Initialize clusters
+    clusters = []
+    tempClusters = []
+    found = True
+    pairs = word_pairs
+
+    # Loop over every word pair
+    for num in range(0, len(pairs)):
+        # Get link data
+        source = pairs[num][0]
+        target = pairs[num][1]
+
+        # Temporary list
+        tempClusters = [source, target]
 
-        # Loop over every combination of words
-        for comb in itertools.combinations(count.keys(), 2):
-
-            try:
-                # Calculate Jiang-Conrath distance
-                dist = g.synsets(comb[0])[0].dist_jcn(g.synsets(comb[1])[0])
-
-                # We found a synonym
-                if dist == 0:
-
-                    # First word occurs more often
-                    if count[comb[0]] > count[comb[1]]:
-                        most_freq_word = comb[0]
-                    # Second word occurs more often
-                    elif count[comb[1]] > count[comb[0]]:
-                        most_freq_word = comb[1]
-                    # Words occurences don't differ
-                    else:
-                        most_freq_word = comb[0]
-
-                    # Loop over tags
-                    for tag in tags:
-                        # Assign tag[0] to most_frequent_word
-                        if tag[0] == comb[0] or tag[0] == comb[1]:
-                            tag[0] = most_freq_word
-
-            except IndexError:
-                pass
-
-        return tags
-
-    def get_tags(self):
-        """
-        Generates tags from string.
-
-        Takes a text as input and extracts nominatives using RFTagger.
-
-        Args:
-                None
-
-        Returns:
-                List with tags
-        """
-
-        # Create directory temp if not existent
-        if not os.path.exists(constants.temp_dir):
-            os.makedirs(constants.temp_dir)
-
-        # Create random string
-        rand_string = ''.join(random.choice(string.ascii_lowercase +
-                                            string.digits) for _ in range(15))
-
-        # Path for text files
-        tokens = constants.temp_tokens + "_" + rand_string + ".txt"
-        curr_text = constants.temp_text + "_" + rand_string + ".txt"
-
-        # Save text to file
-        f = open(curr_text, 'w')
-        #f = open(constants.temp_text, 'w')
-        f.write(self.text)
-        f.close()
-
-        # Tokenize
-        f = open(tokens, 'w')
-        subprocess.call(
-            [constants.tokenizer, curr_text], stdout=f, shell=False)
-        f.close()
-
-        # Tag Tokens from temp_tokens
-        f = open(constants.temp_tags + "_" + rand_string + ".txt", 'w')
-        subprocess.call([constants.rftagger, constants.german_par,
-                         tokens], stdout=f, shell=False)
-        f.close()
-
-        # Read tags from file
-        f = open(constants.temp_tags + "_" + rand_string + ".txt", 'r')
-        tags = f.readlines()
-        f.close()
-
-        # Regular Expression
-        regex = re.compile(r'.*N.Name.*|.*N.Reg.*|.*SYM.Pun.Sent')
-
-        # Filtered tags
-        filtered_tags = [regex.match(tag).string for tag in tags
-                         if regex.match(tag) is not None]
-
-        # Split tags in lists
-        splited_tags = [str.split(tag, '\t') for tag in filtered_tags]
-
-        # Load germanet
-        g = load_germanet()
-
-        # Build Lemmas
-        splited_tags_lemma = [[g.lemmatise(tag[0].decode('utf-8'))[0], tag[0],
-                               tag[1]] for tag in splited_tags]
-
-        # Build empty dictionary with lemmas as key
-        lemmaDic = {key: [] for [key, value, token] in splited_tags_lemma}
-
-        # Fill the dictionary with all values
-        [lemmaDic[key].append(value.decode('utf-8')) for [key, value, token] in
-            splited_tags_lemma if value not in lemmaDic[key]]
-
-        # Update self.tags
-        tags = splited_tags_lemma
-
-        # tags = self.remove_synonyms(tags, g)
-
-        # Remove files
-        os.remove(curr_text)
-        os.remove(tokens)
-        os.remove(constants.temp_tags + "_" + rand_string + ".txt")
-
-        return (tags, lemmaDic)
-
-    def get_sentences(self):
-        """
-        Returns sentences from text
-        """
-
-        sentence_list = list()
-        curr_sentence = list()
-        regex_sym = re.compile(r'.*SYM.*')
-        tags = self.tags
-
-        # Loop over every nominative
-        for item in tags:
-            # Item is not an end-of-line character
-            if not re.match(regex_sym, item[2]) is not None:
-                # TODO: lemmatize item[0]
-                curr_sentence.append(item[0])
-            # Item is an end-of-line-character
-            else:
-                sentence_list.append(curr_sentence)
-                curr_sentence = list()
-
-        # Return list with sentences
-        return sentence_list
-
-    def get_num_sentences(self):
-        """
-        Returns number of sentences in get_tags
-        """
-
-        return len(self.get_sentences())
-
-    def get_coherence_sentences(self):
-        """"
-        Calculates number of coherent sentences and
-        non-coherent sentences from text.
-        """
-
-        # Get sentences
-        sentences = self.get_sentences()
-        num_sentences = self.get_num_sentences()
-
-        if num_sentences <= 1:
-            raise ValueError("You do not have enough sentences")
-
-        # Initialize variable
-        num_coh = 0
-        num_not_coh = 0
-
-        # Check if text has at least 2 sentences
-        if num_sentences > 1:
-
-            # Calcuate num coherent and non-coherent sentences
-            for sentence in range(0, num_sentences):
-
-                # Before last sentence is reached
-                if sentence == num_sentences - 1:
-                    pass
-                else:
-                    # overlap true if two adjacent sentences share a word
-                    overlap = bool(set(sentences[sentence])
-                                   & set(sentences[sentence + 1]))
-
-                    # Update overlapping sentences
-                    if overlap:
-                        num_coh = num_coh + 1
-                    # Update non-overlapping sentences
-                    else:
-                        num_not_coh = num_not_coh + 1
-
-        # Return dict with coherence sentences
-        return {"coh_sen": num_coh, "coh_not_sen": num_not_coh}
-
-    def append_word_pairs(self, word_pairs, list1, list2):
-        """
-        Combine all possible combinations of
-        two lists without repetition
-        """
-
-        pairs = word_pairs
-
-        # List1 one consists of more than 1 element
-        if len(list1) > 1:
-            for word1 in list1:
-                for word2 in list2:
-                    pairs.append((word1, word2))
-
-        # List1 contains 1 element
-        elif len(list1) == 1:
-            for word in list2:
-                pairs.append((list1[0], word))
-
-        return pairs
-
-    def get_clusters(self):
-        """
-        Calculates the number of clusters based on
-        word pairs
-        """
-
-        # Initialize Clusters
-        clusters = []
-        tempClusters = []
+        # Found set to true for while loop
         found = True
-        pairs = self.word_pairs
 
-        # Loop over every word pair
-        for num in range(0, len(pairs)):
+        while found:
+            # Found set to false
+            found = False
 
-            # Get link data
-            source = pairs[num][0]
-            target = pairs[num][1]
+            # Loop over every word pair again
+            for num_again in range(0, len(pairs)):
+                # Word pairs do not match
+                if num != num_again:
 
-            # Temporary list
-            tempClusters = [source, target]
+                    # Initialize temporary source and target
+                    tempSource = pairs[num_again][0]
+                    tempTarget = pairs[num_again][1]
 
-            # Found set to true for while loop
-            found = True
+                    # Temporary array
+                    tempArray = [tempSource, tempTarget]
 
-            while found:
+                    # Temporary sources and targets in array position
+                    tempPosSource = tempSource in tempClusters
+                    tempPosTarget = tempTarget in tempClusters
 
-                # Found set to faulse
-                found = False
+                    # Either of the two in in tempClusters
+                    if tempPosSource or tempPosTarget:
+                        # TempSource is in tempClusters
+                        if not tempPosTarget:
+                            found = True
+                            tempClusters.append(tempTarget)
 
-                # Loop over every word pair again
-                for num_again in range(0, len(pairs)):
+                    # Temp Target is in tempClusters
+                    if tempPosTarget:
+                        # TempSource is not in tempClusters
+                        if not tempPosSource:
+                            found = True
+                            tempClusters.append(tempSource)
 
-                    # Word pairs do not match
-                    if num != num_again:
+        # Remove duplicates from tempClusters
+        tempClusters = list(unique_everseen(tempClusters))
 
-                        # Initialize temporary source and target
-                        tempSource = pairs[num_again][0]
-                        tempTarget = pairs[num_again][1]
+        clusterIn = False
 
-                        # Temporary Array
-                        tempArray = [tempSource, tempTarget]
+        # Clusters has at least one element
+        if len(clusters) > 0:
+            # Loop over every cluster
+            for cluster in range(0, len(clusters)):
+                # Current Cluster
+                currentCluster = clusters[cluster]
 
-                        # Temporary sources and targets in array position
-                        tempPosSource = tempSource in tempClusters
-                        tempPosTarget = tempTarget in tempClusters
+                # Loop over every element in tempClusters
+                for c in range(0, len(tempClusters)):
+                    if tempClusters[c] in currentCluster:
+                        clusterIn = True
+                        break
 
-                        # if (source or target) == "Moskito":
-                        #     print(tempSource)
-                        #     print(tempTarget)
-                        #     print(tempPosSource)
-                        #     print(tempPosTarget)
-                        # print(self.lemmaDic[tempTarget])
-
-                        # Either of the two is in tempClusters
-                        if tempPosSource or tempPosTarget:
-
-
-                            # print("\n")
-                            # print(tempSource + " - " + str(tempPosSource))
-                            # print(tempTarget + " - " + str(tempPosTarget))
-                            # print("\n")
-
-                            # TempSource is in tempClusters
-                            if tempPosSource:
-                                # TempTarget ist not in tempClusters
-                                if not tempPosTarget:
-                                    found = True
-                                    # Loop over every word for lemma and
-                                    # append to list
-                                    # print(tempTarget)
-                                    # for value in self.lemmaDic[tempTarget]:
-                                    #     # print(value.decode('utf-8'))
-                                    #     tempClusters.append(value.decode('utf-8'))
-
-                                    # for value in self.lemmaDic[tempSource]:
-                                    #     # print(tempSource)
-                                    #     # print(value.decode('utf-8'))
-                                    #     tempClusters.append(value.decode('utf-8'))
-
-                                    tempClusters.append(tempTarget)
-
-                            # TempTarget is in tempClusters
-                            if tempPosTarget:
-                                # TempSource is not in tempClusters
-                                if not tempPosSource:
-                                    # print(tempSource)
-                                    found = True
-                                    # for value in self.lemmaDic[tempSource]:
-                                    #     # print(tempSource)
-                                    #     # print(value.decode('utf-8'))
-                                    #     tempClusters.append(value.decode('utf-8'))
-
-                                    # for value in self.lemmaDic[tempTarget]:
-                                    #     # print(value.decode('utf-8'))
-                                    #     tempClusters.append(value.decode('utf-8'))
-                                    tempClusters.append(tempSource)
-
-            # Remove duplicates from tempClusters
-            tempClusters = list(unique_everseen(tempClusters))
-            # print(tempClusters)
-
-            clusterIn = False
-
-            # Clusters has at least one element
-            if len(clusters) > 0:
-                # Loop over every cluster
-                for cluster in range(0, len(clusters)):
-
-                    # Current Cluster
-                    currentCluster = clusters[cluster]
-
-                    # Loop over every element in tempClusters
-                    for c in range(0, len(tempClusters)):
-                        if tempClusters[c] in currentCluster:
-                            # # We have to manually add the missing items
-                            # # that have not been lematized
-                            # inTempNotCurrent = set(tempClusters) - set(currentCluster)
-                            # clusters[cluster] = currentCluster + list(inTempNotCurrent)
-
-                            clusterIn = True
-                            break
-
-                # tempClusters does not exist yet in clusters
-                if not clusterIn:
-                    # for value in self.lemmaDic[source]:
-                    #     tempClusters.append(value.decode('utf-8'))
-
-                    # tempClusters = list(unique_everseen(tempClusters))
-
-                    clusters.append(tempClusters)
-
-            # Clusters is empty
-            else:
-                # print(tempClusters)
-                # print(source)
-                # print(target)
-                # for value in self.lemmaDic[source]:
-                #     tempClusters.append(value.decode('utf-8'))
-
-                # tempClusters = list(unique_everseen(tempClusters))
-
-                # for value in self.lemmaDic[target]:
-                #     tempClusters.append(value.decode('utf-8'))
-                # print(tempClusters)
-                # print(tempClusters)
+            # tempClusters does not exist yet in clusters
+            if not clusterIn:
                 clusters.append(tempClusters)
 
-        return clusters
+        # Clusters is empty
+        else:
+            clusters.append(tempClusters)
 
-    def get_whole_clusters(self):
-        """
-        Returns the whole list of clusters
-        """
-
-        clusters = self.get_clusters()
-
-        for i in range(0, len(clusters)):
-            for word in clusters[i]:
-                nonLemmas = [w for w in self.lemmaDic[word]]
-                clusters[i] = list(unique_everseen(clusters[i] + nonLemmas))
-
-                # clusters[i].remove(word)
-                # print(self.lemmaDic[word])
-                lengthDic = len(self.lemmaDic[word])
-                currArray = self.lemmaDic[word]
-
-                # if lengthDic >= 1:
-                #     if lengthDic == 1:
-                #         if currArray[0] != word:
-                #             clusters[i].remove(word)
-                #     else:
-                #         clusters[i].remove(word)
-
-        return clusters
-
-    def get_num_clusters(self):
-        """
-        Returns number of clusters in text
-        """
-
-        return len(self.get_clusters())
-
-    def get_num_concepts(self):
-        """
-        Calculates the oncepts in the text
-        """
-
-        # Inititialize empty list
-        concepts = []
-        pairs = self.word_pairs
-
-        for pair in pairs:
-            first = pair[0]
-            second = pair[1]
-
-            concepts.append(first)
-            concepts.append(second)
-
-        num_concepts = len(list(unique_everseen(concepts)))
-
-        return num_concepts
-
-    def get_word_pairs(self):
-        """
-        Generates word pairs in order to calculate breaks and
-        number of concepts
-        """
-
-        tags = self.tags
-
-        # Regular expressions
-        regex_nom = re.compile(r'.*Nom.*')
-        regex_acc = re.compile(r'.*Acc.*')
-        regex_gen = re.compile(r'.*Gen.*')
-        regex_dat = re.compile(r'.*Dat.*')
-        regex_sym = re.compile(r'.*SYM.*')
-
-        # Initialize word-pairs and noun lists
-        word_pairs = []
-        nom = []
-        acc = []
-        dat = []
-        gen = []
-
-        # Loop over splited_tags
-        for tag in tags:
-
-            # tag is nominativ
-            if re.match(regex_nom, tag[2]) != None:
-                nom.append(tag[0])
-            # tag is accusative
-            elif re.match(regex_acc, tag[2]) != None:
-                acc.append(tag[0])
-            # tag is dativ
-            elif re.match(regex_dat, tag[2]) != None:
-                dat.append(tag[0])
-            # tag is genitive
-            elif re.match(regex_gen, tag[2]) != None:
-                gen.append(tag[0])
-            # tag is dot
-            elif re.match(regex_sym, tag[2]) != None:
-
-                # Remove duplicates
-                nom = sorted(set(nom))
-                acc = sorted(set(acc))
-                dat = sorted(set(dat))
-                gen = sorted(set(gen))
-
-                # There is at least a dative
-                if len(dat) > 0:
-                    # There is at least an accusative
-                    if len(acc) > 0:
-                        # Accusative - Dative
-                        word_pairs = self.append_word_pairs(word_pairs,
-                                                            dat, acc)
-
-                # There is at least 1 nominative
-                if len(nom) > 0:
-                    # There is just one nominativ
-                    if len(nom) == 1:
-                        word_pairs = self.append_word_pairs(word_pairs,
-                                                            nom, nom)
-
-                    # There is at least an accusative
-                    if len(acc) > 0:
-                        # Nominativ - Accusative
-                        word_pairs = self.append_word_pairs(word_pairs,
-                                                            nom, acc)
-
-                    # There is at least a dativ
-                    if len(dat) > 0:
-                        # Nominativ - Dative
-                        word_pairs = self.append_word_pairs(word_pairs,
-                                                            nom, dat)
-
-                    # There is at least a genitiv
-                    if len(gen) > 0:
-                        # Nominativ - Genitive
-                        word_pairs = self.append_word_pairs(word_pairs,
-                                                            nom, gen)
-
-                    # There are at least 2 nominatives
-                    if len(nom) > 1:
-                        # Nominative - Nominativ
-                        nom_nom = itertools.combinations(nom, 2)
-                        for pair in nom_nom:
-                            word_pairs.append(pair)
-
-                # Reinitialize lists
-                nom = []
-                acc = []
-                dat = []
-                gen = []
-
-        word_list = []
-
-        # Append tuples to word_list
-        for pair in set(word_pairs):
-            word_list.append((pair[0], pair[1]))
-
-        # Return word_list
-        return word_list
+    return len(clusters)
 
 
-# text = """Ein Baum ist keine Wurzel. Moskitos
-#     sind böse. In diesem Haus gibt es Bäume. Eine Mauer muss so
-#     sein. Andreas ist toll."""
+def get_compounds(sentences):
+    """If there is a compound
+    between sentences add these
+    as word pairs.
 
-# # text = """
-# #     Eine unterhaltsame Sportart, die das Potenzial in sich birgt, ein 
-# #     Vereinsleben auf nie dagewesene Weise mit Saufen zu 
-# #     verknüpfen.
-# #     Man begegnet diesem Sport auf den Zeltplätzen diverser Festivals, da diese Form des 
-# #     Alkoholkonsums sehr viel Unrat hervorbringt und somit 
-# #     prima ins Konzept solcher Veranstaltungen passt.
-# #     Um eine Runde zu spielen, bauen zwei Mannschaften eine 
-# #     Reihe leerer Bierdosen zwischen sich auf und entfernen 
-# #     sich zunächst jeweils 4 Meter davon. Anschließend beginnen 
-# #     sich die Teams abwechselnd, Saufzeit zu verschaffen, indem 
-# #     sie mit einem leichten Wurfgerät die leeren Dosen in der 
-# #     Mitte zu Fall bringt und die eigenen Bierdosen aussaufen, 
-# #     bis die gegnerische Mannschaft die Dosenreihe wieder aufstellen 
-# #     und hinter ihre eigene Grundlinie zurückkehren konnte.
-# #     Das Team, das auf diese Weise zuerst alle seine Dosen 
-# #     komplett ausgesoffen hat, geht als Sieger des Spiels 
-# #     hervor. Traditionell wird ein solcher Sieg zum Anlass genommen, 
-# #     Mutmaßungen über die unzureichende Größe der Genitalien der 
-# #     Verlierer anzustellen. Somit wird klar, wie sich säuferische 
-# #     Fähigkeiten unmittelbar auf die gesellschaftliche Akzeptanz einer 
-# #     Person niederschlagen. Laufen-Saufen ist die optimierte Form 
-# #     von des recht bekannten Flunkyball."""
+    Returns
+        Array of compounds
+    """
 
-# c = CoherenceAnalyzer(text)
-# print(c.get_whole_clusters())
+    # Dirname
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+
+    # Read data
+    data = DataFrame.from_csv(dir_path + '/data/compounds.txt', sep='\t',
+        index_col=None)
+
+    # Init word pairs
+    wordPairs = []
+
+    for val, sentence in enumerate(sentences):
+
+        if val != (len(sentences) - 1):
+            for word in sentences[val]:
+                if word['noun'] is True:
+
+                    # Get next sentence
+                    nextSentence = [wordNext['lemma']
+                        for wordNext in sentences[val + 1] if wordNext['noun']]
+
+                    # Get nouns of current sentence
+                    sentence = [wordThis['lemma'] for wordThis in sentences[val]
+                        if wordThis['noun']]
+
+                    # Check if noun is in compound list
+                    word_in_list = data['compound'].str.match(r''
+                        + word['lemma'] + r'$')
+
+                    # If the word has been found in the
+                    # list look inside the next sentence
+                    if word_in_list.any():
+                        # Get index of word
+                        word_index = np.where(word_in_list)[0][0]
+
+                        # Get head word
+                        head = data['head'].where(data['compound']
+                            == word['lemma'], np.nan).max()
+
+                        # Head is in next sentence
+                        if head in nextSentence:
+                            # Get compound word
+                            compound = data['compound'][word_index]
+
+                            # Get index of head in next sentence
+                            index_next_sentence = nextSentence.index(head)
+
+                            # Append to list
+                            wordPairs.append([compound,
+                                nextSentence[index_next_sentence], 'compound'])
+
+    return wordPairs
+
+
+def get_coreferences(sentences, gn):
+    """Extracts all unambigous
+    coreferences
+
+    Args:
+        sentences (Array) - all sentences of the text
+        gn (Object)       - pygermanet object
+
+    Returns:
+        Array of of pronoun and noun pairs
+    """
+
+    word_pairs = []
+
+    # Loop over every sentence
+    for val, sentence in enumerate(sentences):
+
+        # Do not analyze last sentence
+        if val != (len(sentences) - 1):
+
+            # Get nouns and pronouns of current and next sentence
+            current_sentence = filter(lambda x: x['noun'], sentence)
+            nouns_next_sentence = filter(lambda x: x['noun'],
+                                    sentences[val + 1])
+            pronouns_next_sentence = filter(lambda x: x['pronoun'],
+                                    sentences[val + 1])
+
+            # Loop over every pronoun in next sentence
+            for pronoun in pronouns_next_sentence:
+
+                # Check if gender and numerus is unique among
+                # the nouns within the next sentence
+                unique_next = not any([pronoun['feminin'] == noun['feminin'] and
+                          pronoun['singular'] == noun['singular'] and
+                          pronoun['neutrum'] == noun['neutrum']
+                          for noun in nouns_next_sentence])
+
+                if unique_next:
+                    # Check if gender and numerus is unique among
+                    # the nouns within the current sentence
+                    unique_current = [pronoun['feminin'] == noun['feminin'] and
+                              pronoun['singular'] == noun['singular'] and
+                              pronoun['neutrum'] == noun['neutrum']
+                              for noun in current_sentence]
+
+                    # We found a candidate
+                    if sum(unique_current) == 1:
+                        # Get index of anaphor parent
+                        anaphor_parent = [i for i, x in enumerate(unique_current) if x][0]
+
+                        # Get lemma of anaphor parent
+                        lemma_parent = current_sentence[anaphor_parent]['lemma']
+
+                        # Create word pairs
+                        pairs = [[lemma_parent, noun['lemma'], 'coreference']
+                            for noun in nouns_next_sentence]
+
+                        # Append pairs to word pairs
+                        word_pairs = word_pairs + pairs
+
+    return word_pairs
+
+
+def analyzeTextCohesion(text):
+    """Analyzed the cohesion of a txt.
+    Args:
+        text (String) - A string that is Analyzed
+    Returns:
+        Array - An array of word pairs
+    """
+
+    # Check if text is string or unicode
+    if type(text) is not str:
+        raise TypeError('you did not pass a string as argument')
+
+    # Remove brackets and parenthesis from text
+    text = re.sub(r"[\(\[].*?[\)\]]", "", text)
+
+    # Remove trailing white space
+    text = text.strip()
+
+    # If text doesn't end with a dot, fill it in
+    if not text[-1:] in ['.', '!', '?']:
+            text += '.'
+
+    ############################################################################
+    # Tag text
+    ############################################################################
+    # Save text to file
+    f = open(constants.temp_text, 'w')
+    f.write(text)
+    f.close()
+
+    # Tokenize
+    f = open(constants.temp_tokens, 'w')
+    subprocess.call([constants.tokenizer, constants.temp_text], \
+        stdout=f, shell=False)
+    f.close()
+
+    # Tag Tokens from temp_tokens
+    f = open(constants.temp_tags, 'w')
+    subprocess.call([constants.rftagger, constants.german_par, \
+        constants.temp_tokens], stdout=f, shell=False)
+    f.close()
+
+    # Read tags from file
+    f = open(constants.temp_tags, 'r')
+    tags = f.readlines()
+    f.close()
+
+    # Split tags in array
+    tags = [str.split(tag, '\t') for tag in tags]
+
+    # Remove last entry
+    # the entry is only a \n character and can
+    # be ignored. It is a percularity of the
+    # RFTagger
+    tags.pop()
+
+    # Remove \n from end of tag
+    tags = [[tag[0].decode('utf-8'), tag[1][:-1]] for tag in tags]
+
+    ############################################################################
+    # Further processing
+    ############################################################################
+
+    # Load germanet
+    gn = load_germanet()
+
+    # Lemmatise all words
+    tags = [{'orth': tag[0], 'lemma': gn.lemmatise(tag[0])[0],
+               'pos': tag[1]} for tag in tags]
+
+    # Filter only relevant tags: Verbs, Nouns, Pronouns
+    regex = re.compile(
+        r'.*N.Name.*|.*N.Reg.*|.*SYM.Pun.Sent.*|.*VFIN.*|.*PRO.Pers.*|.*PRO.Dem')
+
+    # Filtered tags
+    tags = [tag for tag in tags if regex.match(tag['pos']) != None]
+
+    # Get specific elements of words
+    tags = getPOSElement('singular', r'.*Sg', tags)
+    tags = getPOSElement('accusative', r'.*N.Reg.Acc', tags)
+    tags = getPOSElement('dative', r'.*N.Reg.Dat', tags)
+    tags = getPOSElement('nominative', r'.*N.Reg.Nom', tags)
+    tags = getPOSElement('genitive', r'.*N.Reg.Gen', tags)
+    tags = getPOSElement('feminin', r'.*Fem', tags)
+    tags = getPOSElement('neutrum', r'.*Neut', tags)
+    tags = getPOSElement('noun', r'.*N.Name.*|.*N.Reg', tags)
+    tags = getPOSElement('pronoun', r'.*PRO.Dem.*|.*PRO.Pers', tags)
+    tags = getPOSElement('verb', r'.*VFIN', tags)
+
+    # Get sentences
+    sentences = []
+    sentenceArray = []
+
+    for word in tags:
+        if word['pos'] != 'SYM.Pun.Sent':
+                sentenceArray.append(word)
+        else:
+            sentences.append(sentenceArray)
+            sentenceArray = []
+
+    ############################################################################
+    # Build word pairs
+    ############################################################################
+
+    # Init word pairs array
+    wordPairs = []
+
+    # Build lexical overlap word pairs
+    for val, sentence in enumerate(sentences):
+        # Get all nouns
+        nouns = [word['lemma'] for word in sentence if word['noun'] == True]
+
+        # Append noun if it only occurs once
+        if len(nouns) == 1 and word['noun']:
+            # Append lonely noun
+            wordPairs.append([word['lemma'], word['lemma'], 'lexical overlap'])
+        # If there are multiple nouns append all combinations of nouns
+        elif len(nouns) > 1:
+            for subset in itertools.combinations_with_replacement(nouns, 2):
+                if subset[0] != subset[1]:
+                    pairArray = list(subset)
+                    pairArray.append('lexical overlap')
+                    wordPairs.append(pairArray)
+
+    # Get hypernym hyponym pairs
+    hyponym_hyper_pairs = getHypoHyperPairs(sentences, gn)
+
+    # Get coreference resolutions
+    coreferences = get_coreferences(sentences, gn)
+
+    # Get compounds
+    compounds = get_compounds(sentences)
+
+    # Merge all word pairs
+    wordPairs = wordPairs + hyponym_hyper_pairs + coreferences + compounds
+
+    # Calc number of sentences
+    num_sentences = len(sentences)
+
+    # Number of clusters
+    num_clusters = get_clusters(wordPairs)
+
+    # Get number of concepts
+    num_concepts = len(set([concept['lemma']
+        for concept in tags if concept['noun'] == True]))
+
+    return {'word_pairs': wordPairs,
+             'numSentences': num_sentences,
+             'numConcepts': num_concepts,
+             'numClusters': num_clusters}
