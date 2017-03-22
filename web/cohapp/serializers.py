@@ -16,7 +16,7 @@ class TextDataSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TextData
-        fiels = ('pre_text', 'post_text', 'pre_num_sentences',
+        fields = ('pre_text', 'post_text', 'pre_num_sentences',
                  'post_num_sentences', 'pre_num_clusters', 'post_num_clusters',
                  'pre_num_coherent_sentences', 'post_num_coherent_sentences',
                  'pre_num_non_coherent_sentences',
@@ -32,7 +32,7 @@ class MeasurementSerializer(serializers.ModelSerializer):
         model = Measurement
         fields = ('experiment', 'publication', 'measure',
                   'nr_group', 'instruction', 'group', 'instruction_review')
-        read_only_fields = ('experiment')
+        # read_only_fields = ('experiment', '')
 
 
 class SubjectSerializer(serializers.ModelSerializer):

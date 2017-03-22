@@ -27,7 +27,7 @@
 		{% block header %}
 		<nav>
 		    <div class="nav-wrapper">
-		      <a href="{% url 'cohapp.views.index' %}"><img src="{% static 'cohapp/img/logo.png' %}" width="120" alt="logo"></a>
+		      <a href="{% url 'index' %}"><img src="{% static 'cohapp/img/logo.png' %}" width="120" alt="logo"></a>
 		      <ul id="nav-mobile" class="right hide-on-med-and-down">
 		        <li><a href="#about">About</a></li>
 		        <li><a href="#howitworks">Wie es funktioniert?</a></li>
@@ -42,7 +42,7 @@
 		{% endblock %}
 		</main>
 
-		
+
 		{% block footer %}
 		<!-- *************** Footer ******************************* -->
 <!-- 		<footer class="footer">
@@ -92,7 +92,7 @@
 		{% endblock %}
 
 		<!-- ***************** Scripts ******************************** -->
-		
+
 
 		{% block endscripts %}
 		<script src="{% static 'cohapp/js/vendor.js' %}"></script>
@@ -104,7 +104,7 @@
 		{% endblock %}
 
 		{% block endendscripts %}
-		
+
 		{% endblock %}
 	</body>
 </html>
