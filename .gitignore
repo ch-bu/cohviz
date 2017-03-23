@@ -15,3 +15,4 @@ web/.vim/
 web/.viminfo
 web/cohapp/coherenceanalyzer/GN_V90_XML/
 web/cohapp/coherenceanalyzer/mongodb/
+web/nltk_data/

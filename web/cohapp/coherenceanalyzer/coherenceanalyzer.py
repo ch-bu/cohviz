@@ -8,8 +8,51 @@ from pandas import DataFrame
 import numpy as np
 from pygermanet import load_germanet
 from more_itertools import unique_everseen
+from nltk.corpus import stopwords # We might need to remove this line
+from nltk.stem.snowball import GermanStemmer
 import itertools
+# from pymongo import MongoClient
 
+
+# def nounify(verb_word):
+#     """ Transform a verb to the closest noun: die -> death """
+
+#     gn = load_germanet()
+
+#     verb_synsets = gn.synsets(gn.lemmatise(verb_word)[0], pos="v")
+
+#     # Word not found
+#     if not verb_synsets:
+#         return []
+
+#     # Get all verb lemmas of the word
+#     verb_lemmas = [l.orthForm for s in verb_synsets for l in s.lemmas]
+
+#     # verb_lemmas = [l for s in verb_synsets \
+#     #                for l in s.lemmas if s.name.split('.')[1] == 'v']
+#     # print(verb_lemmas)
+
+#     print(gn.synsets('Haus')[0].lemmas[0].rels())
+#     # Get related forms
+#     # derivationally_related_forms = [(l, l.derivationally_related_forms()) \
+#     #                                 for l in verb_lemmas]
+
+#     # # filter only the nouns
+#     # related_noun_lemmas = [l for drf in derivationally_related_forms \
+#     #                        for l in drf[1] if l.synset.name.split('.')[1] == 'n']
+
+#     # # Extract the words from the lemmas
+#     # words = [l.name for l in related_noun_lemmas]
+#     # len_words = len(words)
+
+#     # # Build the result in the form of a list containing tuples (word, probability)
+#     # result = [(w, float(words.count(w))/len_words) for w in set(words)]
+#     # result.sort(key=lambda w: -w[1])
+
+#     # return all the possibilities sorted by probability
+#     return None
+
+# # print(nounify('arbeitet'))
 
 def getPOSElement(element, regex, tags):
     """Returns an array with a boolean
@@ -194,47 +237,162 @@ def get_compounds(sentences):
     # Init word pairs
     wordPairs = []
 
+    # Loop over every sentence
     for val, sentence in enumerate(sentences):
+        # Loop over every word in current sentence
+        for word in sentences[val]:
+            if word['noun'] is True:
+                # Get nouns of current sentence
+                nouns_current_sentence = [wordThis['lemma']
+                    for wordThis in sentences[val] if wordThis['noun']]
 
-        if val != (len(sentences) - 1):
-            for word in sentences[val]:
-                if word['noun'] is True:
+                # Check if noun is in compound list
+                word_in_list = data['compound'].str.match(r''
+                    + word['lemma'] + r'$')
 
-                    # Get next sentence
-                    nextSentence = [wordNext['lemma']
-                        for wordNext in sentences[val + 1] if wordNext['noun']]
+                # Current word has been found
+                # in the compound list
+                if word_in_list.any():
+                    # Get index of word
+                    word_index = np.where(word_in_list)[0][0]
 
-                    # Get nouns of current sentence
-                    sentence = [wordThis['lemma'] for wordThis in sentences[val]
-                        if wordThis['noun']]
+                    # Get head of compound
+                    head = data['head'].where(data['compound'] ==
+                        word['lemma'], np.nan).max()
 
-                    # Check if noun is in compound list
-                    word_in_list = data['compound'].str.match(r''
-                        + word['lemma'] + r'$')
-
-                    # If the word has been found in the
-                    # list look inside the next sentence
-                    if word_in_list.any():
-                        # Get index of word
-                        word_index = np.where(word_in_list)[0][0]
-
-                        # Get head word
-                        head = data['head'].where(data['compound']
-                            == word['lemma'], np.nan).max()
+                    # Is current sentence not the last
+                    # sentence? This is important, otherwise
+                    # we would compare the compound to a head
+                    # in a sentence that doesn't exist.
+                    if val != (len(sentences) - 1):
+                        # Get nouns of current next sentence
+                        nouns_next_sentence = [wordNext['lemma']
+                            for wordNext in sentences[val + 1]
+                                if wordNext['noun']]
 
                         # Head is in next sentence
-                        if head in nextSentence:
+                        if head in nouns_next_sentence:
                             # Get compound word
                             compound = data['compound'][word_index]
 
                             # Get index of head in next sentence
-                            index_next_sentence = nextSentence.index(head)
+                            index_next_sentence = nouns_next_sentence.index(head)
 
                             # Append to list
                             wordPairs.append([compound,
-                                nextSentence[index_next_sentence], 'compound'])
+                                nouns_next_sentence[index_next_sentence],
+                                    'compound'])
+
+                    # Make sure that I do not append a word pair
+                    # that links the first and the last sentence.
+                    # Only link wordpairs within the text.
+                    if (val -1) > -1:
+                        # Get nouns of previous sentence
+                        nouns_previous_sentence = [wordNext['lemma']
+                            for wordNext in sentences[val - 1]
+                                if wordNext['noun']]
+
+                        # Head occurs in previous sentence
+                        if head in nouns_previous_sentence:
+                            # Get compound word
+                            compound = data['compound'][word_index]
+
+                            # Get index of head in next sentence
+                            index_previous_sentence = nouns_previous_sentence.index(head)
+
+                            # Append to list
+                            wordPairs.append([compound,
+                                nouns_previous_sentence[index_previous_sentence],
+                                    'compound'])
 
     return wordPairs
+
+
+def get_stem_relations(sentences, gn):
+    """Gets verb-noun relations
+    between two sentences.
+
+    Returns
+        Array of word-pairs between two sentences
+    """
+
+    # Init word pairs
+    word_pairs = []
+
+    # Init stemmer
+    stemmer = GermanStemmer(ignore_stopwords=True)
+
+    # Loop over every sentence
+    for val, sentence in enumerate(sentences):
+        # Is current sentence not the last
+        # sentence? If so carry on
+        if val != (len(sentences) - 1):
+            # Get stems of all words in current sentence
+            stems_next_sentence = map(lambda x: stemmer.stem(x['lemma']),
+                sentences[val + 1])
+
+            # Words next sentence
+            words_next_sentence = map(lambda x: x['lemma'],
+                sentences[val + 1])
+
+            # Nouns in next sentence
+            nouns_next_sentence = [word['lemma'] for word in sentences[val + 1]
+                if word['noun']]
+
+            # Nouns of current sentence
+            nouns_current_sentence = [word['lemma'] for word in sentence
+                if word['noun']]
+
+            # Loop over every word in current sentece
+            for word in sentences[val]:
+
+                # Stem of current word
+                stem_current_word = stemmer.stem(word['lemma'])
+
+                # Is the stemmed word in the next sentence, great.
+                # If word is a lame 'sein', ignore it
+                if (stem_current_word in stems_next_sentence) and word['lemma'] != 'sein':
+
+                    # Get index of stem that is related to current word
+                    index_word_next_sentence = stems_next_sentence.index(stem_current_word)
+
+                    # Corresponding word in next sentence
+                    corresponding_word = words_next_sentence[index_word_next_sentence]
+
+                    # Only add word pairs if verb or noun
+                    if word['noun'] or word['verb']:
+
+                        # Get dictionary of word in next sentence
+                        dict_next = sentences[val + 1][index_word_next_sentence]
+
+                        # We do not want to combine words
+                        # that have the same grammatical function
+                        # A noun should not be combined with a noun
+                        # We are only interested in verb-noun relations
+                        if word['verb'] and dict_next['noun']:
+                            # Get all combinations of corresponding noun
+                            # in next sentence an all nouns in current sentence
+                            verb_noun_combinations = [[corresponding_word,
+                                noun, 'verb-noun-relation'] for noun in
+                                    nouns_current_sentence]
+
+                            # Append to word pairs
+                            word_pairs = word_pairs + verb_noun_combinations
+
+                        # Current word is noun and corresponding word is
+                        # verb
+                        elif word['noun'] and dict_next['verb']:
+                            # Get all combinations of noun in this sentence
+                            # and all nouns in next sentence
+                            noun_verb_combinations = [[word['lemma'], noun,
+                                'verb-noun-relation'] for noun in
+                                    nouns_next_sentence]
+
+                            # Append to word pairs
+                            word_pairs = word_pairs + noun_verb_combinations
+
+    return word_pairs
+
 
 
 def get_coreferences(sentences, gn):
@@ -433,8 +591,12 @@ def analyzeTextCohesion(text):
     # Get compounds
     compounds = get_compounds(sentences)
 
+    # Get stem relations
+    stem_relations = get_stem_relations(sentences, gn)
+
     # Merge all word pairs
-    wordPairs = wordPairs + hyponym_hyper_pairs + coreferences + compounds
+    wordPairs = wordPairs + hyponym_hyper_pairs + coreferences + compounds + \
+        stem_relations
 
     # Calc number of sentences
     num_sentences = len(sentences)
@@ -450,3 +612,4 @@ def analyzeTextCohesion(text):
              'numSentences': num_sentences,
              'numConcepts': num_concepts,
              'numClusters': num_clusters}
+

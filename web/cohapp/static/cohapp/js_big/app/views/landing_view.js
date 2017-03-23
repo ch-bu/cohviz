@@ -16,7 +16,7 @@ app.LandingView = Backbone.View.extend({
 		// Generate 20 distinct colors
 		this.colors = d3.scaleOrdinal(d3.schemeCategory10);
 
-		// Render editor 
+		// Render editor
 		this.$el.find('#landingview-editor').html(
 			Handlebars.templates.editor({'instruction': ""}));
 
@@ -25,7 +25,7 @@ app.LandingView = Backbone.View.extend({
 			toolbar: false,
 			placeholder: false,
 		});
-		
+
 		// Check if user first visits the page
 		if (localStorage.getItem('firstVisit') === null) {
 			// Start type animation
@@ -61,7 +61,7 @@ app.LandingView = Backbone.View.extend({
 	analyzeText: function() {
 		// Assign self to this
 		var self = this;
-		
+
 		// Get text from medium editor
 		var paragraphs = app.getParagraphs(this.$el.find('#editor-textinput'));
 
@@ -92,7 +92,7 @@ app.LandingView = Backbone.View.extend({
 	 * Analye Text when user has already submitted first draft
 	 */
 	reanalyzeText: function() {
-		
+
 		var self = this;
 
 		// Get text from medium editor
@@ -165,7 +165,7 @@ app.LandingView = Backbone.View.extend({
 
 		// Render graph
 		this.renderCmap(this.analyzer.get('word_pairs'),
-			this.analyzer.get('clusters'), this.analyzer.get('numClusters'),
+			this.analyzer.get('numConcepts'), this.analyzer.get('numClusters'),
 			graphDiv, svgHeight, svgWidth, this.colors);
 
 		// Check if user first visits the page
@@ -177,19 +177,21 @@ app.LandingView = Backbone.View.extend({
 			// Set local storage
 			localStorage.setItem('firstVisit', false);
 		}
-		
+
 		// Loop over every paragraph
 		// app.highlightWholeText('#editor-full-medium-editor', this.clusters, this.colors);
 	},
 
-	renderCmap: function(pairs, clust, numClusters, svgID, height, width, colors)  {
+	renderCmap: function(pairs, numConcepts, numClusters, svgID, height, width, colors)  {
 		var self = this;
-    
+
 		// ****************** Render SVG ***************************************
 		// Variable declaration
-		var clusters = clust;
-		var lemmaDic = this.analyzer.get('lemmaDic');
+		// var clusters = clust;
+		// var lemmaDic = this.analyzer.get('lemmaDic');
 		var graph = app.getLinksNodes(pairs);
+
+    console.log(graph);
 
 		// // Adjust height of svg
 		var svgHeight = height;
@@ -223,7 +225,7 @@ app.LandingView = Backbone.View.extend({
 		///////////////////////////////
 		// Enable zoom functionality //
 		///////////////////////////////
-		
+
 		// Call zoom
 		svg.call(d3.zoom()
 			.scaleExtent([1 / 10, 10])
@@ -240,7 +242,7 @@ app.LandingView = Backbone.View.extend({
 		function zoomed() {
 			g.attr('transform', d3.event.transform);
 		}
-		
+
 		// Add links
 		var link = g.append('g')
 			.attr('class', 'links')
@@ -260,7 +262,7 @@ app.LandingView = Backbone.View.extend({
 				.on('start', dragstarted)
 				.on('drag', dragged)
 				.on('end', dragended));
-		
+
 		// Append cirles to node
 		var circles = node.append('circle')
 			// .attr('class', 'nodes')
@@ -268,16 +270,16 @@ app.LandingView = Backbone.View.extend({
 			.attr('cx', 0)
 			.attr('cy', 0)
 			// .attr('ry', 2)
-			.style("fill", function (word) {
-				// Loop over every cluster
-				for (var i = 0; i < clusters.length; i++) {
-					// Check if current word is in current Array
-					if ($.inArray(word.id, clusters[i]) != -1) {
-						// Return color if word war found in array
-						return colors(i);
-					}
-				}
-			})
+			// .style("fill", function (word) {
+			// 	// Loop over every cluster
+			// 	for (var i = 0; i < clusters.length; i++) {
+			// 		// Check if current word is in current Array
+			// 		if ($.inArray(word.id, clusters[i]) != -1) {
+			// 			// Return color if word war found in array
+			// 			return colors(i);
+			// 		}
+			// 	}
+			// })
 			.style('opacity', 0.6);
 
 		// Append label to node container
@@ -338,25 +340,25 @@ app.LandingView = Backbone.View.extend({
 		}
 
 		function mouseout() {
-			$('#editor-full-medium-editor').find('p').each(function(paragraph) {
-				var textParagraph = $(this).text();
-				// console.log(textParagraph);
+			// $('#editor-full-medium-editor').find('p').each(function(paragraph) {
+			// 	var textParagraph = $(this).text();
+			// 	// console.log(textParagraph);
 
-				$(this).html(textParagraph);
-			});
+			// 	$(this).html(textParagraph);
+			// });
 
-			// Get all nodes
-			var nodes = d3.selectAll('.node');
+			// // Get all nodes
+			// var nodes = d3.selectAll('.node');
 
-			nodes.selectAll('circle')
-				.style('opacity', 0.6)
-				.attr('r', 15);
+			// nodes.selectAll('circle')
+			// 	.style('opacity', 0.6)
+			// 	.attr('r', 15);
 
-			nodes.selectAll('text')
-				.style('opacity', 0);
+			// nodes.selectAll('text')
+			// 	.style('opacity', 0);
 
-			d3.selectAll('.links').selectAll('line')
-				.style('stroke', '#ccc');
+			// d3.selectAll('.links').selectAll('line')
+			// 	.style('stroke', '#ccc');
 
 		}
 
@@ -364,7 +366,7 @@ app.LandingView = Backbone.View.extend({
 			// Get data
 			var mouse = d3.mouse(this);
 			var obj = simulation.find(mouse[0], mouse[1]);
-			
+
 			//////////////////////
 			// Selected element //
 			//////////////////////
@@ -373,13 +375,13 @@ app.LandingView = Backbone.View.extend({
 					return d.id == obj.id;
 				});
 
-			var textSelected = nodeSelected.select('text')
-				.style('opacity', 1)
-				.style('font-size', 20)
-				.style('font-weight', 'bold');
+			// var textSelected = nodeSelected.select('text')
+			// 	.style('opacity', 1)
+			// 	.style('font-size', 20)
+			// 	.style('font-weight', 'bold');
 
-			nodeSelected.select('circle')
-				.attr('r', 25);
+			// nodeSelected.select('circle')
+			// 	.attr('r', 25);
 
 			//////////////////////////////
 			// Highlight adjacent nodes //
@@ -396,18 +398,18 @@ app.LandingView = Backbone.View.extend({
 					return 0.6;
 				});
 
-			node.selectAll('text')
-				// .transition()
-				// .duration(20)
-				.style('opacity', function(d) {
+			// node.selectAll('text')
+			// 	// .transition()
+			// 	// .duration(20)
+			// 	.style('opacity', function(d) {
 
-					if (isConnected(obj, d)) {
-						return 1;
-					}
+			// 		if (isConnected(obj, d)) {
+			// 			return 1;
+			// 		}
 
-					return 0;
+			// 		return 0;
 
-				});
+			// 	});
 
 			/////////////////////
 			// Highlight links //
@@ -423,44 +425,44 @@ app.LandingView = Backbone.View.extend({
 			////////////////////////
 			// Unselected element //
 			////////////////////////
-			var nodeUnselected = d3.selectAll('.node')
-				.filter(function(d) {
-					return d.id != obj.id;
-				});
+			// var nodeUnselected = d3.selectAll('.node')
+			// 	.filter(function(d) {
+			// 		return d.id != obj.id;
+			// 	});
 
-			nodeUnselected.select('text')
-				.style('font-size', 16)
-				.style('font-weight', 'normal');
+			// nodeUnselected.select('text')
+			// 	.style('font-size', 16)
+			// 	.style('font-weight', 'normal');
 
-			nodeUnselected.select('circle')
-				.attr('r', 15);
+			// nodeUnselected.select('circle')
+			// 	.attr('r', 15);
 
 			/////////////////////////////
 			// Highlight words in text //
 			/////////////////////////////
-			
+
 			// We need to get the text of the selected word in order
 			// to highlight them
-			var wordSelected = textSelected.text();
-			
-			// Get all words that are semantically related
-			// to the selected word
-			var wordsUnselected = [];
-			node.selectAll('text')
-				.each(function(d) {
-					if (isConnected(obj, d)) {
-						wordsUnselected.push(d.id);
-					}
-				});
+			// var wordSelected = textSelected.text();
+
+			// // Get all words that are semantically related
+			// // to the selected word
+			// var wordsUnselected = [];
+			// node.selectAll('text')
+			// 	.each(function(d) {
+			// 		if (isConnected(obj, d)) {
+			// 			wordsUnselected.push(d.id);
+			// 		}
+			// 	});
 
 			// Remove selected word
-			var index = wordsUnselected.indexOf(wordSelected);
+			// var index = wordsUnselected.indexOf(wordSelected);
 
 			// Update unselected words without selected word
-			wordsUnselected.splice(index, 1);
+			// wordsUnselected.splice(index, 1);
 
-			app.highlightSelectedWord('#editor-full-medium-editor', wordSelected, wordsUnselected, lemmaDic, clusters,
-				self.colors);
+			// app.highlightSelectedWord('#editor-full-medium-editor', wordSelected, wordsUnselected, lemmaDic, clusters,
+			// 	self.colors);
 		}
 
 		function isConnected(a, b) {
@@ -478,10 +480,10 @@ app.LandingView = Backbone.View.extend({
 
 	// printSVG: function() {
 	// 	/*
-	// 	 * Prints SVG as pdf 
+	// 	 * Prints SVG as pdf
 	// 	 * borrowed from http://stackoverflow.com/questions/21660843/print-only-svg-from-browser
 	// 	 */
-		 	
+
 	// 	var popUpAndPrint = function() {
 	// 		var container = $('#openapp_svg');
 	// 		var mySVG = container.find('svg');
@@ -504,7 +506,7 @@ app.LandingView = Backbone.View.extend({
 	// 			printWindow.close();
 	// 		});
 	// 	};
-	
+
 	// 	setTimeout(popUpAndPrint, 500);
 	// }
 

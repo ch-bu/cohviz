@@ -33,6 +33,12 @@ mongod --dbpath /cohapp/coherenceanalyzer/mongodb/ &
 python -m pygermanet.mongo_import /code/cohapp/coherenceanalyzer/GN_V90_XML/
 ```
 
+Download the nltk dataset inside your docker web container: 
+
+```
+import nltk
+nltk.download()
+```
 
 Your application should be running on `localhost:8080`. 
 
