@@ -232,7 +232,7 @@ def get_compounds(sentences):
 
     # Read data
     data = DataFrame.from_csv(dir_path + '/data/compounds.txt', sep='\t',
-        index_col=None)
+        index_col=None, encoding='utf-8')
 
     # Init word pairs
     wordPairs = []
