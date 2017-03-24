@@ -1,6 +1,8 @@
 **/*.pyc
 web/node_modules/
 web/bower_components/
+web/static/**/*.map
+web/cohapp/**/*.map
 web/cohapp/coherenceanalyzer/RFTagger/
 web/cohapp/coherenceanalyzer/temp/
 web/cohapp/migrations/
@@ -16,3 +18,4 @@ web/.viminfo
 web/cohapp/coherenceanalyzer/GN_V90_XML/
 web/cohapp/coherenceanalyzer/mongodb/
 web/nltk_data/
+
