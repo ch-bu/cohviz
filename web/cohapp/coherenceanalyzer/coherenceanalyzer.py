@@ -473,6 +473,11 @@ def analyzeTextCohesion(text):
     # Remove brackets and parenthesis from text
     text = re.sub(r"[\(\[].*?[\)\]]", "", text)
 
+    # Substitute abbreviations
+    text = re.sub('bzw.', 'beziehungsweise', text)
+    text = re.sub('“', '', text)
+    text = re.sub('„', '', text)
+
     # Remove trailing white space
     text = text.strip()
 

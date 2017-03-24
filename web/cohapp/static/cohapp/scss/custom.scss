@@ -51,7 +51,7 @@ $form-radius: $global-radius;
         // display: none;
         // opacity: 0;
         font-size: 16px;
-        cursor: default;
+        cursor: pointer;
       }
 
       circle {
@@ -106,20 +106,16 @@ body {
  */
 #editor-full-wrapper {
 
-  height: 100vh;
-  max-height: 100%;
-  overflow: hidden;
-
   #editor-full-medium-editor {
     padding: 0 5px;
-    height: 85vh;
+    height: 70vh;
     outline: 0px solid transparent;
     overflow: auto;
     border: 1px solid #ededed;
   }
 
   #editor-full-buttons {
-    height: 20vh;
+    height: 5vh;
     text-align: center;
   }
 
@@ -144,10 +140,22 @@ h1, h2, h3, h4, h5 {
 
 // ************** Landing Page ***************************
 
-#landingview-info {
-  width: 100%;
-  background-color: rgb(247, 247, 247);
+#landingview {
+  #logo-div {
+    height: 10%;
+    text-align: center;
+  }
+
+
+  #landingview-editor {
+    height: 88%;
+  }
 }
+
+// #landingview-info {
+//   width: 100%;
+//   background-color: rgb(247, 247, 247);
+// }
 
 
 // ******************** Login Page ******************************
