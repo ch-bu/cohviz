@@ -218,9 +218,10 @@ app.LandingView = Backbone.View.extend({
       .force('link', d3.forceLink().id(function(d) {
         return d.id;
       }))
-      .force('charge', d3.forceManyBody().strength(80))
+      // .force('link', d3.forceLink(graph).distance(20).strength(1))
+      .force('charge', d3.forceManyBody().strength(-1))
       .force('center', d3.forceCenter(svgWidth / 2, svgHeight / 2))
-      .force('collide', d3.forceCollide(40).iterations(60));
+      .force('collide', d3.forceCollide(40).iterations(6));
 
     ///////////////////////////////
     // Enable zoom functionality //
