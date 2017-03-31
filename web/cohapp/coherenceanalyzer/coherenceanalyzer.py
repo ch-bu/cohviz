@@ -457,9 +457,27 @@ def calc_local_cohesion(word_pairs, sentences):
     connections = list(set(map(lambda x: (x['source']['sentence'],
         x['target']['sentence']), word_pairs)))
 
-    # Get all connections between sentences
-    connections_between = filter(lambda x: x[0] != x[1], connections)
+    # Loop over every sentence
+    # We need to count the sentences that overlap by argument
+    # overlap
+    for val, sentence in enumerate(sentences):
+        # Do not loop over last sentence
+        if val != (len(sentences) - 1):
 
+            lemmas_current_sentence = [word['lemma'] for word in sentence
+                    if word['noun']]
+
+            lemmas_next_sentence = [word['lemma'] for word in sentences[val + 1]
+                    if word['noun']]
+
+            if bool(set(lemmas_current_sentence) & set(lemmas_next_sentence)):
+                connections.append((val, val + 1))
+
+    # Get all connections between sentences
+    connections_between = list(set(filter(lambda x: x[0] != x[1], connections)))
+
+    # If we only have one sentence there is no point in calculating
+    # local cohesion. Check if zero division error occurs
     try:
         # Return local cohesion
         local_cohesion = float(len(connections_between)) / (len(sentences) - 1)
