@@ -211,7 +211,7 @@ app.LandingView = Backbone.View.extend({
         .force('charge', d3.forceManyBody().strength(-100))
         // .force('link', d3.forceLink(graph.links).distance(20).strength(1).iterations(10))
         .force('link', d3.forceLink(graph.links)
-          .distance(70)
+          .distance(90)
           .id(function(d) {
             return d.id;
           }))

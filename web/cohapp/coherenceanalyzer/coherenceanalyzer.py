@@ -135,9 +135,8 @@ def get_clusters(word_pairs, sentences):
                 word_pairs[num]['target']['lemma']]
 
         # Only assign a new cluster if the current word pair has
-        # not already been processed and if we are at least in the
-        # second word pair
-        if (not bool(set(current_word_pair) & set(assigned_words))) and (num != 0):
+        # not already been processed
+        if (not bool(set(current_word_pair) & set(assigned_words))):
             # Init current cluster
             current_cluster = [word_pairs[num]]
 
@@ -167,8 +166,16 @@ def get_clusters(word_pairs, sentences):
                         iter_word_pair = [word_pairs[num_again]['source']['lemma'],
                                  word_pairs[num_again]['target']['lemma']]
 
+                        # Lemmas in current cluster
+                        current_cluster_lemma_source = map(lambda x: x['source']['lemma'], current_cluster)
+                        current_cluster_lemma_target = map(lambda x: x['target']['lemma'], current_cluster)
+
+                        # Get all words in current cluster
+                        current_cluster_lemma = current_cluster_lemma_source + \
+                                    current_cluster_lemma_target
+
                         # Both pairs share an element
-                        shared_element = bool(set(current_word_pair) & set(iter_word_pair))
+                        shared_element = bool(set(current_cluster_lemma) & set(iter_word_pair))
 
                         # If they share an element append to current cluster
                         if shared_element:
