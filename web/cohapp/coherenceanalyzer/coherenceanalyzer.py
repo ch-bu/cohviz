@@ -670,15 +670,16 @@ def analyzeTextCohesion(text):
     # Build lexical overlap word pairs
     for val, sentence in enumerate(sentences):
         # Get all nouns
-        nouns = [word['lemma'] for word in sentence if word['noun'] == True]
+        nouns = [word['lemma'] for word in sentence if word['noun']]
         nouns_full = [word for word in sentence if word['noun']]
 
         # Append noun if it only occurs once
-        if len(nouns) == 1 and word['noun']:
+        if len(nouns) == 1:
             # Append lonely noun
-            word_pairs.append({'source': {'word': word['orth'],
-                'lemma': word['lemma'], 'sentence': val},
-                'target': {'word': word['orth'], 'lemma': word['lemma'], 'sentence': val},
+            word_pairs.append({'source': {'word': nouns_full[0]['orth'],
+                'lemma': nouns_full[0]['lemma'], 'sentence': val},
+                'target': {'word': nouns_full[0]['orth'],
+                'lemma': nouns_full[0]['lemma'], 'sentence': val},
                 'device': 'single word'})
 
         # If there are multiple nouns append all combinations of nouns
