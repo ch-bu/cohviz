@@ -8,51 +8,9 @@ from pandas import DataFrame
 import numpy as np
 from pygermanet import load_germanet
 from more_itertools import unique_everseen
-from nltk.corpus import stopwords # We might need to remove this line
 from nltk.stem.snowball import GermanStemmer
 import itertools
-# from pymongo import MongoClient
 
-
-# def nounify(verb_word):
-#     """ Transform a verb to the closest noun: die -> death """
-
-#     gn = load_germanet()
-
-#     verb_synsets = gn.synsets(gn.lemmatise(verb_word)[0], pos="v")
-
-#     # Word not found
-#     if not verb_synsets:
-#         return []
-
-#     # Get all verb lemmas of the word
-#     verb_lemmas = [l.orthForm for s in verb_synsets for l in s.lemmas]
-
-#     # verb_lemmas = [l for s in verb_synsets \
-#     #                for l in s.lemmas if s.name.split('.')[1] == 'v']
-#     # print(verb_lemmas)
-
-#     print(gn.synsets('Haus')[0].lemmas[0].rels())
-#     # Get related forms
-#     # derivationally_related_forms = [(l, l.derivationally_related_forms()) \
-#     #                                 for l in verb_lemmas]
-
-#     # # filter only the nouns
-#     # related_noun_lemmas = [l for drf in derivationally_related_forms \
-#     #                        for l in drf[1] if l.synset.name.split('.')[1] == 'n']
-
-#     # # Extract the words from the lemmas
-#     # words = [l.name for l in related_noun_lemmas]
-#     # len_words = len(words)
-
-#     # # Build the result in the form of a list containing tuples (word, probability)
-#     # result = [(w, float(words.count(w))/len_words) for w in set(words)]
-#     # result.sort(key=lambda w: -w[1])
-
-#     # return all the possibilities sorted by probability
-#     return None
-
-# # print(nounify('arbeitet'))
 
 def getPOSElement(element, regex, tags):
     """Returns an array with a boolean
@@ -105,117 +63,140 @@ def getHypoHyperPairs(sentences, gn):
                                 hypers.append(lemma.orthForm)
 
                     # Get next sentence
-                    nextSentence = [wordNext['lemma']
+                    words_next_sentence = [wordNext
                         for wordNext in sentences[val + 1] if wordNext['noun']]
 
                     # Get nouns of current sentence
-                    sentence = [wordThis['lemma'] for wordThis in sentences[val]
+                    word_this_sentence = [wordThis for wordThis in sentences[val]
                         if wordThis['noun']]
 
-                    # Find common elements in hypos and next sentence
-                    intersections_hypo = list(set(hypos).intersection(nextSentence))
+                    # Get nouns of next sentence in array
+                    nouns_next_sentence = map(lambda x: x['lemma'], words_next_sentence)
 
                     # Find common elements in hypos and next sentence
-                    intersections_hyper = list(set(hypers).intersection(nextSentence))
+                    intersections_hypo = list(set(hypos).intersection(nouns_next_sentence))
+
+                    # Find common elements in hypos and next sentence
+                    intersections_hyper = list(set(hypers).intersection(nouns_next_sentence))
 
                     # Loop over every intersections and append
                     for intersection in intersections_hypo:
                         if intersection != word['orth']:
-                            wordPairs.append([word['lemma'], intersection,
-                                'hyponym'])
+                            # Get full target word of intersection
+                            targetWord = filter(lambda x: x['orth']
+                                == intersection, words_next_sentence)[0]
+
+                            # Append
+                            wordPairs.append({'source': {'word': word['orth'],
+                                'lemma': word['lemma'], 'sentence': val},
+                                'target': {'word': targetWord['orth'],
+                                'lemma': targetWord['lemma'], 'sentence': val + 1},
+                                'device': 'hyponym'})
 
                     # Loop over every intersections and append
                     for intersection in intersections_hyper:
                         if intersection != word['orth']:
-                            wordPairs.append([word['lemma'], intersection,
-                                'hypernym'])
+                            # Get full target word of intersection
+                            targetWord = filter(lambda x: x['orth']
+                                == intersection, words_next_sentence)[0]
+
+                            # Append
+                            wordPairs.append({'source': {'word': word['orth'],
+                                'lemma': word['lemma'], 'sentence': val},
+                                'target': {'word': targetWord['orth'],
+                                'lemma': targetWord['lemma'], 'sentence': val + 1},
+                                'device': 'hypernym'})
 
     return wordPairs
 
 
-def get_clusters(word_pairs):
+def get_clusters(word_pairs, sentences):
     """Calculates the number of computed
     clusters"""
 
-    # Initialize clusters
+    # If we only have one sentence return word pairs
+    # as single cluster
+    if len(sentences) == 1:
+        return word_pairs
+
+    # Initialize clusters. The cluster
+    # later stores all clusters as a list containing
+    # the word pair dictionaries
     clusters = []
-    tempClusters = []
-    found = True
-    pairs = word_pairs
+
+    # Store all words that have already been
+    # assigned to a cluster
+    assigned_words = []
 
     # Loop over every word pair
-    for num in range(0, len(pairs)):
-        # Get link data
-        source = pairs[num][0]
-        target = pairs[num][1]
+    for num in range(0, len(word_pairs)):
+        # Store all words that are stored in the current cluster
+        current_word_pair = [word_pairs[num]['source']['lemma'],
+                word_pairs[num]['target']['lemma']]
 
-        # Temporary list
-        tempClusters = [source, target]
+        # Only assign a new cluster if the current word pair has
+        # not already been processed and if we are at least in the
+        # second word pair
+        if (not bool(set(current_word_pair) & set(assigned_words))) and (num != 0):
+            # Init current cluster
+            current_cluster = [word_pairs[num]]
 
-        # Found set to true for while loop
-        found = True
+            # Remember that we already added the words of the current cluster
+            assigned_words.append(current_word_pair[0])
+            assigned_words.append(current_word_pair[1])
 
-        while found:
-            # Found set to false
-            found = False
+            # Index of word_pair we already added to current cluster.
+            # We store the index to reduce the computation. If we already
+            # added an index to the current cluster, there is no need
+            # to look at it again
+            index_pairs_added = [num]
 
-            # Loop over every word pair again
-            for num_again in range(0, len(pairs)):
-                # Word pairs do not match
-                if num != num_again:
+            # Found set to true for while loop
+            found = True
 
-                    # Initialize temporary source and target
-                    tempSource = pairs[num_again][0]
-                    tempTarget = pairs[num_again][1]
+            # As long as we still find connections keep on looping
+            while found:
+                # Found set to false
+                found = False
 
-                    # Temporary array
-                    tempArray = [tempSource, tempTarget]
+                # Loop over every word pair again
+                for num_again in range(0, len(word_pairs)):
+                    # Word pairs do not match
+                    if num_again not in index_pairs_added:
+                        # Store both words of current pair in list
+                        iter_word_pair = [word_pairs[num_again]['source']['lemma'],
+                                 word_pairs[num_again]['target']['lemma']]
 
-                    # Temporary sources and targets in array position
-                    tempPosSource = tempSource in tempClusters
-                    tempPosTarget = tempTarget in tempClusters
+                        # Both pairs share an element
+                        shared_element = bool(set(current_word_pair) & set(iter_word_pair))
 
-                    # Either of the two in in tempClusters
-                    if tempPosSource or tempPosTarget:
-                        # TempSource is in tempClusters
-                        if not tempPosTarget:
+                        # If they share an element append to current cluster
+                        if shared_element:
+                            # Append pair to current cluster
+                            current_cluster.append(word_pairs[num_again])
+
+                            # Remember that we already appended this
+                            # pair to the current cluster
+                            index_pairs_added.append(num_again)
+
+                            # Add word pair that belongs to current cluster
+                            # to list of assigned word pairs. By doing this
+                            # we know if a word has already been assigned
+                            # to a cluster.
+                            assigned_words.append(iter_word_pair[0])
+                            assigned_words.append(iter_word_pair[1])
+
+                            # We found a candidate. When we found a connection
+                            # a new word might be added to the current
+                            # cluster. Therefore we have too loop over
+                            # every word pair again to see if we
+                            # missed a connection with the new word
                             found = True
-                            tempClusters.append(tempTarget)
 
-                    # Temp Target is in tempClusters
-                    if tempPosTarget:
-                        # TempSource is not in tempClusters
-                        if not tempPosSource:
-                            found = True
-                            tempClusters.append(tempSource)
+            # Append current cluster to all clusters
+            clusters.append(current_cluster)
 
-        # Remove duplicates from tempClusters
-        tempClusters = list(unique_everseen(tempClusters))
-
-        clusterIn = False
-
-        # Clusters has at least one element
-        if len(clusters) > 0:
-            # Loop over every cluster
-            for cluster in range(0, len(clusters)):
-                # Current Cluster
-                currentCluster = clusters[cluster]
-
-                # Loop over every element in tempClusters
-                for c in range(0, len(tempClusters)):
-                    if tempClusters[c] in currentCluster:
-                        clusterIn = True
-                        break
-
-            # tempClusters does not exist yet in clusters
-            if not clusterIn:
-                clusters.append(tempClusters)
-
-        # Clusters is empty
-        else:
-            clusters.append(tempClusters)
-
-    return len(clusters)
+    return clusters
 
 
 def get_compounds(sentences):
@@ -226,13 +207,12 @@ def get_compounds(sentences):
     Returns
         Array of compounds
     """
-
     # Dirname
     dir_path = os.path.dirname(os.path.realpath(__file__))
 
     # Read data
-    data = DataFrame.from_csv(dir_path + '/data/compounds.txt', sep='\t',
-        index_col=None, encoding='utf-8')
+    data = DataFrame.from_csv(dir_path + '/data/compounds.txt', sep='\t', index_col=None,
+        encoding='utf-8')
 
     # Init word pairs
     wordPairs = []
@@ -265,45 +245,49 @@ def get_compounds(sentences):
                     # we would compare the compound to a head
                     # in a sentence that doesn't exist.
                     if val != (len(sentences) - 1):
-                        # Get nouns of current next sentence
-                        nouns_next_sentence = [wordNext['lemma']
-                            for wordNext in sentences[val + 1]
-                                if wordNext['noun']]
+                        # Get nouns and words of next sentence
+                        words_next_sentence = filter(lambda x: x['noun'],
+                                sentences[val + 1])
+                        nouns_next_sentence = map(lambda x: x['lemma'],
+                                words_next_sentence)
 
                         # Head is in next sentence
                         if head in nouns_next_sentence:
-                            # Get compound word
-                            compound = data['compound'][word_index]
-
                             # Get index of head in next sentence
                             index_next_sentence = nouns_next_sentence.index(head)
 
                             # Append to list
-                            wordPairs.append([compound,
-                                nouns_next_sentence[index_next_sentence],
-                                    'compound'])
+                            wordPairs.append({'source': {'word': word['orth'],
+                                'lemma': word['lemma'], 'sentence': val},
+                                'target': {'word': words_next_sentence[index_next_sentence]['orth'],
+                                'lemma': words_next_sentence[index_next_sentence]['lemma'], 'sentence': val + 1},
+                                'device': 'compound subordination'})
 
                     # Make sure that I do not append a word pair
                     # that links the first and the last sentence.
                     # Only link wordpairs within the text.
                     if (val -1) > -1:
                         # Get nouns of previous sentence
-                        nouns_previous_sentence = [wordNext['lemma']
-                            for wordNext in sentences[val - 1]
-                                if wordNext['noun']]
+                        # nouns_previous_sentence = [wordNext['lemma']
+                        #     for wordNext in sentences[val - 1]
+                        #         if wordNext['noun']]
+                        words_previous_sentence = filter(lambda x: x['noun'],
+                                sentences[val - 1])
+                        nouns_previous_sentence = map(lambda x: x['lemma'],
+                                words_previous_sentence)
 
                         # Head occurs in previous sentence
                         if head in nouns_previous_sentence:
-                            # Get compound word
-                            compound = data['compound'][word_index]
-
                             # Get index of head in next sentence
                             index_previous_sentence = nouns_previous_sentence.index(head)
 
                             # Append to list
-                            wordPairs.append([compound,
-                                nouns_previous_sentence[index_previous_sentence],
-                                    'compound'])
+                            wordPairs.append({'source': {'word':
+                                    words_previous_sentence[index_previous_sentence]['orth'],
+                                'lemma': words_previous_sentence[index_previous_sentence]['lemma'], 'sentence': val -1},
+                                'target': {'word': word['orth'],
+                                'lemma': word['lemma'], 'sentence': val},
+                                'device': 'compound superordination'})
 
     return wordPairs
 
@@ -331,37 +315,30 @@ def get_stem_relations(sentences, gn):
             stems_next_sentence = map(lambda x: stemmer.stem(x['lemma']),
                 sentences[val + 1])
 
-            # Words next sentence
-            words_next_sentence = map(lambda x: x['lemma'],
-                sentences[val + 1])
-
             # Nouns in next sentence
             nouns_next_sentence = [word['lemma'] for word in sentences[val + 1]
                 if word['noun']]
 
             # Nouns of current sentence
-            nouns_current_sentence = [word['lemma'] for word in sentence
+            words_current_sentence = [word for word in sentence
                 if word['noun']]
 
             # Loop over every word in current sentece
             for word in sentences[val]:
-
                 # Stem of current word
                 stem_current_word = stemmer.stem(word['lemma'])
 
                 # Is the stemmed word in the next sentence, great.
                 # If word is a lame 'sein', ignore it
                 if (stem_current_word in stems_next_sentence) and word['lemma'] != 'sein':
-
                     # Get index of stem that is related to current word
                     index_word_next_sentence = stems_next_sentence.index(stem_current_word)
 
                     # Corresponding word in next sentence
-                    corresponding_word = words_next_sentence[index_word_next_sentence]
+                    corresponding_word = sentences[val + 1][index_word_next_sentence]
 
                     # Only add word pairs if verb or noun
                     if word['noun'] or word['verb']:
-
                         # Get dictionary of word in next sentence
                         dict_next = sentences[val + 1][index_word_next_sentence]
 
@@ -372,27 +349,30 @@ def get_stem_relations(sentences, gn):
                         if word['verb'] and dict_next['noun']:
                             # Get all combinations of corresponding noun
                             # in next sentence an all nouns in current sentence
-                            verb_noun_combinations = [[corresponding_word,
-                                noun, 'verb-noun-relation'] for noun in
-                                    nouns_current_sentence]
-
-                            # Append to word pairs
-                            word_pairs = word_pairs + verb_noun_combinations
+                            for wordCurrent in words_current_sentence:
+                                # Append to list
+                                word_pairs.append({'source': {'word': corresponding_word['orth'],
+                                    'lemma': corresponding_word['lemma'], 'sentence': val},
+                                    'target': {'word': wordCurrent['orth'],
+                                    'lemma': wordCurrent['lemma'], 'sentence': val + 1},
+                                    'device': 'verb noun relation'})
 
                         # Current word is noun and corresponding word is
                         # verb
                         elif word['noun'] and dict_next['verb']:
-                            # Get all combinations of noun in this sentence
-                            # and all nouns in next sentence
-                            noun_verb_combinations = [[word['lemma'], noun,
-                                'verb-noun-relation'] for noun in
-                                    nouns_next_sentence]
-
-                            # Append to word pairs
-                            word_pairs = word_pairs + noun_verb_combinations
+                            # Get all combinations of of noun in this sentence
+                            # with nouns in next sentence
+                            for wordNext in sentences[val + 1]:
+                                # Do not use stupid 'sein'
+                                if wordNext['noun']:
+                                    # Append to list
+                                    word_pairs.append({'source': {'word': word['orth'],
+                                        'lemma': word['lemma'], 'sentence': val},
+                                        'target': {'word': wordNext['orth'],
+                                        'lemma': wordNext['lemma'], 'sentence': val + 1},
+                                        'device': 'noun verb relation'})
 
     return word_pairs
-
 
 
 def get_coreferences(sentences, gn):
@@ -446,16 +426,120 @@ def get_coreferences(sentences, gn):
                         anaphor_parent = [i for i, x in enumerate(unique_current) if x][0]
 
                         # Get lemma of anaphor parent
-                        lemma_parent = current_sentence[anaphor_parent]['lemma']
+                        word_parent = current_sentence[anaphor_parent]
 
-                        # Create word pairs
-                        pairs = [[lemma_parent, noun['lemma'], 'coreference']
-                            for noun in nouns_next_sentence]
-
-                        # Append pairs to word pairs
-                        word_pairs = word_pairs + pairs
+                        # Loop over every noun in next sentence
+                        for noun_next in nouns_next_sentence:
+                            # Append
+                            word_pairs.append({'source': {'word': word_parent['orth'],
+                                'lemma': word_parent['lemma'], 'sentence': val},
+                                'target': {'word': noun_next['orth'],
+                                'lemma': noun_next['lemma'], 'sentence': val + 1},
+                                'device': 'coreference'})
 
     return word_pairs
+
+
+def calc_local_cohesion(word_pairs, sentences):
+    """Calculates local cohesion
+    by a probability score between 0 and 1.
+    1 indicates a fully local coherent text.
+
+    Args:
+        word_pairs (dict) - All word pairs of text
+        sentences (Array) - List of all sentences
+
+    Return:
+        Float - Local cohesion of text
+    """
+
+    # Get all connections also within sentences
+    connections = list(set(map(lambda x: (x['source']['sentence'],
+        x['target']['sentence']), word_pairs)))
+
+    # Get all connections between sentences
+    connections_between = filter(lambda x: x[0] != x[1], connections)
+
+    try:
+        # Return local cohesion
+        local_cohesion = float(len(connections_between)) / (len(sentences) - 1)
+    except ZeroDivisionError:
+        return {'local_cohesion': None,
+                'cohSentences': None,
+                'cohNotSentences': None}
+
+    # Number of coherent sentences
+    num_coh_sentences = len(connections_between)
+
+    # Number of non-coherent sentences
+    num_non_coh_sentences = (len(sentences) - 1) - num_coh_sentences
+
+    return {'local_cohesion': local_cohesion,
+            'cohSentences': num_coh_sentences,
+            'cohNotSentences': num_non_coh_sentences}
+
+
+def get_lemma_mapping(word_pairs):
+    """Get a dictionary that stores all orthographic
+    forms for a lemma.
+
+    Args:
+        word_pairs (Array) - a list of all word_pairs
+
+    Returns:
+        Dictionary - All lemma - word combinations
+    """
+
+    # Initialize dictionaries that hold the
+    # mapping of a lemma to a word or of a word to a lemma
+    lemma_word_dic = {}
+    word_lemma_dic = {}
+
+    # Loop over every word pair
+    for pair in word_pairs:
+        # Temporary store source and target
+        # of current word pair
+        source = pair['source']
+        target = pair['target']
+
+        # Attach each mapping of lemma and corresponding
+        # word. Later we calculate the set
+        if lemma_word_dic.get(source['lemma']):
+            lemma_word_dic[source['lemma']].append(source['word'])
+        else:
+            lemma_word_dic[source['lemma']] = [source['word']]
+
+        # Add target
+        if lemma_word_dic.get(target['lemma']):
+            lemma_word_dic[target['lemma']].append(target['word'])
+        else:
+            lemma_word_dic[target['lemma']] = [target['word']]
+
+        # Attach each mapping of word and corresponding
+        # lemma. Later we calculate the set
+        if word_lemma_dic.get(source['word']):
+            word_lemma_dic[source['word']].append(source['lemma'])
+        else:
+            word_lemma_dic[source['word']] = [source['lemma']]
+
+        if word_lemma_dic.get(target['word']):
+            word_lemma_dic[target['word']].append(target['lemma'])
+        else:
+            word_lemma_dic[target['word']] = [target['lemma']]
+
+    # Build lemma dic without redundant words
+    lemma_word_dic_non_redundant = {}
+    word_lemma_dic_non_redundant = {}
+
+    # Build sets of both dictionaries
+    for field, words in lemma_word_dic.items():
+        lemma_word_dic_non_redundant[field] = list(set(words))
+
+    for field, words in word_lemma_dic.items():
+        word_lemma_dic_non_redundant[field] = list(set(words))
+
+    return {'lemma_word': lemma_word_dic_non_redundant,
+            'word_lemma': word_lemma_dic_non_redundant}
 
 
 def analyzeTextCohesion(text):
@@ -472,11 +556,6 @@ def analyzeTextCohesion(text):
 
     # Remove brackets and parenthesis from text
     text = re.sub(r"[\(\[].*?[\)\]]", "", text)
-
-    # Substitute abbreviations
-    text = re.sub('bzw.', 'beziehungsweise', text)
-    text = re.sub('“', '', text)
-    text = re.sub('„', '', text)
 
     # Remove trailing white space
     text = text.strip()
@@ -568,24 +647,33 @@ def analyzeTextCohesion(text):
     ############################################################################
 
     # Init word pairs array
-    wordPairs = []
+    word_pairs = []
 
     # Build lexical overlap word pairs
     for val, sentence in enumerate(sentences):
         # Get all nouns
         nouns = [word['lemma'] for word in sentence if word['noun'] == True]
+        nouns_full = [word for word in sentence if word['noun']]
 
         # Append noun if it only occurs once
         if len(nouns) == 1 and word['noun']:
             # Append lonely noun
-            wordPairs.append([word['lemma'], word['lemma'], 'lexical overlap'])
+            word_pairs.append({'source': {'word': word['orth'],
+                'lemma': word['lemma'], 'sentence': val},
+                'target': {'word': word['orth'], 'lemma': word['lemma'], 'sentence': val},
+                'device': 'single word'})
+
         # If there are multiple nouns append all combinations of nouns
         elif len(nouns) > 1:
-            for subset in itertools.combinations_with_replacement(nouns, 2):
+            # Loop over every combination of nouns in current sentence
+            for subset in itertools.combinations_with_replacement(nouns_full, 2):
                 if subset[0] != subset[1]:
-                    pairArray = list(subset)
-                    pairArray.append('lexical overlap')
-                    wordPairs.append(pairArray)
+                    # Append word pairs
+                    word_pairs.append({'source': {'word': subset[0]['orth'],
+                        'lemma': subset[0]['lemma'], 'sentence': val},
+                        'target': {'word': subset[1]['orth'],
+                        'lemma': subset[1]['lemma'], 'sentence': val},
+                        'device': 'within sentence'})
 
     # Get hypernym hyponym pairs
     hyponym_hyper_pairs = getHypoHyperPairs(sentences, gn)
@@ -600,21 +688,33 @@ def analyzeTextCohesion(text):
     stem_relations = get_stem_relations(sentences, gn)
 
     # Merge all word pairs
-    wordPairs = wordPairs + hyponym_hyper_pairs + coreferences + compounds + \
+    word_pairs = word_pairs + hyponym_hyper_pairs + coreferences + compounds + \
         stem_relations
 
     # Calc number of sentences
     num_sentences = len(sentences)
 
-    # Number of clusters
-    num_clusters = get_clusters(wordPairs)
+    # Calculate local cohesion
+    local_cohesion = calc_local_cohesion(word_pairs, sentences)
+
+    # Calculate clusters
+    cluster = get_clusters(word_pairs, sentences)
+
+    # Get dictionary of orthographic forms of all lemmas
+    word_lemma_mapping = get_lemma_mapping(word_pairs)
 
     # Get number of concepts
     num_concepts = len(set([concept['lemma']
-        for concept in tags if concept['noun'] == True]))
+                for concept in tags if concept['noun'] == True]))
 
-    return {'word_pairs': wordPairs,
-             'numSentences': num_sentences,
-             'numConcepts': num_concepts,
-             'numClusters': num_clusters}
-
+    # Return data
+    return {'word_pairs': word_pairs,
+            'numSentences': num_sentences,
+            'numConcepts': num_concepts,
+            'clusters': cluster,
+            'numCluster': len(cluster),
+            'local cohesion': local_cohesion['local_cohesion'],
+            'cohSentences': local_cohesion['cohSentences'],
+            'cohNotSentences': local_cohesion['cohNotSentences'],
+            'lemmaWordRelations': word_lemma_mapping['lemma_word'],
+            'wordLemmaRelations': word_lemma_mapping['word_lemma']}
