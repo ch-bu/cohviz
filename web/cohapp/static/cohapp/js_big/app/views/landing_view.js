@@ -184,8 +184,144 @@ app.LandingView = Backbone.View.extend({
 
   renderCmap: function(pairs, numConcepts, numClusters, svgID, height, width, colors)  {
     var self = this;
+    var svgHeight = height / 2;
+    var svgWidth = (width / 2);
+    var margin = {top: 0, right: 0, bottom: 0, left: 0};
 
-    console.log(this.analyzer.toJSON());
+    /**
+     * Closure
+     * @param  {[type]} currentCluster [description]
+     * @return {[type]}                [description]
+     */
+    function runSimulation(currentCluster) {
+      // Save temporary cluster
+      var cluster = currentCluster;
+
+      // Get data for force simulation with
+      // nodes and links
+      var graph = app.getLinksNodes(cluster);
+
+      // Create svg
+      var svg = d3.select(svgID).append("svg")
+        .attr("width", svgWidth + margin.left + margin.right)
+        .attr("height", svgHeight + margin.top + margin.bottom);
+
+      // Create force simulation
+      var simulation = d3.forceSimulation(graph.nodes)
+        .force('charge', d3.forceManyBody().strength(-100))
+        // .force('link', d3.forceLink(graph.links).distance(20).strength(1).iterations(10))
+        .force('link', d3.forceLink(graph.links)
+          .distance(70)
+          .id(function(d) {
+            return d.id;
+          }))
+        .force('center', d3.forceCenter(svgWidth / 2, svgHeight / 2))
+        .force('x', d3.forceX())
+        .force('y', d3.forceY())
+        .stop();
+
+      // Wrap everything in g element
+      var g = svg.append('g');
+
+      var loading = svg.append("text")
+        .attr("dy", "0.35em")
+        .attr("text-anchor", "middle")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", 10)
+        .attr('x', svgWidth / 2)
+        .attr('y', svgHeight / 2)
+        .text("Simulating. One moment please…");
+
+      // Run simulation in the background
+      d3.timeout(function() {
+        loading.remove();
+
+        // See https://github.com/d3/d3-force/blob/master/README.md#simulation_tick
+        for (var i = 0, n = Math.ceil(Math.log(simulation.alphaMin()) / Math.log(1 - simulation.alphaDecay())); i < n; ++i) {
+          simulation.tick();
+        }
+
+        // Add links
+        var link = g.append('g')
+          .attr('class', 'links')
+          .selectAll('line')
+          .data(graph.links)
+          .enter().append('line')
+          .attr("x1", function(d) {
+            // console.log(d);
+            return d.source.x;
+          })
+          .attr("y1", function(d) { return d.source.y; })
+          .attr("x2", function(d) { return d.target.x; })
+          .attr("y2", function(d) { return d.target.y; });
+
+        // Create g element that stores
+        // circles and text and call dragging on it
+        var node = g.append('g')
+          .attr('class', 'nodes')
+          .selectAll('.node')
+          .data(graph.nodes)
+          .enter().append('g')
+          .attr('class', 'node')
+          .attr('transform', function(d) {
+            return 'translate(' + d.x + ',' + d.y + ')';
+          });
+          // .attr('transform'))
+          // .attr("x", function(d) {
+          //   console.log(d);
+          //   return d.x;
+          // })
+          // .attr("y", function(d) { return d.y; });
+
+        // Append label to node container
+        var label = node.append('text')
+          .attr('dy', '0')
+          .attr('dx', '0')
+          .attr('text-anchor', 'middle')
+          .text(function(d) {
+            return d.id;
+          });
+          // .attr('x', function(d) { return d.source.x; })
+          // .attr('y', function(d) { return d.source.y; });
+      });
+    }
+
+    // Create svg for each cluster
+    for (var i = 0; i < this.clusters.length; i++) {
+      console.log(this.clusters[i]);
+      runSimulation(this.clusters[i]);
+
+    }
+
+    // /**
+    //  * Tick function adds x and y
+    //  * coordinates to nodes and links
+    //  */
+    // function ticked() {
+    //   // Update links
+    //   link
+    //     .attr('x1', function(d) {
+    //       // console.log(d);
+    //       return d.source.x;
+    //     })
+    //     .attr('y1', function(d) { return d.source.y; })
+    //     .attr('x2', function(d) { return d.target.x; })
+    //     .attr('y2', function(d) { return d.target.y; });
+
+    //   // var xTest = Math.max(6, Math.min(svgWidth, d.x));
+    //   // var yTest = Math.max(6, Math.min(svgHeight, d.y));
+
+    //   // Update nodes
+    //   node.attr('transform', function(d) {
+    //     // console.log(d);
+    //     // var xTest = Math.max(25, Math.min(svgWidth, d.x));
+    //     // var yTest = Math.max(25, Math.min(svgHeight, d.y));
+
+    //     // return 'translate(' + xTest + ',' + yTest + ')';
+    //     return 'translate(' + d.x + ',' + d.y + ')';
+    //   });
+    // }
+      // console.log(cluster);
 
     // ****************** Render SVG ***************************************
     // Variable declaration
@@ -200,30 +336,12 @@ app.LandingView = Backbone.View.extend({
     // var svgWidth = width;
     // var windowHeight = $(window).height();
 
-    // // Set margin and width
-    // var margin = {top: 0, right: 0, bottom: 0, left: 0};
-
-    // // Select svg
-    // var svg = d3.select(svgID).append("svg")
-    //   .attr("width", svgWidth + margin.left + margin.right)
-    //   .attr("height", svgHeight + margin.top + margin.bottom);
-
     // // Append rectangle to svg
     // var rect = svg.append("rect")
     //   .attr("width", svgWidth)
     //   .attr("height", svgHeight)
     //   .style("fill", "none")
     //   .style("pointer-events", "all");
-
-    // // Create new force simulation
-    // var simulation = d3.forceSimulation()
-    //   .force('link', d3.forceLink().id(function(d) {
-    //     return d.id;
-    //   }))
-    //   // .force('link', d3.forceLink(graph).distance(20).strength(1))
-    //   .force('charge', d3.forceManyBody().strength(-1))
-    //   .force('center', d3.forceCenter(svgWidth / 2, svgHeight / 2))
-    //   .force('collide', d3.forceCollide(40).iterations(6));
 
     // ///////////////////////////////
     // // Enable zoom functionality //
@@ -294,43 +412,7 @@ app.LandingView = Backbone.View.extend({
     //     return d.id;
     //   });
 
-    // // Add nodes to simulation
-    // simulation
-    //   .nodes(graph.nodes)
-    //   .on('tick', ticked);
 
-    // // Add links to simulation
-    // simulation.force('link')
-    //   .links(graph.links);
-
-    // var linkedByIndex = {};
-    //   link.each(function(d) {
-    //     linkedByIndex[d.source.index + "," + d.target.index] = true;
-    //   });
-
-    // /**
-    //  * Tick function adds x and y
-    //  * coordinates to nodes and links
-    //  */
-    // function ticked() {
-    //   // Update links
-    //   link
-    //     .attr('x1', function(d) { return d.source.x; })
-    //     .attr('y1', function(d) { return d.source.y; })
-    //     .attr('x2', function(d) { return d.target.x; })
-    //     .attr('y2', function(d) { return d.target.y; });
-
-    //   // var xTest = Math.max(6, Math.min(svgWidth, d.x));
-    //   // var yTest = Math.max(6, Math.min(svgHeight, d.y));
-
-    //   // Update nodes
-    //   node.attr('transform', function(d) {
-    //     var xTest = Math.max(25, Math.min(svgWidth, d.x));
-    //     var yTest = Math.max(25, Math.min(svgHeight, d.y));
-
-    //     return 'translate(' + xTest + ',' + yTest + ')';
-    //   });
-    // }
 
     // function dragstarted(d) {
     //   if (!d3.event.active) simulation.alphaTarget(0.3).restart();

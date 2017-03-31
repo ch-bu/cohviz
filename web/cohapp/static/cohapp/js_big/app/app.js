@@ -28,7 +28,7 @@ app.urls = function() {
 
     this.single_experiment = this.website + '/experiment/';
     this.run_experiment = this.website + '/run-experiment/';
-    
+
     return this;
 }();
 
@@ -56,13 +56,13 @@ app.constants = function() {
 app.getExperimentId = function() {
     var path = window.location.href;
     var experiment_id = path.substr(path.lastIndexOf('/') + 1);
-    
+
     return experiment_id;
 };
 
 app.regExText = function(id) {
     var textToChange = $('#editor-textinput').html();
-    
+
     // textToChange = textToChange.replace(/CLT/g, 'Cognitive-Load-Theory');
     textToChange = textToChange.replace(/[Cc]ognitive [Ll]oad [Tt]heor(y|(ie))/g, 'Cognitive-Load-Theory');
     // textToChange = textToChange.replace(/[Cc]ognitive [Ll]oad/g, 'Kognitive-Belastung');
@@ -91,11 +91,11 @@ app.getParagraphs = function(div) {
     // All paragraphs in text
     var paragraphs = div.find('p');
 
-    // Api needs a single string. We need to get the text from 
+    // Api needs a single string. We need to get the text from
     // the paragraphs
     var paragraphText = '';
     paragraphs.each(function(paragraph) {
-        
+
         paragraphText += paragraphs[paragraph].innerText + " ";
     });
 
@@ -127,9 +127,9 @@ app.replaceAll = function(str, find, replace) {
 //         element.value = string;
 //         return;
 //     }
-    
+
 //     element.value = string.substring(0,i);
-    
+
 //     if( element.value[element.value.length-1] != " " )element.focus();
 //         var rand = Math.floor(Math.random() * (100)) + 140;
 //         setTimeout(function(){writer(i);},rand);
@@ -179,8 +179,8 @@ app.sameOrigin = function(url) {
 //  * @param  {Array}   colors        20 distinct colors
 //  * @param  {String}  word          word of cluster that should be highlighted
 //  * @param  {Boolean} singleCluster Wheter a single cluster should be highlighted
-//  * @return {null} 
- 
+//  * @return {null}
+
 app.highlightWholeText = function(divId, clusters, colors) {
     $(divId).find('p').each(function(paragraph) {
         var textParagraph = $(this).text();
@@ -196,7 +196,7 @@ app.colorText = function(text, paragraph, clusters, colors) {
 
     // Get each word in paragraph and remove punctuation from text
     var words = text.replace(/[.,\/#!$%\^&\*;:{}=_`~()]/g,"").split(" ");
-    
+
     // Split whole text string
     var newTextSplit = newText.replace(/[^\wöäüÄÖÜß-\s]|_/g, function ($1) { return ' ' + $1 + ' ';}).replace(/[ ]+/g, ' ').split(' ');
 
@@ -243,7 +243,7 @@ app.highlightSelectedWord = function(divId, wordSelected, wordsUnselected, lemma
 
         // Get cluster with word
         var cluster = null;
-        
+
         // Get id of cluster the word is in
         for (var p = 0; p < clusters.length; p++) {
             if (clusters[p].indexOf(wordSelected) != -1) {
@@ -256,11 +256,11 @@ app.highlightSelectedWord = function(divId, wordSelected, wordsUnselected, lemma
 
         // Get each word in paragraph and remove punctuation from text
         var words = textParagraph.replace(/[.,\/#!$%\^&\*;:{}=_`~()]/g,"").split(" ");
-        
+
         // Split whole text string
         var newTextSplit = newText.replace(/[^\wöäüÄÖÜß-\s]|_/g, function ($1) { return ' ' + $1 + ' ';}).replace(/[ ]+/g, ' ').split(' ');
 
-        // Used words 
+        // Used words
         var usedWords = [];
         // Loop over every word in paragraph
         for (var i = 0; i < newTextSplit.length; i++) {
@@ -327,8 +327,8 @@ app.getLinksNodes = function(wordpairs) {
 
     // Save all word-pairs in different format
     wordpairs.forEach(function(pair) {
-        links.push(pair[0]);
-        links.push(pair[1]);
+        links.push(pair.source['lemma']);
+        links.push(pair.target['lemma']);
     });
 
     // Remove duplicates
@@ -339,18 +339,18 @@ app.getLinksNodes = function(wordpairs) {
     $.each(uniqueLinks, function(i) {
         nodes.push({"index": i, "id": uniqueLinks[i]});
     });
-    
 
     // Generate links
     $.each(wordpairs, function(i) {
+        // console.log(wordpairs[i]);
         // Get indexes of texts
         // var source = uniqueLinks.indexOf(wordpairs[i][0]);
         // var target = uniqueLinks.indexOf(wordpairs[i][1]);
         // console.log(wordpairs[i][0]);
         // Push to edges
-        edges.push({'source': wordpairs[i][0], 'target': wordpairs[i][1]});
+        edges.push({'source': wordpairs[i].source['lemma'],
+          'target': wordpairs[i].target['lemma']});
     });
-
 
     // Save nodes and edges to graph object
     var graph = {
@@ -368,9 +368,9 @@ app.getLinksNodes = function(wordpairs) {
  * @param  {Object} clust       clusters of words
  * @param  {Number} numClusters number of clusters of a text
  * @param  {String} svgID       id of dom element for svg
- * @param  {Number} height      height of svg 
+ * @param  {Number} height      height of svg
  * @param  {Number} width       width of svg
  */
 // app.renderCmap = function(pairs, clust, numClusters, svgID, height, width, colors)  {
-    
+
 // }
