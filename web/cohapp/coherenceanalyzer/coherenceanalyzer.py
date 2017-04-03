@@ -83,7 +83,7 @@ def getHypoHyperPairs(sentences, gn):
                     for intersection in intersections_hypo:
                         if intersection != word['orth']:
                             # Get full target word of intersection
-                            targetWord = filter(lambda x: x['orth']
+                            targetWord = filter(lambda x: x['lemma']
                                 == intersection, words_next_sentence)[0]
 
                             # Append
@@ -97,7 +97,7 @@ def getHypoHyperPairs(sentences, gn):
                     for intersection in intersections_hyper:
                         if intersection != word['orth']:
                             # Get full target word of intersection
-                            targetWord = filter(lambda x: x['orth']
+                            targetWord = filter(lambda x: x['lemma']
                                 == intersection, words_next_sentence)[0]
 
                             # Append
@@ -581,6 +581,11 @@ def analyzeTextCohesion(text):
 
     # Remove brackets and parenthesis from text
     text = re.sub(r"[\(\[].*?[\)\]]", "", text)
+
+    # Remove percent sign
+    text = re.sub(r'%', '', text)
+    text = re.sub(r'“', '', text)
+    text = re.sub(r'–', '', text)
 
     # Remove trailing white space
     text = text.strip()

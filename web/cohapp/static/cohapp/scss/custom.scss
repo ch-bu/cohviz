@@ -35,7 +35,7 @@ $form-radius: $global-radius;
 @mixin svg-attributes() {
 
     svg {
-      border: 1px solid #ededed;
+      // border: 1px solid #ededed;
 
       @media print {
         border: none;
@@ -121,6 +121,16 @@ body {
 
   #editor-full-graph {
     height: 80vh;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    overflow-y: scroll;
+
+    svg {
+      width: 47%;
+    }
+
+
   }
 }
 

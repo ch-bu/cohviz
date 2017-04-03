@@ -247,10 +247,7 @@ app.LandingView = Backbone.View.extend({
           .selectAll('line')
           .data(graph.links)
           .enter().append('line')
-          .attr("x1", function(d) {
-            // console.log(d);
-            return d.source.x;
-          })
+          .attr("x1", function(d) { return d.source.x; })
           .attr("y1", function(d) { return d.source.y; })
           .attr("x2", function(d) { return d.target.x; })
           .attr("y2", function(d) { return d.target.y; });
@@ -266,12 +263,6 @@ app.LandingView = Backbone.View.extend({
           .attr('transform', function(d) {
             return 'translate(' + d.x + ',' + d.y + ')';
           });
-          // .attr('transform'))
-          // .attr("x", function(d) {
-          //   console.log(d);
-          //   return d.x;
-          // })
-          // .attr("y", function(d) { return d.y; });
 
         // Append label to node container
         var label = node.append('text')
@@ -281,8 +272,7 @@ app.LandingView = Backbone.View.extend({
           .text(function(d) {
             return d.id;
           });
-          // .attr('x', function(d) { return d.source.x; })
-          // .attr('y', function(d) { return d.source.y; });
+
       });
     }
 
