@@ -227,9 +227,9 @@ app.LandingView = Backbone.View.extend({
       var linkedByIndex = {};
 
       // Call zoom
-      svg.call(d3.zoom()
-        .scaleExtent([1 / 10, 10])
-        .on('zoom', zoomed));
+      // svg.call(d3.zoom()
+      //   .scaleExtent([1 / 10, 10])
+      //   .on('zoom', zoomed));
 
       var loading = svg.append("text")
         .attr("dy", "0.35em")
@@ -349,39 +349,36 @@ app.LandingView = Backbone.View.extend({
             return d.source.id === nodeData.id || d.target.id === nodeData.id ? '#4c4c4c' : '#f4f4f4';
           });
 
-
-        ////////////////////////
-        // Unselected element //
-        ////////////////////////
-        // var nodeUnselected = d3.selectAll('.node')
-        //  .filter(function(d) {
-        //    return d.id != obj.id;
-        //  });
-
-        // nodeUnselected.select('text')
-        //  .style('font-size', 16)
-        //  .style('font-weight', 'normal');
-
-        // nodeUnselected.select('circle')
-        //  .attr('r', 15);
-
         /////////////////////////////
         // Highlight words in text //
         /////////////////////////////
 
         // We need to get the text of the selected word in order
         // to highlight them
-        // var wordSelected = textSelected.text();
+        var wordSelected = textSelected.text();
 
-        // // Get all words that are semantically related
-        // // to the selected word
-        // var wordsUnselected = [];
-        // node.selectAll('text')
-        //  .each(function(d) {
-        //    if (isConnected(obj, d)) {
-        //      wordsUnselected.push(d.id);
-        //    }
-        //  });
+        // Get all words that are semantically related
+        // to the selected word
+        var wordsRelated = [];
+
+        svg.selectAll('text')
+         .each(function(d) {
+           if (isConnected(nodeData, d)) {
+             wordsRelated.push(d);
+           }
+         });
+
+        // Get all words and corresponding orthoForms
+        // console.log(self.analyzer.toJSON());
+        var lemmaWordRelations = self.analyzer.get('lemmaWordRelations');
+        var orthos = wordsRelated.map(function(obj) {
+          return self.analyzer.get('lemmaWordRelations')[obj.id];
+        });
+
+        orthos = [].concat.apply([], orthos);
+
+        console.log(orthos);
+        // console.log(wordsUnselected);
 
         // Remove selected word
         // var index = wordsUnselected.indexOf(wordSelected);
