@@ -106,6 +106,7 @@ app.getParagraphs = function(div) {
 
         // Generate spans for text
         $(this).html(jquerySpan);
+        $(this).append('.');
     });
 
     // Remove line breaks from string
@@ -256,6 +257,7 @@ app.highlightSelectedWord = function(divId, wordSelected) {
 
         // Return paragraph with highlighting
         $(this).html(jquerySpan);
+        $(this).append('.');
     });
 };
 
