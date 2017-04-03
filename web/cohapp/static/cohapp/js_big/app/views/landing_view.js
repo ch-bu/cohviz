@@ -6,7 +6,9 @@ app.LandingView = Backbone.View.extend({
 
   events: {
     'click #editor-button': 'analyzeText',
-    'click #editor-full-button': 'reanalyzeText'
+    'click #editor-full-button': 'reanalyzeText',
+    'mouseover #editor-full-medium-editor span': 'onTextHover',
+    'mouseout #editor-full-medium-editor span': 'onTextHoverOff',
   },
 
   initialize: function () {
@@ -15,6 +17,9 @@ app.LandingView = Backbone.View.extend({
 
     // Generate 20 distinct colors
     this.colors = d3.scaleOrdinal(d3.schemeCategory10);
+
+    // this simulations
+    this.simulations = {};
 
     // Render editor
     this.$el.find('#landingview-editor').html(
@@ -53,7 +58,10 @@ app.LandingView = Backbone.View.extend({
 
     // Initalize model for text analysis
     this.analyzer = new app.TextAnalyzerModel();
+
+    _.bindAll(this, "onTextHover");
   },
+
 
   /**
    * Get text from medium editor and pass it to render function
@@ -128,6 +136,114 @@ app.LandingView = Backbone.View.extend({
     });
   },
 
+  onTextHover: function(e) {
+    // Get span element that is hovered
+    var hoveredElement = e.currentTarget.innerText;
+
+    // Get lemmas for word
+    var lemmasForWord = this.analyzer.get('wordLemmaRelations')[hoveredElement];
+
+    // Is element in Data?
+    if (lemmasForWord) {
+      // Get cluster of word
+
+      // Loop over every cluster and see in which cluster the word is
+      var clusters = this.analyzer.get('clusters');
+      var indexOfCluster = null;
+
+      for (var key in clusters) {
+        clusters[key].map(function(d, i) {
+          var source = d.source.word;
+          var target = d.target.word;
+
+          if (hoveredElement == source || hoveredElement == target) {
+            indexOfCluster = key;
+          }
+        });
+      }
+
+      var linkedByIndex = this.simulations[indexOfCluster].linkedByIndex;
+      var svg = this.simulations[indexOfCluster].svg;
+
+      // Get selected word
+      var nodeSelected = d3.select('#node-' + lemmasForWord[0]);
+      var nodeData = nodeSelected.data()[0];
+
+      // Change text of selected element
+      var textSelected = nodeSelected.select('text')
+        .style('opacity', 1)
+        .style('font-weight', 'bold');
+
+      // Highlight adjacent nodes
+      svg.selectAll('text')
+        .style('opacity', function(d) {
+         if (isConnected(nodeData, d)) {
+           return 1;
+         }
+
+         return 0.1;
+
+        });
+
+      svg.selectAll('circle')
+        .style('fill', function(d) {
+          if (isConnected(nodeData, d)) {
+            return '#000';
+          }
+
+          return '#f4f4f4';
+        })
+        .style('opacity', function(d) {
+          if (isConnected(nodeData, d)) {
+            return 1;
+          }
+
+          return 0.2;
+        });
+
+      /////////////////////
+      // Highlight links //
+      /////////////////////
+      svg.selectAll('line')
+        .style('stroke', function(d) {
+          return d.source.id === nodeData.id || d.target.id === nodeData.id ? '#4c4c4c' : '#f4f4f4';
+        });
+    }
+
+    function isConnected(a, b) {
+      return isConnectedAsTarget(a, b) || isConnectedAsSource(a, b) || a.index == b.index;
+    }
+
+    function isConnectedAsSource(a, b) {
+      return linkedByIndex[a.index + "," + b.index];
+    }
+
+    function isConnectedAsTarget(a, b) {
+      return linkedByIndex[b.index + "," + a.index];
+    }
+  },
+
+  onTextHoverOff: function(e) {
+    // var gElement = d3.selectAll('g');
+
+    // gElement.select('circle')
+    //   .style('fill', '#ccc');
+
+    // gElement.select('text')
+    //   .style('font-weight', 'normal');
+
+    d3.selectAll('text')
+       .style('opacity', 0.8)
+       .style('font-weight', 'normal');
+
+    d3.selectAll('circle')
+      .style('fill', '#ccc')
+      .style('opacity', 1);
+
+    d3.selectAll('.links').selectAll('line')
+     .style('stroke', '#ccc');
+},
+
   /**
    * Render graph
    * @param  {String}  paragraphDiv the div that contains the paragraphs
@@ -193,7 +309,7 @@ app.LandingView = Backbone.View.extend({
      * @param  {[type]} currentCluster [description]
      * @return {[type]}                [description]
      */
-    function runSimulation(currentCluster) {
+    function runSimulation(currentCluster, clusterIndex) {
       // Save temporary cluster
       var cluster = currentCluster;
 
@@ -264,6 +380,9 @@ app.LandingView = Backbone.View.extend({
           linkedByIndex[d.source.index + "," + d.target.index] = true;
         });
 
+        // Add data of simulation globally
+        self.simulations[clusterIndex] = {'simulation': simulation, 'linkedByIndex': linkedByIndex, 'svg': svg};
+
         // Create g element that stores
         // circles and text and call dragging on it
         var node = g.append('g')
@@ -312,7 +431,6 @@ app.LandingView = Backbone.View.extend({
         var textSelected = nodeSelected.select('text')
           .style('opacity', 1)
           .style('font-weight', 'bold');
-
 
         // Highlight adjacent nodes
         svg.selectAll('text')
@@ -377,12 +495,6 @@ app.LandingView = Backbone.View.extend({
 
         orthos = [].concat.apply([], orthos);
 
-        // Remove selected word
-        // var index = wordsUnselected.indexOf(wordSelected);
-
-        // Update unselected words without selected word
-        // wordsUnselected.splice(index, 1);
-
         app.highlightSelectedWord('#editor-full-medium-editor', orthos);
 
       }
@@ -406,17 +518,21 @@ app.LandingView = Backbone.View.extend({
 
     // Create svg for each cluster
     for (var i = 0; i < this.clusters.length; i++) {
-      runSimulation(this.clusters[i]);
+      runSimulation(this.clusters[i], i);
 
     }
 
     function mouseout() {
 
       $('#editor-full-medium-editor').find('p').each(function(paragraph) {
-       var textParagraph = $(this).text();
-       // console.log(textParagraph);
+        var textParagraph = $(this).text();
+        // Wrap everything in span elements
+        var spanText = textParagraph.replace(/([A-z0-9'<>\u00dc\u00fc\u00e4\u00c4\u00f6\u00d6\u00df\-/]+)/g, '<span>$1</span>');
 
-       $(this).html(textParagraph);
+        var jquerySpan = $(spanText);
+
+        // Generate spans for text
+        $(this).html(jquerySpan);
       });
 
       // Get all nodes

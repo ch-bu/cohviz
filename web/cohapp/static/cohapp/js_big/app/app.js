@@ -88,15 +88,24 @@ app.regExText = function(id) {
  * @param {jQuery Object} div div that includes multiple paragraphs
  */
 app.getParagraphs = function(div) {
+    var self = this;
     // All paragraphs in text
     var paragraphs = div.find('p');
 
     // Api needs a single string. We need to get the text from
     // the paragraphs
     var paragraphText = '';
+
     paragraphs.each(function(paragraph) {
+        // Wrap everything in span elements
+        var spanText = paragraphs[paragraph].innerText.replace(/([A-z0-9'<>\u00dc\u00fc\u00e4\u00c4\u00f6\u00d6\u00df\-/]+)/g, '<span>$1</span>');
+
+        var jquerySpan = $(spanText);
 
         paragraphText += paragraphs[paragraph].innerText + " ";
+
+        // Generate spans for text
+        $(this).html(jquerySpan);
     });
 
     // Remove line breaks from string
