@@ -12,9 +12,9 @@ this["Handlebars"]["templates"]["double-text-editor"] = Handlebars.template({"co
 this["Handlebars"]["templates"]["editor-full"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper;
 
-  return "<div id=\"editor-full-wrapper\">\n	<div class=\"row\">\n		<div class=\"col s12 m4 l4\">\n			<div class=\"row\" id=\"editor-full-medium-editor\">"
+  return "<div id=\"editor-full-wrapper\">\n	<div class=\"row\">\n		<div class=\"col s12 m3 l3\">\n			<div class=\"row\" id=\"editor-full-medium-editor\">"
     + ((stack1 = ((helper = (helper = helpers.text || (depth0 != null ? depth0.text : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"text","hash":{},"data":data}) : helper))) != null ? stack1 : "")
-    + "</div>\n			<div class=\"row\" id=\"editor-full-button-div\">\n				<a class=\"waves-effect waves-light btn\" id=\"editor-full-button\">Analyziere meinen Text</a>\n			</div>\n		</div>\n\n		<div id=\"editor-full-graph\" class=\"col s12 m9 l8\"></div>\n	</div>\n</div>\n";
+    + "</div>\n			<div class=\"row\" id=\"editor-full-button-div\">\n				<a class=\"waves-effect waves-light btn\" id=\"editor-full-button\">Analyziere meinen Text</a>\n			</div>\n		</div>\n\n		<div id=\"editor-full-graph\" class=\"col s12 m9 l9\"></div>\n	</div>\n</div>\n";
 },"useData":true});
 this["Handlebars"]["templates"]["editor"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     return "<div id=\"editor-medium-editor\" class=\"col s11 m10 offset-m1 l8 offset-l2\">\n	<div id=\"editor-textinput\">\n		\n	</div>\n	<div id=\"editor-button-div\" class=\"center-align\">\n		<a class=\"waves-effect waves-light btn\" id=\"editor-button\">Analyziere meinen Text</a>\n	</div>\n</div>";

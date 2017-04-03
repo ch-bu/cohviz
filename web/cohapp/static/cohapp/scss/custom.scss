@@ -35,7 +35,8 @@ $form-radius: $global-radius;
 @mixin svg-attributes() {
 
     svg {
-      // border: 1px solid #ededed;
+      border: 1px dashed #ccc;
+      min-height: 500px;
 
       @media print {
         border: none;
@@ -127,7 +128,7 @@ body {
     overflow-y: scroll;
 
     svg {
-      width: 47%;
+      width: 49%;
     }
 
 

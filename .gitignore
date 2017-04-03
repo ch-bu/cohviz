@@ -21,4 +21,5 @@ web/nltk_data/
 
 web/static/
 web/cohapp/static/
-
+web/cohapp/static/cohapp/css/custom.css
+web/static/cohapp/css/custom.css

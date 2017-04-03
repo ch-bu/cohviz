@@ -185,7 +185,7 @@ app.LandingView = Backbone.View.extend({
   renderCmap: function(pairs, numConcepts, numClusters, svgID, height, width, colors)  {
     var self = this;
     var svgHeight = height / 2;
-    var svgWidth = (width / 2);
+    var svgWidth = width / 2;
     var margin = {top: 0, right: 0, bottom: 0, left: 0};
 
     /**
@@ -202,19 +202,19 @@ app.LandingView = Backbone.View.extend({
       var graph = app.getLinksNodes(cluster);
 
       // Create svg
-      var svg = d3.select(svgID).append("svg")
-        .attr("width", svgWidth + margin.left + margin.right)
-        .attr("height", svgHeight + margin.top + margin.bottom);
+      var svg = d3.select(svgID).append("svg");
+        // .attr("width", svgWidth + margin.left + margin.right)
+        // .attr("height", svgHeight + margin.top + margin.bottom);
 
       // Create force simulation
       var simulation = d3.forceSimulation(graph.nodes)
-        .force('charge', d3.forceManyBody().strength(-100))
-        // .force('link', d3.forceLink(graph.links).distance(20).strength(1).iterations(10))
+        .force('charge', d3.forceManyBody().strength(-240))
         .force('link', d3.forceLink(graph.links)
-          .distance(90)
+          .distance(200)
           .id(function(d) {
             return d.id;
           }))
+        // .force("collide", d3.forceCollide().radius(function(d) { return d.r + 1.5; }).iterations(2))
         .force('center', d3.forceCenter(svgWidth / 2, svgHeight / 2))
         .force('x', d3.forceX())
         .force('y', d3.forceY())
@@ -222,6 +222,14 @@ app.LandingView = Backbone.View.extend({
 
       // Wrap everything in g element
       var g = svg.append('g');
+
+      // Stores all links
+      var linkedByIndex = {};
+
+      // Call zoom
+      svg.call(d3.zoom()
+        .scaleExtent([1 / 10, 10])
+        .on('zoom', zoomed));
 
       var loading = svg.append("text")
         .attr("dy", "0.35em")
@@ -252,6 +260,10 @@ app.LandingView = Backbone.View.extend({
           .attr("x2", function(d) { return d.target.x; })
           .attr("y2", function(d) { return d.target.y; });
 
+        link.each(function(d) {
+          linkedByIndex[d.source.index + "," + d.target.index] = true;
+        });
+
         // Create g element that stores
         // circles and text and call dragging on it
         var node = g.append('g')
@@ -259,304 +271,174 @@ app.LandingView = Backbone.View.extend({
           .selectAll('.node')
           .data(graph.nodes)
           .enter().append('g')
+          .attr('id', function(d, i) {
+            return 'node-' + d.id;
+          })
           .attr('class', 'node')
           .attr('transform', function(d) {
             return 'translate(' + d.x + ',' + d.y + ')';
-          });
+          })
+          .on('mouseover', mouseover)
+          .on('mouseout', mouseout);
+
+        // Append circle
+        var circle = node.append('circle')
+          .attr('r', 10)
+          .attr('cx', 0)
+          .attr('cy', 0)
+          .attr('fill', '#ccc');
 
         // Append label to node container
         var label = node.append('text')
-          .attr('dy', '0')
-          .attr('dx', '0')
-          .attr('text-anchor', 'middle')
+          .attr('dy', -10)
+          .attr('dx', 12)
+          .style('opacity', 0.8)
+          .attr('text-anchor', 'start')
           .text(function(d) {
             return d.id;
           });
-
       });
+
+      function mouseover(mouseOverObject) {
+
+        // Get data
+        var mouse = d3.mouse(this);
+
+        // Select element that is hovered
+        var nodeSelected = g.select('#node-' + mouseOverObject.id);
+        var nodeData = nodeSelected.data()[0];
+
+        // Change text of selected element
+        var textSelected = nodeSelected.select('text')
+          .style('opacity', 1)
+          .style('font-weight', 'bold');
+
+
+        // Highlight adjacent nodes
+        svg.selectAll('text')
+          .style('opacity', function(d) {
+           if (isConnected(nodeData, d)) {
+             return 1;
+           }
+
+           return 0.1;
+
+          });
+
+        svg.selectAll('circle')
+          .style('fill', function(d) {
+            if (isConnected(nodeData, d)) {
+              return '#000';
+            }
+
+            return '#f4f4f4';
+          })
+          .style('opacity', function(d) {
+            if (isConnected(nodeData, d)) {
+              return 1;
+            }
+
+            return 0.2;
+          });
+
+        /////////////////////
+        // Highlight links //
+        /////////////////////
+        svg.selectAll('line')
+          .style('stroke', function(d) {
+            return d.source.id === nodeData.id || d.target.id === nodeData.id ? '#4c4c4c' : '#f4f4f4';
+          });
+
+
+        ////////////////////////
+        // Unselected element //
+        ////////////////////////
+        // var nodeUnselected = d3.selectAll('.node')
+        //  .filter(function(d) {
+        //    return d.id != obj.id;
+        //  });
+
+        // nodeUnselected.select('text')
+        //  .style('font-size', 16)
+        //  .style('font-weight', 'normal');
+
+        // nodeUnselected.select('circle')
+        //  .attr('r', 15);
+
+        /////////////////////////////
+        // Highlight words in text //
+        /////////////////////////////
+
+        // We need to get the text of the selected word in order
+        // to highlight them
+        // var wordSelected = textSelected.text();
+
+        // // Get all words that are semantically related
+        // // to the selected word
+        // var wordsUnselected = [];
+        // node.selectAll('text')
+        //  .each(function(d) {
+        //    if (isConnected(obj, d)) {
+        //      wordsUnselected.push(d.id);
+        //    }
+        //  });
+
+        // Remove selected word
+        // var index = wordsUnselected.indexOf(wordSelected);
+
+        // Update unselected words without selected word
+        // wordsUnselected.splice(index, 1);
+
+        // app.highlightSelectedWord('#editor-full-medium-editor', wordSelected, wordsUnselected, lemmaDic, clusters,
+        //  self.colors);
+      }
+
+      function isConnected(a, b) {
+        return isConnectedAsTarget(a, b) || isConnectedAsSource(a, b) || a.index == b.index;
+      }
+
+      function isConnectedAsSource(a, b) {
+        return linkedByIndex[a.index + "," + b.index];
+      }
+
+      function isConnectedAsTarget(a, b) {
+        return linkedByIndex[b.index + "," + a.index];
+      }
+
+      function zoomed() {
+        g.attr('transform', d3.event.transform);
+      }
     }
 
     // Create svg for each cluster
     for (var i = 0; i < this.clusters.length; i++) {
-      console.log(this.clusters[i]);
       runSimulation(this.clusters[i]);
 
     }
 
-    // /**
-    //  * Tick function adds x and y
-    //  * coordinates to nodes and links
-    //  */
-    // function ticked() {
-    //   // Update links
-    //   link
-    //     .attr('x1', function(d) {
-    //       // console.log(d);
-    //       return d.source.x;
-    //     })
-    //     .attr('y1', function(d) { return d.source.y; })
-    //     .attr('x2', function(d) { return d.target.x; })
-    //     .attr('y2', function(d) { return d.target.y; });
+    function mouseout() {
+      // $('#editor-full-medium-editor').find('p').each(function(paragraph) {
+      //  var textParagraph = $(this).text();
+      //  // console.log(textParagraph);
 
-    //   // var xTest = Math.max(6, Math.min(svgWidth, d.x));
-    //   // var yTest = Math.max(6, Math.min(svgHeight, d.y));
+      //  $(this).html(textParagraph);
+      // });
 
-    //   // Update nodes
-    //   node.attr('transform', function(d) {
-    //     // console.log(d);
-    //     // var xTest = Math.max(25, Math.min(svgWidth, d.x));
-    //     // var yTest = Math.max(25, Math.min(svgHeight, d.y));
+      // Get all nodes
+      var nodes = d3.selectAll('.node');
 
-    //     // return 'translate(' + xTest + ',' + yTest + ')';
-    //     return 'translate(' + d.x + ',' + d.y + ')';
-    //   });
-    // }
-      // console.log(cluster);
+      nodes.selectAll('text')
+         .style('opacity', 0.8)
+         .style('font-weight', 'normal');
 
-    // ****************** Render SVG ***************************************
-    // Variable declaration
-    // var clusters = clust;
-    // var lemmaDic = this.analyzer.get('lemmaDic');
-    // var graph = app.getLinksNodes(pairs);
+      d3.selectAll('circle')
+        .style('fill', '#ccc')
+        .style('opacity', 1);
 
-    // console.log(graph);
+      d3.selectAll('.links').selectAll('line')
+       .style('stroke', '#ccc');
 
-    // // // Adjust height of svg
-    // var svgHeight = height;
-    // var svgWidth = width;
-    // var windowHeight = $(window).height();
-
-    // // Append rectangle to svg
-    // var rect = svg.append("rect")
-    //   .attr("width", svgWidth)
-    //   .attr("height", svgHeight)
-    //   .style("fill", "none")
-    //   .style("pointer-events", "all");
-
-    // ///////////////////////////////
-    // // Enable zoom functionality //
-    // ///////////////////////////////
-
-    // // Call zoom
-    // // svg.call(d3.zoom()
-    // //   .scaleExtent([1 / 10, 10])
-    // //   .on('zoom', zoomed));
-
-    // // Wrap everything in g element
-    // var g = svg.append('g')
-    //   .on('mouseover', mouseover)
-    //   .on('mouseout', mouseout);
-
-    // /**
-    //  * Zoom function
-    //  */
-    // // function zoomed() {
-    // //   g.attr('transform', d3.event.transform);
-    // // }
-
-    // // Add links
-    // var link = g.append('g')
-    //   .attr('class', 'links')
-    //   .selectAll('line')
-    //   .data(graph.links)
-    //   .enter().append('line');
-
-    // // Create g element that stores
-    // // circles and text and call dragging on it
-    // var node = g.append('g')
-    //   .attr('class', 'nodes')
-    //   .selectAll('.node')
-    //   .data(graph.nodes)
-    //   .enter().append('g')
-    //   .attr('class', 'node')
-    //   .call(d3.drag()
-    //     .on('start', dragstarted)
-    //     .on('drag', dragged)
-    //     .on('end', dragended));
-
-    // // Append cirles to node
-    // // var circles = node.append('circle')
-    // //   // .attr('class', 'nodes')
-    // //   .attr('r', 15)
-    // //   .attr('cx', 0)
-    // //   .attr('cy', 0)
-    // //   // .attr('ry', 2)
-    // //   // .style("fill", function (word) {
-    // //   //  // Loop over every cluster
-    // //   //  for (var i = 0; i < clusters.length; i++) {
-    // //   //    // Check if current word is in current Array
-    // //   //    if ($.inArray(word.id, clusters[i]) != -1) {
-    // //   //      // Return color if word war found in array
-    // //   //      return colors(i);
-    // //   //    }
-    // //   //  }
-    // //   // })
-    // //   .style('opacity', 0.6);
-
-    // // Append label to node container
-    // var label = node.append('text')
-    //   .attr('dy', '0')
-    //   .attr('dx', '0')
-    //   .attr('text-anchor', 'middle')
-    //   .text(function(d) {
-    //     return d.id;
-    //   });
-
-
-
-    // function dragstarted(d) {
-    //   if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-    //   d.fx = d.x;
-    //   d.fy = d.y;
-    // }
-
-    // function dragged(d) {
-    //   d.fx = d3.event.x;
-    //   d.fy = d3.event.y;
-    // }
-
-    // function dragended(d) {
-    //   if (!d3.event.active) simulation.alphaTarget(0);
-    //   d.fx = null;
-    //   d.fy = null;
-    // }
-
-    // function mouseout() {
-    //   // $('#editor-full-medium-editor').find('p').each(function(paragraph) {
-    //   //  var textParagraph = $(this).text();
-    //   //  // console.log(textParagraph);
-
-    //   //  $(this).html(textParagraph);
-    //   // });
-
-    //   // // Get all nodes
-    //   var nodes = d3.selectAll('.node');
-
-    //   nodes.selectAll('circle')
-    //     .style('opacity', 0.6);
-    //     // .attr('r', 15);
-
-    //   nodes.selectAll('text')
-    //    .style('opacity', 0.6)
-    //    .style('font-weight', 'normal');
-
-    //   d3.selectAll('.links').selectAll('line')
-    //    .style('stroke', '#ccc');
-
-    // }
-
-    // function mouseover() {
-    //   // Get data
-    //   var mouse = d3.mouse(this);
-    //   var obj = simulation.find(mouse[0], mouse[1]);
-
-    //   //////////////////////
-    //   // Selected element //
-    //   //////////////////////
-    //   var nodeSelected = d3.selectAll('.node')
-    //     .filter(function(d) {
-    //       return d.id == obj.id;
-    //     });
-
-    //   var textSelected = nodeSelected.select('text')
-    //    .style('opacity', 1)
-    //    // .style('font-size', 20)
-    //    .style('font-weight', 'bold');
-
-    //   // nodeSelected.select('circle')
-    //   //  .attr('r', 25);
-
-    //   //////////////////////////////
-    //   // Highlight adjacent nodes //
-    //   //////////////////////////////
-    //   // node.selectAll('circle')
-    //   //   // .transition()
-    //   //   // .duration(20)
-    //   //   .style('opacity', function(d) {
-    //   //     if (isConnected(obj, d)) {
-    //   //       return 1;
-    //   //     }
-
-    //   //     return 0.6;
-    //   //   });
-
-    //   node.selectAll('text')
-    //    // .transition()
-    //    // .duration(20)
-    //    .style('opacity', function(d) {
-
-    //      if (isConnected(obj, d)) {
-    //        return 1;
-    //      }
-
-    //      return 0.6;
-
-    //    });
-    //    // .style('font-weight', 'bold');
-
-    //   /////////////////////
-    //   // Highlight links //
-    //   /////////////////////
-    //   link
-    //     .style('stroke', function(d) {
-    //       return d.source.id === obj.id || d.target.id === obj.id ? '#4c4c4c' : '#ccc';
-    //     });
-
-
-    //   ////////////////////////
-    //   // Unselected element //
-    //   ////////////////////////
-    //   // var nodeUnselected = d3.selectAll('.node')
-    //   //  .filter(function(d) {
-    //   //    return d.id != obj.id;
-    //   //  });
-
-    //   // nodeUnselected.select('text')
-    //   //  .style('font-size', 16)
-    //   //  .style('font-weight', 'normal');
-
-    //   // nodeUnselected.select('circle')
-    //   //  .attr('r', 15);
-
-    //   /////////////////////////////
-    //   // Highlight words in text //
-    //   /////////////////////////////
-
-    //   // We need to get the text of the selected word in order
-    //   // to highlight them
-    //   // var wordSelected = textSelected.text();
-
-    //   // // Get all words that are semantically related
-    //   // // to the selected word
-    //   // var wordsUnselected = [];
-    //   // node.selectAll('text')
-    //   //  .each(function(d) {
-    //   //    if (isConnected(obj, d)) {
-    //   //      wordsUnselected.push(d.id);
-    //   //    }
-    //   //  });
-
-    //   // Remove selected word
-    //   // var index = wordsUnselected.indexOf(wordSelected);
-
-    //   // Update unselected words without selected word
-    //   // wordsUnselected.splice(index, 1);
-
-    //   // app.highlightSelectedWord('#editor-full-medium-editor', wordSelected, wordsUnselected, lemmaDic, clusters,
-    //   //  self.colors);
-    // }
-
-    // function isConnected(a, b) {
-    //   return isConnectedAsTarget(a, b) || isConnectedAsSource(a, b) || a.index == b.index;
-    // }
-
-    // function isConnectedAsSource(a, b) {
-    //   return linkedByIndex[a.index + "," + b.index];
-    // }
-
-    // function isConnectedAsTarget(a, b) {
-    //   return linkedByIndex[b.index + "," + a.index];
-    // }
+    }
   }
 
   // printSVG: function() {
