@@ -75,7 +75,6 @@ $form-radius: $global-radius;
 
 body {
   font-family: 'Open Sans', sans-serif;
-
   @include svg-attributes();
 }
 
@@ -113,6 +112,13 @@ body {
     outline: 0px solid transparent;
     overflow: auto;
     border: 1px solid #ededed;
+
+    span {
+      &.highlight-related {
+        color: #26a69a;
+        font-weight: bold;
+      }
+    }
   }
 
   #editor-full-buttons {

@@ -181,140 +181,72 @@ app.sameOrigin = function(url) {
 //  * @param  {Boolean} singleCluster Wheter a single cluster should be highlighted
 //  * @return {null}
 
-app.highlightWholeText = function(divId, clusters, colors) {
-    $(divId).find('p').each(function(paragraph) {
-        var textParagraph = $(this).text();
-        $(this).html(app.colorText(textParagraph, this, clusters, colors));
-    });
-};
+// app.highlightWholeText = function(divId, clusters, colors) {
+//     $(divId).find('p').each(function(paragraph) {
+//         var textParagraph = $(this).text();
+//         $(this).html(app.colorText(textParagraph, this, clusters, colors));
+//     });
+// };
 
 
-app.colorText = function(text, paragraph, clusters, colors) {
+// app.colorText = function(text, paragraph, clusters, colors) {
 
-    // Save text in variable
-    var newText = text;
+//     // Save text in variable
+//     var newText = text;
 
-    // Get each word in paragraph and remove punctuation from text
-    var words = text.replace(/[.,\/#!$%\^&\*;:{}=_`~()]/g,"").split(" ");
+//     // Get each word in paragraph and remove punctuation from text
+//     var words = text.replace(/[.,\/#!$%\^&\*;:{}=_`~()]/g,"").split(" ");
 
-    // Split whole text string
-    var newTextSplit = newText.replace(/[^\wöäüÄÖÜß-\s]|_/g, function ($1) { return ' ' + $1 + ' ';}).replace(/[ ]+/g, ' ').split(' ');
+//     // Split whole text string
+//     var newTextSplit = newText.replace(/[^\wöäüÄÖÜß-\s]|_/g, function ($1) { return ' ' + $1 + ' ';}).replace(/[ ]+/g, ' ').split(' ');
 
-    // Loop over whole text
-    for (var i = 0; i < newTextSplit.length; i++) {
-        var splitWord = newTextSplit[i];
+//     // Loop over whole text
+//     for (var i = 0; i < newTextSplit.length; i++) {
+//         var splitWord = newTextSplit[i];
 
-        for (var cluster = 0; cluster < clusters.length; cluster++) {
-            if ($.inArray(splitWord, clusters[cluster]) != -1) {
-                newTextSplit[i] = splitWord.replace(splitWord,
-                    '<a style="background-color: ' +
-                    colors(cluster) + ';color: #fff;border-radius: 3px; padding: 1px 3px;" class="cluster' + cluster + '">' +
-                    splitWord + '</a>');
-            }
-        }
-    }
+//         for (var cluster = 0; cluster < clusters.length; cluster++) {
+//             if ($.inArray(splitWord, clusters[cluster]) != -1) {
+//                 newTextSplit[i] = splitWord.replace(splitWord,
+//                     '<a style="background-color: ' +
+//                     colors(cluster) + ';color: #fff;border-radius: 3px; padding: 1px 3px;" class="cluster' + cluster + '">' +
+//                     splitWord + '</a>');
+//             }
+//         }
+//     }
 
-    return newTextSplit.join(' ');
-};
+//     return newTextSplit.join(' ');
+// };
 
-app.highlightSelectedWord = function(divId, wordSelected, wordsUnselected, lemmaDic, clusters, colors) {
-
-    // Expand unselected words with lemmaDics
-    var updateWordsUnselected = [];
-
-    // Loop over unselected words
-    for (var bah = 0; bah < wordsUnselected.length; bah++) {
-        // Save lemmas of unselected word
-        var dicLemma = lemmaDic[wordsUnselected[bah]];
-
-        // Loop over lemmas
-        for (var lemma = 0; lemma < dicLemma.length; lemma++) {
-            // Append to list
-            updateWordsUnselected.push(dicLemma[lemma]);
-        }
-    }
-
-    // Update unselected words with lemmas
-    wordsUnselected = updateWordsUnselected;
+app.highlightSelectedWord = function(divId, wordSelected) {
 
     // Loop over every paragraph
     $(divId).find('p').each(function(paragraph) {
         var textParagraph = $(this).text();
 
-        // Get cluster with word
-        var cluster = null;
+        var spanText = textParagraph.replace(/([A-z0-9'<>\u00dc\u00fc\u00e4\u00c4\u00f6\u00d6\u00df\-/]+)/g, '<span>$1</span>');
 
-        // Get id of cluster the word is in
-        for (var p = 0; p < clusters.length; p++) {
-            if (clusters[p].indexOf(wordSelected) != -1) {
-                cluster = p;
-            }
-        }
+        var jquerySpan = $(spanText);
 
-        // Save text in variable
-        var newText = textParagraph;
+        // Change attributes
+        spanText = jquerySpan.map(function(obj) {
 
-        // Get each word in paragraph and remove punctuation from text
-        var words = textParagraph.replace(/[.,\/#!$%\^&\*;:{}=_`~()]/g,"").split(" ");
+            // We have a span
+            if (jquerySpan[obj].tagName == 'SPAN') {
 
-        // Split whole text string
-        var newTextSplit = newText.replace(/[^\wöäüÄÖÜß-\s]|_/g, function ($1) { return ' ' + $1 + ' ';}).replace(/[ ]+/g, ' ').split(' ');
+                var spanElement = jquerySpan[obj];
 
-        // Used words
-        var usedWords = [];
-        // Loop over every word in paragraph
-        for (var i = 0; i < newTextSplit.length; i++) {
-            // Save current word in paragraph in variable
-            var splitWord = newTextSplit[i];
-
-            // Check if word should be highlighted at all
-            if ($.inArray(splitWord, clusters[cluster]) != -1) {
-                // Loop over every word that applies to the specific lemma
-                for (var j = 0; j < lemmaDic[wordSelected].length; j++) {
-                    var lemmaWord = lemmaDic[wordSelected][j];
-                    // Should word be emphasized
-                    if (splitWord === lemmaWord) {
-                        usedWords.push(lemmaWord);
-
-                        // Highlight word that user currently looks at
-                        newTextSplit[i] = splitWord.replace(splitWord,
-                            '<a style="background-color: ' +
-                            colors(cluster) + ';color: #fff;font-weight:bold; font-size: 1.3em; border-radius: 3px; padding: 1px 3px;" class="cluster' + cluster + '">' +
-                            splitWord + '</a>');
-                    }
+                if (wordSelected.indexOf(spanElement.innerHTML) > -1) {
+                    spanElement.className += " highlight-related";
+                    return spanElement;
                 }
 
-                // Loop over every word that is related to the target word
-                for (var foo = 0; foo < wordsUnselected.length; foo++) {
-                    // Save current word
-                    var unselectedWord = wordsUnselected[foo];
-
-                    // The current word in the paragraph is
-                    // in the same as the related word
-                    if (splitWord === unselectedWord) {
-                        // Tell the usedWords array that we already highlighted
-                        // the current word
-                        usedWords.push(unselectedWord);
-
-                        // Highlight related word of target word in text
-                        newTextSplit[i] = splitWord.replace(splitWord,
-                            '<a style="background-color: ' +
-                            colors(cluster) + ';color: #fff; opacity: 0.7; border-radius: 3px; padding: 1px 3px;" class="cluster' + cluster + '">' +
-                            splitWord + '</a>');
-                    }
-                }
-
-                // if ($.inArray(splitWord, usedWords) == -1) {
-                //     newTextSplit[i] = splitWord.replace(splitWord,
-                //         '<a style="background-color: ' +
-                //         colors(cluster) + ';color: #fff; opacity: 0.6; border-radius: 3px; padding: 1px 3px;" class="cluster' + cluster + '">' +
-                //         splitWord + '</a>');
-                // }
             }
-        }
+
+            return obj;
+        });
 
         // Return paragraph with highlighting
-        $(this).html(newTextSplit.join(' '));
+        $(this).html(jquerySpan);
     });
 };
 
@@ -342,11 +274,6 @@ app.getLinksNodes = function(wordpairs) {
 
     // Generate links
     $.each(wordpairs, function(i) {
-        // console.log(wordpairs[i]);
-        // Get indexes of texts
-        // var source = uniqueLinks.indexOf(wordpairs[i][0]);
-        // var target = uniqueLinks.indexOf(wordpairs[i][1]);
-        // console.log(wordpairs[i][0]);
         // Push to edges
         edges.push({'source': wordpairs[i].source['lemma'],
           'target': wordpairs[i].target['lemma']});

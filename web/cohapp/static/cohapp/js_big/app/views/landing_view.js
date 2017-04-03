@@ -227,9 +227,9 @@ app.LandingView = Backbone.View.extend({
       var linkedByIndex = {};
 
       // Call zoom
-      // svg.call(d3.zoom()
-      //   .scaleExtent([1 / 10, 10])
-      //   .on('zoom', zoomed));
+      svg.call(d3.zoom()
+        .scaleExtent([1 / 10, 10])
+        .on('zoom', zoomed));
 
       var loading = svg.append("text")
         .attr("dy", "0.35em")
@@ -377,17 +377,14 @@ app.LandingView = Backbone.View.extend({
 
         orthos = [].concat.apply([], orthos);
 
-        console.log(orthos);
-        // console.log(wordsUnselected);
-
         // Remove selected word
         // var index = wordsUnselected.indexOf(wordSelected);
 
         // Update unselected words without selected word
         // wordsUnselected.splice(index, 1);
 
-        // app.highlightSelectedWord('#editor-full-medium-editor', wordSelected, wordsUnselected, lemmaDic, clusters,
-        //  self.colors);
+        app.highlightSelectedWord('#editor-full-medium-editor', orthos);
+
       }
 
       function isConnected(a, b) {
@@ -414,12 +411,13 @@ app.LandingView = Backbone.View.extend({
     }
 
     function mouseout() {
-      // $('#editor-full-medium-editor').find('p').each(function(paragraph) {
-      //  var textParagraph = $(this).text();
-      //  // console.log(textParagraph);
 
-      //  $(this).html(textParagraph);
-      // });
+      $('#editor-full-medium-editor').find('p').each(function(paragraph) {
+       var textParagraph = $(this).text();
+       // console.log(textParagraph);
+
+       $(this).html(textParagraph);
+      });
 
       // Get all nodes
       var nodes = d3.selectAll('.node');
