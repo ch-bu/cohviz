@@ -533,6 +533,8 @@ app.LandingView = Backbone.View.extend({
 
         // Generate spans for text
         $(this).html(jquerySpan);
+        $(this).append('.');
+
       });
 
       // Get all nodes

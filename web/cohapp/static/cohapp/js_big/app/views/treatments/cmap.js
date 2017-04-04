@@ -6,43 +6,46 @@ app.CmapView = Backbone.View.extend({
     el: '#treatment-cmap',
 
 	events: {
-        'click #instruction-read': 'renderEditor',
+    'click #instruction-read': 'renderEditor',
 		'click #help': 'renderInstructionModal',
 		'click #editor-button': 'analyzeText',
 		'click #editor-full-button': 'saveText',
 	},
 
 	initialize: function() {
-        // Variable declaration
-        var self = this;
-        this.prePageDurationStart = null;
-        this.postPageDurationStart = null;
+    // Variable declaration
+    var self = this;
+    this.prePageDurationStart = null;
+    this.postPageDurationStart = null;
 
 		// Generate 20 distinct colors for the cmap
 		this.colors = d3.scaleOrdinal(d3.schemeCategory10);
-        
-        // Get user data
-        this.userModel = new app.UserSpecificModel();
 
-        // Init textanalyzer model
-        this.textModel = new app.TextModelComplete();
+    // this simulations
+    this.simulations = {};
 
-        // Init textAnalyzer model
-        this.analyzer = new app.TextAnalyzerModel();
+    // Get user data
+    this.userModel = new app.UserSpecificModel();
 
-        // Fetch user data
-        this.userModel.fetch({
-            success: function(model, response) {
-                self.renderInstruction();
-            },
-            error: function(model, response) {
-                console.log(response);
-            }
-        });
+    // Init textanalyzer model
+    this.textModel = new app.TextModelComplete();
+
+    // Init textAnalyzer model
+    this.analyzer = new app.TextAnalyzerModel();
+
+    // Fetch user data
+    this.userModel.fetch({
+        success: function(model, response) {
+            self.renderInstruction();
+        },
+        error: function(model, response) {
+            console.log(response);
+        }
+    });
 
 	},
 
-    /** Render instruction for 
+    /** Render instruction for
       * this part of the experiment
       */
 	renderInstruction: function() {
@@ -52,7 +55,7 @@ app.CmapView = Backbone.View.extend({
                 this.userModel.get('instruction')}));
 	},
 
-	/** 
+	/**
      * When user has read the instruction he or she is able
      * to write their text.
      */
@@ -80,7 +83,7 @@ app.CmapView = Backbone.View.extend({
         // Append help button to window
         this.$el.append('<i id="help" class="material-icons">help</i>');
 
-        // Append modal 
+        // Append modal
         this.$el.append(Handlebars.templates['modal-help']({'instruction':
             this.userModel.get('instruction') }));
     },
@@ -93,10 +96,10 @@ app.CmapView = Backbone.View.extend({
     },
 
     /**
-     * After user has written his or her text the 
-     * user gets feedback on the draft. 
-     * Before users can see the feedback we need 
-     * to make some sanity checks whether the 
+     * After user has written his or her text the
+     * user gets feedback on the draft.
+     * Before users can see the feedback we need
+     * to make some sanity checks whether the
      * text is long enough.
      */
     analyzeText: function() {
@@ -142,384 +145,339 @@ app.CmapView = Backbone.View.extend({
 
 
     /**
-     * After user has written the draft she gets the 
+     * After user has written the draft she gets the
      * opportunity to revise her text
      */
     renderRevision: function() {
-		var self = this;
+      var self = this;
 
-        // Render submit button
-        this.$el.find('#editor-button-div').html(
-                '<a class="waves-effect waves-light btn" id="save-text">Text abschicken</a>');
+      // Render submit button
+      this.$el.find('#editor-button-div').html(
+              '<a class="waves-effect waves-light btn" id="save-text">Text abschicken</a>');
 
-        // Save data for draft
-        this.textModel.set({'pre_text': this.analyzer.get('text'),
-            'pre_num_sentences': this.analyzer.get('numSentences'),
-            'pre_num_clusters': this.analyzer.get('numClusters'),
-            'pre_num_coherent_sentences': this.analyzer.get('cohSentences'),
-            'pre_num_non_coherent_sentences': this.analyzer.get('cohNotSentences'),
-            'pre_num_concepts': this.analyzer.get('numConcepts')});
+      // Save data for draft
+      this.textModel.set({'pre_text': this.analyzer.get('text'),
+          'pre_num_sentences': this.analyzer.get('numSentences'),
+          'pre_num_clusters': this.analyzer.get('numCluster'),
+          'pre_num_coherent_sentences': this.analyzer.get('cohSentences'),
+          'pre_num_non_coherent_sentences': this.analyzer.get('cohNotSentences'),
+          'pre_num_concepts': this.analyzer.get('numConcepts'),
+          'pre_local_cohesion': this.analyzer.get('local cohesion')});
 
-		// Get inner html of text input
-		this.paragraphs = $('#editor-textinput').html();
+      // Get inner html of text input
+      this.paragraphs = $('#editor-textinput').html();
 
-        // Change inner html
-        this.$el.html(Handlebars.templates['editor-full']({'instruction':
-            app.constants.simpleRevisionModal}));
+          // Change inner html
+          this.$el.html(Handlebars.templates['editor-full']({'instruction':
+              app.constants.simpleRevisionModal}));
 
-        // Append help button to window
-        this.$el.append('<i id="help" class="material-icons">help</i>');
+          // Append help button to window
+          this.$el.append('<i id="help" class="material-icons">help</i>');
 
-        // Append modal 
-        this.$el.append(Handlebars.templates['modal-help']({'instruction':
-            this.userModel.get('instructionreview') }));
+          // Append modal
+          this.$el.append(Handlebars.templates['modal-help']({'instruction':
+              this.userModel.get('instructionreview') }));
 
-        // Change inner html of editor
-        $('#editor-full-medium-editor').html(this.paragraphs);
+          // Change inner html of editor
+          $('#editor-full-medium-editor').html(this.paragraphs);
 
-        // Enable editor functionality
-        var editor = new MediumEditor('#editor-full-medium-editor', {
-			toolbar: false,
-		});
+          // Enable editor functionality
+          var editor = new MediumEditor('#editor-full-medium-editor', {
+        toolbar: false,
+      });
 
-        // Change text of Button
-        $('#editor-full-button').text('Text abschicken');
+      // Change text of Button
+      $('#editor-full-button').text('Text abschicken');
 
-		// Display modal
-        this.$el.append(Handlebars.templates['modal-revision']({'instruction':
-            this.userModel.get('instructionreview')}));
-        $('#modal-revision').openModal();
+      // Display modal
+      this.$el.append(Handlebars.templates['modal-revision']({'instruction':
+          this.userModel.get('instructionreview')}));
+      $('#modal-revision').openModal();
 
-        // Set width of height of svg element
-        var svgWidth = $('#editor-full-graph').width();
-		var svgHeight = $('#editor-full-medium-editor').height();
+      // Set width of height of svg element
+      var svgWidth = $('#editor-full-graph').width();
+      var svgHeight = $('#editor-full-medium-editor').height();
 
-		// Render graph
-		this.renderCmap(this.analyzer.get('word_pairs'),
-			this.analyzer.get('clusters'), this.analyzer.get('numClusters'),
-			'#editor-full-graph', svgHeight, svgWidth, this.colors);
-    },
+      // Render graph
+      this.renderCmap(this.analyzer.get('word_pairs'),
+        this.analyzer.get('clusters'), this.analyzer.get('numClusters'),
+        '#editor-full-graph', svgHeight, svgWidth, this.colors);
+      },
 
 
 	renderCmap: function(pairs, clust, numClusters, svgID, height, width, colors)  {
-        var self = this;
-    
-        // ****************** Render SVG ***************************************
-        // Variable declaration
-        var clusters = clust;
-        var lemmaDic = this.analyzer.get('lemmaDic');
-        var graph = app.getLinksNodes(pairs);
+    var self = this;
+    var svgHeight = height / 2;
+    var svgWidth = width / 2;
+    var margin = {top: 0, right: 0, bottom: 0, left: 0};
 
-        // // Adjust height of svg
-        var svgHeight = height;
-        var svgWidth = width;
-        var windowHeight = $(window).height();
+    /**
+     * Closure
+     * @param  {[type]} currentCluster [description]
+     * @return {[type]}                [description]
+     */
+    function runSimulation(currentCluster, clusterIndex) {
+      // Save temporary cluster
+      var cluster = currentCluster;
 
-        // Set margin and width
-        var margin = {top: 0, right: 0, bottom: 0, left: 0};
+      // Get data for force simulation with
+      // nodes and links
+      var graph = app.getLinksNodes(cluster);
 
-        // Select svg
-        var svg = d3.select(svgID).append("svg")
-            .attr("width", svgWidth + margin.left + margin.right)
-            .attr("height", svgHeight + margin.top + margin.bottom);
+      // Create svg
+      var svg = d3.select(svgID).append("svg");
+        // .attr("width", svgWidth + margin.left + margin.right)
+        // .attr("height", svgHeight + margin.top + margin.bottom);
 
-        // Append rectangle to svg
-        var rect = svg.append("rect")
-            .attr("width", svgWidth)
-            .attr("height", svgHeight)
-            .style("fill", "none")
-            .style("pointer-events", "all");
+      // Create force simulation
+      var simulation = d3.forceSimulation(graph.nodes)
+        .force('charge', d3.forceManyBody().strength(-240))
+        .force('link', d3.forceLink(graph.links)
+          .distance(200)
+          .id(function(d) {
+            return d.id;
+          }))
+        // .force("collide", d3.forceCollide().radius(function(d) { return d.r + 1.5; }).iterations(2))
+        .force('center', d3.forceCenter(svgWidth / 2, svgHeight / 2))
+        .force('x', d3.forceX())
+        .force('y', d3.forceY())
+        .stop();
 
-        // Create new force simulation
-        var simulation = d3.forceSimulation()
-            .force('link', d3.forceLink().id(function(d) {
-                return d.id;
-            }))
-            .force('charge', d3.forceManyBody().strength(50))
-            .force('center', d3.forceCenter(svgWidth / 2, svgHeight / 2))
-            .force('collide', d3.forceCollide(40).iterations(60));
+      // Wrap everything in g element
+      var g = svg.append('g');
 
-        ///////////////////////////////
-        // Enable zoom functionality //
-        ///////////////////////////////
-        
-        // Call zoom
-        svg.call(d3.zoom()
-            .scaleExtent([1 / 10, 10])
-            .on('zoom', zoomed));
+      // Stores all links
+      var linkedByIndex = {};
 
-        // Wrap everything in g element
-        var g = svg.append('g')
-            .on('mouseover', mouseover)
-            .on('mouseout', mouseout);
+      // Call zoom
+      svg.call(d3.zoom()
+        .scaleExtent([1 / 10, 10])
+        .on('zoom', zoomed));
 
-        /**
-         * Zoom function
-         */
-        function zoomed() {
-            g.attr('transform', d3.event.transform);
+      var loading = svg.append("text")
+        .attr("dy", "0.35em")
+        .attr("text-anchor", "middle")
+        .attr("font-family", "sans-serif")
+        .attr("font-size", 10)
+        .attr('x', svgWidth / 2)
+        .attr('y', svgHeight / 2)
+        .text("Simulating. One moment please…");
+
+      // Run simulation in the background
+      d3.timeout(function() {
+        loading.remove();
+
+        // See https://github.com/d3/d3-force/blob/master/README.md#simulation_tick
+        for (var i = 0, n = Math.ceil(Math.log(simulation.alphaMin()) / Math.log(1 - simulation.alphaDecay())); i < n; ++i) {
+          simulation.tick();
         }
-        
+
         // Add links
         var link = g.append('g')
-            .attr('class', 'links')
-            .selectAll('line')
-            .data(graph.links)
-            .enter().append('line');
+          .attr('class', 'links')
+          .selectAll('line')
+          .data(graph.links)
+          .enter().append('line')
+          .attr("x1", function(d) { return d.source.x; })
+          .attr("y1", function(d) { return d.source.y; })
+          .attr("x2", function(d) { return d.target.x; })
+          .attr("y2", function(d) { return d.target.y; });
+
+        link.each(function(d) {
+          linkedByIndex[d.source.index + "," + d.target.index] = true;
+        });
+
+        // Add data of simulation globally
+        self.simulations[clusterIndex] = {'simulation': simulation, 'linkedByIndex': linkedByIndex, 'svg': svg};
 
         // Create g element that stores
         // circles and text and call dragging on it
         var node = g.append('g')
-            .attr('class', 'nodes')
-            .selectAll('.node')
-            .data(graph.nodes)
-            .enter().append('g')
-            .attr('class', 'node')
-            .call(d3.drag()
-                .on('start', dragstarted)
-                .on('drag', dragged)
-                .on('end', dragended));
-        
-        // Append cirles to node
-        var circles = node.append('circle')
-            // .attr('class', 'nodes')
-            .attr('r', 15)
-            .attr('cx', 0)
-            .attr('cy', 0)
-            // .attr('ry', 2)
-            .style("fill", function (word) {
-                // Loop over every cluster
-                for (var i = 0; i < clusters.length; i++) {
-                    // Check if current word is in current Array
-                    if ($.inArray(word.id, clusters[i]) != -1) {
-                        // Return color if word war found in array
-                        return colors(i);
-                    }
-                }
-            })
-            .style('opacity', 0.6);
+          .attr('class', 'nodes')
+          .selectAll('.node')
+          .data(graph.nodes)
+          .enter().append('g')
+          .attr('id', function(d, i) {
+            return 'node-' + d.id;
+          })
+          .attr('class', 'node')
+          .attr('transform', function(d) {
+            return 'translate(' + d.x + ',' + d.y + ')';
+          })
+          .on('mouseover', mouseover)
+          .on('mouseout', mouseout);
+
+        // Append circle
+        var circle = node.append('circle')
+          .attr('r', 10)
+          .attr('cx', 0)
+          .attr('cy', 0)
+          .attr('fill', '#ccc');
 
         // Append label to node container
         var label = node.append('text')
-            .attr('dy', '-.35em')
-            .attr('dx', '1.4em')
-            .text(function(d) {
-                return d.id;
-            });
+          .attr('dy', -10)
+          .attr('dx', 12)
+          .style('opacity', 0.8)
+          .attr('text-anchor', 'start')
+          .text(function(d) {
+            return d.id;
+          });
+      });
 
-        // Add nodes to simulation
-        simulation
-            .nodes(graph.nodes)
-            .on('tick', ticked);
+      function mouseover(mouseOverObject) {
+        // Get data
+        var mouse = d3.mouse(this);
 
-        // Add links to simulation
-        simulation.force('link')
-            .links(graph.links);
+        // Select element that is hovered
+        var nodeSelected = g.select('#node-' + mouseOverObject.id);
+        var nodeData = nodeSelected.data()[0];
 
-        var linkedByIndex = {};
-            link.each(function(d) {
-                linkedByIndex[d.source.index + "," + d.target.index] = true;
-            });
+        // Change text of selected element
+        var textSelected = nodeSelected.select('text')
+          .style('opacity', 1)
+          .style('font-weight', 'bold');
 
-        /**
-         * Tick function adds x and y
-         * coordinates to nodes and links
-         */
-        function ticked() {
-            // Update links
-            link
-                .attr('x1', function(d) { return d.source.x; })
-                .attr('y1', function(d) { return d.source.y; })
-                .attr('x2', function(d) { return d.target.x; })
-                .attr('y2', function(d) { return d.target.y; });
+        // Highlight adjacent nodes
+        svg.selectAll('text')
+          .style('opacity', function(d) {
+           if (isConnected(nodeData, d)) {
+             return 1;
+           }
 
-            // Update nodes
-            node.attr('transform', function(d) {
-                return 'translate(' + d.x + ',' + d.y + ')';
-            });
-        }
+           return 0.1;
 
-        function dragstarted(d) {
-            if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-            d.fx = d.x;
-            d.fy = d.y;
-        }
+          });
 
-        function dragged(d) {
-            d.fx = d3.event.x;
-            d.fy = d3.event.y;
-        }
-
-        function dragended(d) {
-            if (!d3.event.active) simulation.alphaTarget(0);
-            d.fx = null;
-            d.fy = null;
-        }
-
-        function mouseout() {
-            $('#editor-full-medium-editor').find('p').each(function(paragraph) {
-                var textParagraph = $(this).text();
-                // console.log(textParagraph);
-
-                $(this).html(textParagraph);
-            });
-
-            // Get all nodes
-            var nodes = d3.selectAll('.node');
-
-            nodes.selectAll('circle')
-                .style('opacity', 0.6)
-                .attr('r', 15);
-
-            nodes.selectAll('text')
-                .style('opacity', 0);
-
-            d3.selectAll('.links').selectAll('line')
-                .style('stroke', '#ccc');
-
-        }
-
-        function mouseover() {
-            // Get data
-            var mouse = d3.mouse(this);
-            var obj = simulation.find(mouse[0], mouse[1]);
-            
-            //////////////////////
-            // Selected element //
-            //////////////////////
-            var nodeSelected = d3.selectAll('.node')
-                .filter(function(d) {
-                    return d.id == obj.id;
-                });
-
-            var textSelected = nodeSelected.select('text')
-                .style('opacity', 1)
-                .style('font-size', 20)
-                .style('font-weight', 'bold');
-
-            nodeSelected.select('circle')
-                .attr('r', 25);
-
-            //////////////////////////////
-            // Highlight adjacent nodes //
-            //////////////////////////////
-            node.selectAll('circle')
-                // .transition()
-                // .duration(20)
-                .style('opacity', function(d) {
-
-                    if (isConnected(obj, d)) {
-                        return 1;
-                    }
-
-                    return 0.6;
-                });
-
-            node.selectAll('text')
-                // .transition()
-                // .duration(20)
-                .style('opacity', function(d) {
-
-                    if (isConnected(obj, d)) {
-                        return 1;
-                    }
-
-                    return 0;
-
-                });
-
-            /////////////////////
-            // Highlight links //
-            /////////////////////
-            link
-                // .transition()
-                // .duration(20)
-                .style('stroke', function(d) {
-                    return d.source.id === obj.id || d.target.id === obj.id ? '#000' : '#ccc';
-                });
-
-
-            ////////////////////////
-            // Unselected element //
-            ////////////////////////
-            var nodeUnselected = d3.selectAll('.node')
-                .filter(function(d) {
-                    return d.id != obj.id;
-                });
-
-            nodeUnselected.select('text')
-                .style('font-size', 16)
-                .style('font-weight', 'normal');
-
-            nodeUnselected.select('circle')
-                .attr('r', 15);
-        }
-
-        function isConnected(a, b) {
-            return isConnectedAsTarget(a, b) || isConnectedAsSource(a, b) || a.index == b.index;
-        }
-
-        function isConnectedAsSource(a, b) {
-            return linkedByIndex[a.index + "," + b.index];
-        }
-
-        function isConnectedAsTarget(a, b) {
-            return linkedByIndex[b.index + "," + a.index];
-        }
-    },
-
-    saveText: function() {
-        var self = this;
-
-        // Get seconds subject worked for revision
-        var revisionElapsed = (new Date() - this.postPageDurationStart) / 1000;
-
-        // Render loading ring
-        this.$el.find('#editor-full-button-div').html(
-            Handlebars.templates['loading-ring']());
-
-        // Get text
-        var text = app.getParagraphs(this.$el.find('#editor-full-medium-editor'));
-
-        // Save post text to textModel
-        this.textModel.set({'post_text': text,
-                            'post_page_duration': revisionElapsed});
-
-        // Set text to analyzer
-        this.analyzer.set({'text': text});
-
-        // Fetch data
-        this.analyzer.save(null, {
-            success: function(response) {
-                self.sendToServer();
-            },
-            error: function(model, response) {
-                console.log(response.responseText);
+        svg.selectAll('circle')
+          .style('fill', function(d) {
+            if (isConnected(nodeData, d)) {
+              return '#000';
             }
-        });
-    },
 
-    sendToServer: function() {
-        // Save last data 
-        this.textModel.set({'post_num_sentences': this.analyzer.get('numSentences'),
-            'post_num_clusters': this.analyzer.get('numClusters'),
-            'post_num_coherent_sentences': this.analyzer.get('cohSentences'),
-            'post_num_non_coherent_sentences': this.analyzer.get('cohNotSentences'),
-            'post_num_concepts': this.analyzer.get('numConcepts')});
-        
-        // Send data to server
-        this.textModel.save(null, {
-            success: function(response) {
-                // Reload page
-                location.reload();
-            },
-            error: function(model, response) {
-                console.log('error');
+            return '#f4f4f4';
+          })
+          .style('opacity', function(d) {
+            if (isConnected(nodeData, d)) {
+              return 1;
             }
-        });
+
+            return 0.2;
+          });
+
+        /////////////////////
+        // Highlight links //
+        /////////////////////
+        svg.selectAll('line')
+          .style('stroke', function(d) {
+            return d.source.id === nodeData.id || d.target.id === nodeData.id ? '#4c4c4c' : '#f4f4f4';
+          });
+      }
+
+      function isConnected(a, b) {
+        return isConnectedAsTarget(a, b) || isConnectedAsSource(a, b) || a.index == b.index;
+      }
+
+      function isConnectedAsSource(a, b) {
+        return linkedByIndex[a.index + "," + b.index];
+      }
+
+      function isConnectedAsTarget(a, b) {
+        return linkedByIndex[b.index + "," + a.index];
+      }
+
+      function zoomed() {
+        g.attr('transform', d3.event.transform);
+      }
     }
 
+    // Store clusters temporarily
+    var clusters = this.analyzer.get('clusters');
 
+    // Create svg for each cluster
+    for (var i = 0; i < clusters.length; i++) {
+      runSimulation(clusters[i], i);
+    }
+
+    function mouseout() {
+      $('#editor-full-medium-editor').find('p').each(function(paragraph) {
+        var textParagraph = $(this).text();
+        // Wrap everything in span elements
+        var spanText = textParagraph.replace(/([A-z0-9'<>\u00dc\u00fc\u00e4\u00c4\u00f6\u00d6\u00df\-/]+)/g, '<span>$1</span>');
+
+        var jquerySpan = $(spanText);
+
+        // Generate spans for text
+        $(this).html(jquerySpan);
+      });
+
+      // Get all nodes
+      var nodes = d3.selectAll('.node');
+
+      nodes.selectAll('text')
+         .style('opacity', 0.8)
+         .style('font-weight', 'normal');
+
+      d3.selectAll('circle')
+        .style('fill', '#ccc')
+        .style('opacity', 1);
+
+      d3.selectAll('.links').selectAll('line')
+       .style('stroke', '#ccc');
+    }
+  },
+
+  saveText: function() {
+      var self = this;
+
+      // Get seconds subject worked for revision
+      var revisionElapsed = (new Date() - this.postPageDurationStart) / 1000;
+
+      // Render loading ring
+      this.$el.find('#editor-full-button-div').html(
+          Handlebars.templates['loading-ring']());
+
+      // Get text
+      var text = app.getParagraphs(this.$el.find('#editor-full-medium-editor'));
+
+      // Save post text to textModel
+      this.textModel.set({'post_text': text,
+                          'post_page_duration': revisionElapsed});
+
+      // Set text to analyzer
+      this.analyzer.set({'text': text});
+
+      // Fetch data
+      this.analyzer.save(null, {
+          success: function(response) {
+              self.sendToServer();
+          },
+          error: function(model, response) {
+              console.log(response.responseText);
+          }
+      });
+  },
+
+  sendToServer: function() {
+    // Save last data
+    this.textModel.set({'post_num_sentences': this.analyzer.get('numSentences'),
+        'post_num_clusters': this.analyzer.get('numCluster'),
+        'post_num_coherent_sentences': this.analyzer.get('cohSentences'),
+        'post_num_non_coherent_sentences': this.analyzer.get('cohNotSentences'),
+        'post_num_concepts': this.analyzer.get('numConcepts'),
+        'post_local_cohesion': this.analyzer.get('local cohesion')});
+
+    // Send data to server
+    this.textModel.save(null, {
+        success: function(response) {
+            // Reload page
+            location.reload();
+        },
+        error: function(model, response) {
+            console.log('error');
+        }
+    });
+  }
 });
 
 new app.CmapView();
