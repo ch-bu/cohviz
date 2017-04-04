@@ -88,7 +88,7 @@ app.ExperimentView = Backbone.View.extend({
 		// Generate new user
 		this.UserModel.set({'nr_users': 1});
 
-		// Save new User 
+		// Save new User
 		this.UserModel.save(null, {
 			success: function (model, response) {
 				self.fetchUsers();
@@ -110,97 +110,7 @@ app.ExperimentView = Backbone.View.extend({
 });
 
 
-// // ==================== SwitchButtonView =====================
-// var GenerateUserView = Backbone.View.extend({
-// 	el: $('#experiment_generate-user'),
-
-// 	events: {
-// 		"click #experiment_generate-user-button": "generateUser",
-// 		"mouseup #experiment_slider": "setSliderValue",
-// 	},
-
-// 	user_template: _.template($('#experiment_show-users-template').html()),
-
-// 	initialize: function() {
-
-// 		this.user_collection = new UserCollection();
-		
-// 		this.user_collection.bind('sync', this.fetchUsers());
-// 		this.slider_value_paragraph = $('#experiment_slider-value')
-
-// 		var self = this;
-
-// 		this.user_collection.fetch({
-// 			success: function(collection) {
-// 				if (collection.length > 0) {
-// 					self.renderUsers()
-// 				}
-// 			}
-// 		})
-// 	},
-
-// 	setSliderValue: function() {
-		
-// 		var slider = $('#experiment_slider').attr('aria-valuenow');
-
-// 		this.slider_value_paragraph.html(slider);
-// 	},
-
-// 	generateUser: function() {
-// 		var user_model = new UserModel();
-// 		var self = this;
-
-// 		var nr_users = $('#experiment_slider-value').html();
-// 		user_model.set({'nr_users': nr_users});
-
-// 		// Save experiment model
-// 		user_model.save(null, {
-// 		    success: function (model, response) {
-// 		    	// Save measurement data for experiment
-
-// 		        // Empty experiment model
-// 		        user_model.clear();
-
-// 		        // Render user data
-// 		        self.fetchUsers();
-// 		    },
-// 		    error: function (model, response) {
-// 		        console.log(response.responseText);
-// 		    }
-// 		});
-
-// 	},
-
-// 	fetchUsers: function() {
-		
-// 		var self = this;
-		
-// 		// Fetch users from database
-// 		this.user_collection.fetch({
-// 			success: function(collection) {
-// 				if (collection.length > 0) {
-// 					self.renderUsers();
-// 					// self.renderBarChart();
-// 				}
-// 			}
-// 		});
-// 	},
-
-// 	renderUsers: function() {
-		
-// 		var user_div = $('#experiment_show-users');
-		
-// 		// Empty user div
-// 		user_div.empty();
-
-// 		user_div.html(this.user_template({users: this.user_collection.toJSON()}));
-// 	},
-
-// });
-
 
 if (window.location.pathname.startsWith('/experiment/')) {
 	new app.ExperimentView();
 }
-// var experiment_view = new ExperimentView();
-// var user_view = new GenerateUserView();

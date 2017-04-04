@@ -20,6 +20,7 @@ class TextDataSerializer(serializers.ModelSerializer):
                  'post_num_sentences', 'pre_num_clusters', 'post_num_clusters',
                  'pre_num_coherent_sentences', 'post_num_coherent_sentences',
                  'pre_num_non_coherent_sentences',
+                 'pre_local_cohesion', 'post_local_cohesion',
                  'post_num_non_coherent_sentences', 'pre_num_concepts',
                  'post_num_concepts', 'pre_page_duration',
                  'post_page_duration', 'measurement', 'experiment', 'subject',

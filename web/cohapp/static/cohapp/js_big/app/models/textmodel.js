@@ -17,6 +17,8 @@ app.TextModelComplete = Backbone.Model.extend({
         "pre_page_duration": null,
         "post_page_duration": null,
         "pre_num_concepts": null,
-        "post_num_concepts": null
+        "post_num_concepts": null,
+        'pre_local_cohesion': null,
+        'post_local_cohesion': null
     }
 });
