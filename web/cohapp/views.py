@@ -403,7 +403,9 @@ def csv_text_view(request, experiment_password):
                      'post_num_concepts',
                      'pre_page_duration',
                      'post_page_duration',
-                     'levenshtein_distance'])
+                     'levenshtein_distance',
+                     'pre_local_cohesion',
+                     'post_local_cohesion'])
 
     for inst in text_data:
         writer.writerow([inst.subject.user,
@@ -425,6 +427,8 @@ def csv_text_view(request, experiment_password):
                          inst.post_num_concepts,
                          inst.pre_page_duration,
                          inst.post_page_duration,
-                         inst.levenshtein_distance])
+                         inst.levenshtein_distance,
+                         inst.pre_local_cohesion,
+                         inst.post_local_cohesion])
 
     return response
