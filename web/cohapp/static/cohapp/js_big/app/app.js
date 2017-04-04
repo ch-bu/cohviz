@@ -119,6 +119,25 @@ app.getParagraphs = function(div) {
 };
 
 /**
+ * Get Plain text with line breaks
+ * @param  {[type]} div [description]
+ * @return {[type]}     [description]
+ */
+app.getPlainText = function(div) {
+    var self = this;
+
+    var paragraphs = div.find('p');
+
+    var paragraphText = '';
+
+    paragraphs.each(function(paragraph) {
+       paragraphText += paragraphs[paragraph].innerText + '|LINE-BREAK|';
+    });
+
+    return paragraphText;
+};
+
+/**
  * Escape all occurences of string
  * @return {String} Replacements
  */

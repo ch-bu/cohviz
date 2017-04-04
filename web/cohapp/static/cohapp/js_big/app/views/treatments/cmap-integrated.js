@@ -113,6 +113,9 @@ app.CmapView = Backbone.View.extend({
         // Get text
         var text = app.getParagraphs(this.$el.find('#editor-textinput'));
 
+        // Get plain text
+        var plainText = app.getPlainText(this.$el.find('#editor-textinput'));
+
         // Check if text is long enough
         if (text.length < 1000) {
             // Display toast
@@ -126,7 +129,7 @@ app.CmapView = Backbone.View.extend({
 
             // Set draft time and draftText to textModel
             this.textModel.set({'pre_page_duration': draftElapsed,
-                                'pre_text': text});
+                                'pre_text': plainText});
 
             // Render loading ring
             this.$el.find('#editor-button-div').html(
@@ -220,6 +223,9 @@ app.CmapView = Backbone.View.extend({
         // Get text
         var text = app.getParagraphs(this.$el.find('#editor-full-medium-editor'));
 
+        // Get plain Text
+        var plainText = app.getPlainText(this.$el.find('#editor-full-medium-editor'));
+
         // Remove unnecessary white spaces
         text = text.replace(/\s\,/g, ',');
         text = text.replace(/\s\./g, '.');
@@ -238,7 +244,7 @@ app.CmapView = Backbone.View.extend({
         text = text.replace(/\s\//g, '/');
 
         // Save post text to textModel
-        this.textModel.set({'post_text': text,
+        this.textModel.set({'post_text': plainText,
                             'post_page_duration': revisionElapsed});
 
         // Set text to analyzer

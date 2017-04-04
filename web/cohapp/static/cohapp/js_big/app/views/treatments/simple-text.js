@@ -1,7 +1,7 @@
 var app = app || {};
 
 app.SimpleRevisionView = Backbone.View.extend({
-    
+
     el: '#treatment-simple-revision',
 
     events: {
@@ -16,7 +16,7 @@ app.SimpleRevisionView = Backbone.View.extend({
         var self = this;
         this.prePageDurationStart = null;
         this.postPageDurationStart = null;
-        
+
         // Get user data
         this.userModel = new app.UserSpecificModel();
 
@@ -37,7 +37,7 @@ app.SimpleRevisionView = Backbone.View.extend({
         });
     },
 
-    /** Render instruction for 
+    /** Render instruction for
       * this part of the experiment
       */
     renderInstruction: function() {
@@ -47,7 +47,7 @@ app.SimpleRevisionView = Backbone.View.extend({
                 this.userModel.get('instruction')}));
     },
 
-    /** 
+    /**
      * When user has read the instruction he or she is able
      * to write their text.
      */
@@ -75,7 +75,7 @@ app.SimpleRevisionView = Backbone.View.extend({
         // Append help button to window
         this.$el.append('<i id="help" class="material-icons">help</i>');
 
-        // Append modal 
+        // Append modal
         this.$el.append(Handlebars.templates['modal-help']({'instruction':
             this.userModel.get('instruction') }));
     },
@@ -88,10 +88,10 @@ app.SimpleRevisionView = Backbone.View.extend({
     },
 
     /**
-     * After user has written his or her text the 
-     * user gets feedback on the draft. 
-     * Before users can see the feedback we need 
-     * to make some sanity checks whether the 
+     * After user has written his or her text the
+     * user gets feedback on the draft.
+     * Before users can see the feedback we need
+     * to make some sanity checks whether the
      * text is long enough.
      */
     analyzeText: function() {
@@ -102,6 +102,9 @@ app.SimpleRevisionView = Backbone.View.extend({
 
         // Get text
         var text = app.getParagraphs(this.$el.find('#editor-textinput'));
+
+        // Get plain text
+        var plainText = app.getPlainText(this.$el.find('#editor-textinput'));
 
         // Check if text is long enough
         if (text.length < 1000) {
@@ -116,7 +119,7 @@ app.SimpleRevisionView = Backbone.View.extend({
 
             // Set draft time and draftText to textModel
             this.textModel.set({'pre_page_duration': draftElapsed,
-                                'pre_text': text});
+                                'pre_text': plainText});
 
             // Render loading ring
             this.$el.find('#editor-button-div').html(
@@ -148,9 +151,12 @@ app.SimpleRevisionView = Backbone.View.extend({
         // Get text
         var text = app.getParagraphs(this.$el.find('#editor-textinput'));
 
+        // Get plain text
+        var plainText = app.getPlainText(this.$el.find('#editor-textinput'));
+
         // Save post text to textModel
-        this.textModel.set({'post_text': text,
-            'post_page_duration': 0,
+        this.textModel.set({'post_text': plainText,
+            'post_page_duration': revisionElapsed,
             'pre_num_sentences': this.analyzer.get('numSentences'),
             'pre_num_clusters': this.analyzer.get('numClusters'),
             'pre_num_coherent_sentences': this.analyzer.get('cohSentences'),

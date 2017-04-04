@@ -106,6 +106,9 @@ app.TextIntegratedView = Backbone.View.extend({
         // Get text
         var text = app.getParagraphs(this.$el.find('#editor-textinput'));
 
+        // Get plain text
+        var plainText = app.getPlainText(this.$el.find('#editor-textinput'));
+
         // Check if text is long enough
         if (text.length < 1000) {
             // Display toast
@@ -119,7 +122,7 @@ app.TextIntegratedView = Backbone.View.extend({
 
             // Set draft time and draftText to textModel
             this.textModel.set({'pre_page_duration': draftElapsed,
-                                'pre_text': text});
+                                'pre_text': plainText});
 
             // Render loading ring
             this.$el.find('#editor-button-div').html(
@@ -150,7 +153,7 @@ app.TextIntegratedView = Backbone.View.extend({
                 '<a class="waves-effect waves-light btn" id="save-text">Text abschicken</a>');
 
         // Save data for draft
-        this.textModel.set({'pre_text': this.analyzer.get('text'),
+        this.textModel.set({
             'pre_num_sentences': this.analyzer.get('numSentences'),
             'pre_num_clusters': this.analyzer.get('numCluster'),
             'pre_num_coherent_sentences': this.analyzer.get('cohSentences'),
@@ -208,8 +211,13 @@ app.TextIntegratedView = Backbone.View.extend({
         // Get text
         var text = app.getParagraphs(this.$el.find('#editor-edit'));
 
+        // Get plain Text
+        var plainText = app.getPlainText(this.$el.find('#editor-edit'));
+
+        console.log(plainText);
+
         // Save post text to textModel
-        this.textModel.set({'post_text': text,
+        this.textModel.set({'post_text': plainText,
                             'post_page_duration': revisionElapsed});
 
         // Set text to analyzer
