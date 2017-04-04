@@ -202,6 +202,9 @@ class TextData(models.Model):
     pre_num_concepts = models.PositiveSmallIntegerField()
     post_num_concepts = models.PositiveSmallIntegerField()
 
+    pre_local_cohesion = models.FloatField()
+    post_local_cohesion = models.FloatField()
+
     pre_page_duration = models.FloatField()
     post_page_duration = models.FloatField()
 
