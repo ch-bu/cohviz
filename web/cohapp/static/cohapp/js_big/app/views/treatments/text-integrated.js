@@ -1,7 +1,7 @@
 var app = app || {};
 
 app.TextIntegratedView = Backbone.View.extend({
-    
+
     el: '#treatment-text-integrated',
 
     events: {
@@ -19,7 +19,7 @@ app.TextIntegratedView = Backbone.View.extend({
 
         // Generate 20 distinct colors for the cmap
         this.colors = d3.scaleOrdinal(d3.schemeCategory10);
-        
+
         // Get user data
         this.userModel = new app.UserSpecificModel();
 
@@ -40,7 +40,7 @@ app.TextIntegratedView = Backbone.View.extend({
         });
     },
 
-    /** Render instruction for 
+    /** Render instruction for
       * this part of the experiment
       */
     renderInstruction: function() {
@@ -50,7 +50,7 @@ app.TextIntegratedView = Backbone.View.extend({
                 this.userModel.get('instruction')}));
     },
 
-    /** 
+    /**
      * When user has read the instruction he or she is able
      * to write their text.
      */
@@ -78,7 +78,7 @@ app.TextIntegratedView = Backbone.View.extend({
         // Append help button to window
         this.$el.append('<i id="help" class="material-icons">help</i>');
 
-        // Append modal 
+        // Append modal
         this.$el.append(Handlebars.templates['modal-help']({'instruction':
             this.userModel.get('instruction') }));
     },
@@ -91,10 +91,10 @@ app.TextIntegratedView = Backbone.View.extend({
     },
 
     /**
-     * After user has written his or her text the 
-     * user gets feedback on the draft. 
-     * Before users can see the feedback we need 
-     * to make some sanity checks whether the 
+     * After user has written his or her text the
+     * user gets feedback on the draft.
+     * Before users can see the feedback we need
+     * to make some sanity checks whether the
      * text is long enough.
      */
     analyzeText: function() {
@@ -139,7 +139,7 @@ app.TextIntegratedView = Backbone.View.extend({
     },
 
     /**
-     * After user has written the draft she gets the 
+     * After user has written the draft she gets the
      * opportunity to revise her text
      */
     renderRevision: function() {
@@ -152,10 +152,11 @@ app.TextIntegratedView = Backbone.View.extend({
         // Save data for draft
         this.textModel.set({'pre_text': this.analyzer.get('text'),
             'pre_num_sentences': this.analyzer.get('numSentences'),
-            'pre_num_clusters': this.analyzer.get('numClusters'),
+            'pre_num_clusters': this.analyzer.get('numCluster'),
             'pre_num_coherent_sentences': this.analyzer.get('cohSentences'),
             'pre_num_non_coherent_sentences': this.analyzer.get('cohNotSentences'),
-            'pre_num_concepts': this.analyzer.get('numConcepts')});
+            'pre_num_concepts': this.analyzer.get('numConcepts'),
+            'pre_local_cohesion': this.analyzer.get('local cohesion')});
 
         // Get inner html of text input
         this.paragraphs = $('#editor-textinput').html();
@@ -170,7 +171,7 @@ app.TextIntegratedView = Backbone.View.extend({
         // Append help button to window
         this.$el.append('<i id="help" class="material-icons">help</i>');
 
-        // Append modal 
+        // Append modal
         this.$el.append(Handlebars.templates['modal-help']({'instruction':
             this.userModel.get('instructionreview') }));
 
@@ -189,7 +190,7 @@ app.TextIntegratedView = Backbone.View.extend({
         // Display modal
         this.$el.append(Handlebars.templates['modal-revision']({'instruction':
             this.userModel.get('instructionreview')}));
-        
+
         $('#modal-revision').openModal();
 
     },
@@ -226,13 +227,14 @@ app.TextIntegratedView = Backbone.View.extend({
     },
 
     sendToServer: function() {
-        // Save last data 
+        // Save last data
         this.textModel.set({'post_num_sentences': this.analyzer.get('numSentences'),
-            'post_num_clusters': this.analyzer.get('numClusters'),
+            'post_num_clusters': this.analyzer.get('numCluster'),
             'post_num_coherent_sentences': this.analyzer.get('cohSentences'),
             'post_num_non_coherent_sentences': this.analyzer.get('cohNotSentences'),
-            'post_num_concepts': this.analyzer.get('numConcepts')});
-        
+            'post_num_concepts': this.analyzer.get('numConcepts'),
+            'post_local_cohesion': this.analyzer.get('local cohesion')});
+
         // Send data to server
         this.textModel.save(null, {
             success: function(response) {

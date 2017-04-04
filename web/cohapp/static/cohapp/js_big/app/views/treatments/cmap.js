@@ -3,7 +3,7 @@ var app = app || {};
 
 app.CmapView = Backbone.View.extend({
 
-    el: '#treatment-cmap',
+  el: '#treatment-cmap',
 
 	events: {
     'click #instruction-read': 'renderEditor',
@@ -49,10 +49,10 @@ app.CmapView = Backbone.View.extend({
       * this part of the experiment
       */
 	renderInstruction: function() {
-        // Render instruction
-        this.$el.html(
-            Handlebars.templates.instruction({'instruction':
-                this.userModel.get('instruction')}));
+    // Render instruction
+    this.$el.html(
+        Handlebars.templates.instruction({'instruction':
+            this.userModel.get('instruction')}));
 	},
 
 	/**
@@ -167,22 +167,22 @@ app.CmapView = Backbone.View.extend({
       // Get inner html of text input
       this.paragraphs = $('#editor-textinput').html();
 
-          // Change inner html
-          this.$el.html(Handlebars.templates['editor-full']({'instruction':
-              app.constants.simpleRevisionModal}));
+      // Change inner html
+      this.$el.html(Handlebars.templates['editor-full']({'instruction':
+          app.constants.simpleRevisionModal}));
 
-          // Append help button to window
-          this.$el.append('<i id="help" class="material-icons">help</i>');
+      // Append help button to window
+      this.$el.append('<i id="help" class="material-icons">help</i>');
 
-          // Append modal
-          this.$el.append(Handlebars.templates['modal-help']({'instruction':
-              this.userModel.get('instructionreview') }));
+      // Append modal
+      this.$el.append(Handlebars.templates['modal-help']({'instruction':
+          this.userModel.get('instructionreview') }));
 
-          // Change inner html of editor
-          $('#editor-full-medium-editor').html(this.paragraphs);
+      // Change inner html of editor
+      $('#editor-full-medium-editor').html(this.paragraphs);
 
-          // Enable editor functionality
-          var editor = new MediumEditor('#editor-full-medium-editor', {
+      // Enable editor functionality
+      var editor = new MediumEditor('#editor-full-medium-editor', {
         toolbar: false,
       });
 
@@ -409,6 +409,7 @@ app.CmapView = Backbone.View.extend({
 
         // Generate spans for text
         $(this).html(jquerySpan);
+        $(this).append('.');
       });
 
       // Get all nodes

@@ -190,42 +190,49 @@ app.sameOrigin = function(url) {
 //  * @param  {String}  word          word of cluster that should be highlighted
 //  * @param  {Boolean} singleCluster Wheter a single cluster should be highlighted
 //  * @return {null}
+app.highlightWholeText = function(divId, clusters, colors) {
 
-// app.highlightWholeText = function(divId, clusters, colors) {
-//     $(divId).find('p').each(function(paragraph) {
-//         var textParagraph = $(this).text();
-//         $(this).html(app.colorText(textParagraph, this, clusters, colors));
-//     });
-// };
+    var clustersArray = [];
+
+    // Store words of clusters in array
+    for (var cluster = 0; cluster < clusters.length; cluster++) {
+        clustersArray[cluster] = [].concat.apply([], Object.keys(clusters[cluster]).map(function(key) {
+            return [clusters[cluster][key].source.word, clusters[cluster][key].target.word];
+        }));
+    }
+
+    $(divId).find('p').each(function(paragraph) {
+        var textParagraph = $(this).text();
+        $(this).html(app.colorText(textParagraph, this, clustersArray, colors));
+    });
+};
 
 
-// app.colorText = function(text, paragraph, clusters, colors) {
+app.colorText = function(text, paragraph, clusters, colors) {
+    // Save text in variable
+    var newText = text;
+    // Get each word in paragraph and remove punctuation from text
+    var words = text.replace(/[.,\/#!$%\^&\*;:{}=_`~()]/g,"").split(" ");
 
-//     // Save text in variable
-//     var newText = text;
+    // Split whole text string
+    var newTextSplit = newText.replace(/[^\wöäüÄÖÜß-\s]|_/g, function ($1) { return ' ' + $1 + ' ';}).replace(/[ ]+/g, ' ').split(' ');
 
-//     // Get each word in paragraph and remove punctuation from text
-//     var words = text.replace(/[.,\/#!$%\^&\*;:{}=_`~()]/g,"").split(" ");
+    // Loop over whole text
+    for (var i = 0; i < newTextSplit.length; i++) {
+        var splitWord = newTextSplit[i];
 
-//     // Split whole text string
-//     var newTextSplit = newText.replace(/[^\wöäüÄÖÜß-\s]|_/g, function ($1) { return ' ' + $1 + ' ';}).replace(/[ ]+/g, ' ').split(' ');
+        for (var cluster = 0; cluster < clusters.length; cluster++) {
+            if ($.inArray(splitWord, clusters[cluster]) != -1) {
+                newTextSplit[i] = splitWord.replace(splitWord,
+                    '<a style="background-color: ' +
+                    colors(cluster) + ';color: #fff;border-radius: 3px; padding: 1px 3px;" class="cluster' + cluster + '">' +
+                    splitWord + '</a>');
+            }
+        }
+    }
 
-//     // Loop over whole text
-//     for (var i = 0; i < newTextSplit.length; i++) {
-//         var splitWord = newTextSplit[i];
-
-//         for (var cluster = 0; cluster < clusters.length; cluster++) {
-//             if ($.inArray(splitWord, clusters[cluster]) != -1) {
-//                 newTextSplit[i] = splitWord.replace(splitWord,
-//                     '<a style="background-color: ' +
-//                     colors(cluster) + ';color: #fff;border-radius: 3px; padding: 1px 3px;" class="cluster' + cluster + '">' +
-//                     splitWord + '</a>');
-//             }
-//         }
-//     }
-
-//     return newTextSplit.join(' ');
-// };
+    return newTextSplit.join(' ');
+};
 
 app.highlightSelectedWord = function(divId, wordSelected) {
 

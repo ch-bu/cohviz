@@ -586,6 +586,9 @@ def analyzeTextCohesion(text):
     text = re.sub(r'%', '', text)
     text = re.sub(r'“', '', text)
     text = re.sub(r'–', '', text)
+    text = re.sub(r'„', '', text)
+    text = re.sub(r'Dr\.', 'Doktor', text)
+    text = re.sub(r'St\.', 'Sankt', text)
 
     # Remove trailing white space
     text = text.strip()
