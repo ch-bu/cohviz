@@ -1,30 +1,41 @@
 **/*.pyc
 web/node_modules/
 web/bower_components/
-web/static/**/*.map
-web/static/
-web/cohapp/**/*.map
-web/cohapp/coherenceanalyzer/RFTagger/
-web/cohapp/coherenceanalyzer/temp/
-web/cohapp/migrations/
 
+# Ignore static files
+web/static/**/*.map
+web/static/**/*.js
+web/static/**/*.css
+web/static/**/*.scss
+web/cohapp/**/*.map
+web/static/**/*.svg
+
+# Ignore large files
+web/cohapp/coherenceanalyzer/RFTagger/
+web/cohapp/coherenceanalyzer/GN_V90_XML/
+web/cohapp/coherenceanalyzer/mongodb/
+web/cohapp/coherenceanalyzer/temp/
+
+# Ignore sublime project files
 cohviz.sublime-project
 cohviz.sublime-workspace
 
+# Ignore hidden files
 web/.bash_history
 web/.dbshell
 web/.mongorc.js
 web/.vim/
 web/.viminfo
-web/cohapp/coherenceanalyzer/GN_V90_XML/
-web/cohapp/coherenceanalyzer/mongodb/
+
+# Ignore nltk data
 web/nltk_data/
 
-web/static/
-web/cohapp/static/
+
+web/cohapp/static/**/*
 web/cohapp/static/cohapp/css/custom.css
 web/static/cohapp/css/custom.css
 
+# Ignore setting files
 docker-compose.yml
 web/toolapp/settings.py
 .env
