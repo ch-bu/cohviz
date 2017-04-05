@@ -26,3 +26,4 @@ web/static/cohapp/css/custom.css
 
 docker-compose.yml
 web/toolapp/settings.py
+.env
