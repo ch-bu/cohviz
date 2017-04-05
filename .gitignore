@@ -2,6 +2,7 @@
 web/node_modules/
 web/bower_components/
 web/static/**/*.map
+web/static/
 web/cohapp/**/*.map
 web/cohapp/coherenceanalyzer/RFTagger/
 web/cohapp/coherenceanalyzer/temp/
