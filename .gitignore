@@ -3,12 +3,7 @@ web/node_modules/
 web/bower_components/
 
 # Ignore static files
-web/static/**/*.map
-web/static/**/*.js
-web/static/**/*.css
-web/static/**/*.scss
-web/cohapp/**/*.map
-web/static/**/*.svg
+web/static/*
 
 # Ignore large files
 web/cohapp/coherenceanalyzer/RFTagger/
@@ -30,12 +25,10 @@ web/.viminfo
 # Ignore nltk data
 web/nltk_data/
 
-
-web/cohapp/static/**/*
-web/cohapp/static/cohapp/css/custom.css
-web/static/cohapp/css/custom.css
-
 # Ignore setting files
 docker-compose.yml
 web/toolapp/settings.py
 .env
+
+# Ignore map files
+web/cohapp/static/cohapp/**/*.map
