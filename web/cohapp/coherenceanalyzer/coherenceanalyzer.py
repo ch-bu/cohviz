@@ -691,27 +691,66 @@ def analyzeTextCohesion(text):
         # Get all nouns
         nouns = [word['lemma'] for word in sentence if word['noun']]
         nouns_full = [word for word in sentence if word['noun']]
+        nominatives = filter(lambda x: x['nominative'], sentence)
 
         # Append noun if it only occurs once
         if len(nouns) == 1:
             # Append lonely noun
             word_pairs.append({'source': {'word': nouns_full[0]['orth'],
                 'lemma': nouns_full[0]['lemma'], 'sentence': val},
-                'target': {'word': nouns_full[0]['orth'],
-                'lemma': nouns_full[0]['lemma'], 'sentence': val},
+                'target': {'word': nouns_full[0]['orth'], 'lemma': nouns_full[0]['lemma'], 'sentence': val},
                 'device': 'single word'})
 
         # If there are multiple nouns append all combinations of nouns
         elif len(nouns) > 1:
-            # Loop over every combination of nouns in current sentence
-            for subset in itertools.combinations_with_replacement(nouns_full, 2):
-                if subset[0] != subset[1]:
-                    # Append word pairs
-                    word_pairs.append({'source': {'word': subset[0]['orth'],
-                        'lemma': subset[0]['lemma'], 'sentence': val},
-                        'target': {'word': subset[1]['orth'],
-                        'lemma': subset[1]['lemma'], 'sentence': val},
-                        'device': 'within sentence'})
+            # Check if there are nominatives within the sentence
+            if len(nominatives) > 0:
+                # Loop over every combination of nouns in current sentence
+                for subset in itertools.combinations_with_replacement(nouns_full, 2):
+                    if subset[0] != subset[1]:
+                        # Check if first word is nominative
+                        if subset[0]['nominative']:
+                            # Only combine nominatives with accusative, dative
+                            # and genitive
+                            if subset[1]['accusative'] or subset[1]['dative'] or \
+                                subset[1]['genitive']:
+                                # Append word pairs
+                                word_pairs.append({'source': {'word': subset[0]['orth'],
+                                    'lemma': subset[0]['lemma'], 'sentence': val},
+                                    'target': {'word': subset[1]['orth'],
+                                    'lemma': subset[1]['lemma'], 'sentence': val},
+                                    'device': 'within sentence'})
+                        # Check if second word is nominative
+                        if subset[1]['nominative']:
+                            # Only combine nominatives with accusative, dative,
+                            # and genitive
+                            if subset[0]['accusative'] or subset[0]['dative'] or \
+                                subset[0]['genitive']:
+                                # Append word pairs
+                                word_pairs.append({'source': {'word': subset[1]['orth'],
+                                    'lemma': subset[1]['lemma'], 'sentence': val},
+                                    'target': {'word': subset[0]['orth'],
+                                    'lemma': subset[0]['lemma'], 'sentence': val},
+                                    'device': 'within sentence'})
+            else:
+                # Loop over every combination of nouns in current sentence
+                for subset in itertools.combinations_with_replacement(nouns_full, 2):
+                    if subset[0] != subset[1]:
+                        # Combine accusative with dative
+                        if subset[0]['accusative'] and subset[1]['dative']:
+                            # Append word pairs
+                            word_pairs.append({'source': {'word': subset[0]['orth'],
+                                'lemma': subset[0]['lemma'], 'sentence': val},
+                                'target': {'word': subset[1]['orth'],
+                                'lemma': subset[1]['lemma'], 'sentence': val},
+                                'device': 'within sentence'})
+                        elif subset[1]['accusative'] and subset[0]['dative']:
+                            # Append word pairs
+                            word_pairs.append({'source': {'word': subset[0]['orth'],
+                                'lemma': subset[0]['lemma'], 'sentence': val},
+                                'target': {'word': subset[1]['orth'],
+                                'lemma': subset[1]['lemma'], 'sentence': val},
+                                'device': 'within sentence'})
 
     # Get hypernym hyponym pairs
     hyponym_hyper_pairs = getHypoHyperPairs(sentences, gn)
