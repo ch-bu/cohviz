@@ -32,7 +32,8 @@ class MeasurementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Measurement
         fields = ('experiment', 'publication', 'measure',
-                  'nr_group', 'instruction', 'group', 'instruction_review')
+                  'nr_group', 'instruction', 'group', 'instruction_review',
+                  'instruction_strategies')
         # read_only_fields = ('experiment', '')
 
 
