@@ -106,6 +106,10 @@ body {
  */
 #editor-full-wrapper {
 
+  .col {
+    padding-right: 1px;
+  }
+
   #editor-full-medium-editor {
     padding: 0 5px;
     height: 70vh;
@@ -133,6 +137,8 @@ body {
     flex-direction: row;
     flex-wrap: wrap;
     overflow-y: scroll;
+    padding-left: 0;
+    padding-right: 0;
 
     svg {
       width: 49%;
@@ -146,7 +152,7 @@ body {
  * General stuff
  */
 p {
-  font-size: 1.2rem;
+  font-size: 0.9rem;
 }
 
 h1, h2, h3, h4, h5 {
