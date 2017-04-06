@@ -253,7 +253,9 @@ app.colorText = function(text, paragraph, clusters, colors) {
     return newTextSplit.join(' ');
 };
 
-app.highlightSelectedWord = function(divId, wordSelected) {
+app.highlightSelectedWord = function(divId, wordSelected, relations, colors, index) {
+    var self = this;
+
 
     // Loop over every paragraph
     $(divId).find('p').each(function(paragraph) {
@@ -271,8 +273,11 @@ app.highlightSelectedWord = function(divId, wordSelected) {
 
                 var spanElement = jquerySpan[obj];
 
-                if (wordSelected.indexOf(spanElement.innerHTML) > -1) {
-                    spanElement.className += " highlight-related";
+                // Highlight lemma and orthografical forms
+                if (wordSelected == spanElement.innerHTML ||
+                    relations[wordSelected].indexOf(spanElement.innerHTML) > -1) {
+                    spanElement.style.color = colors(index[wordSelected]);
+                    spanElement.className += 'highlight-related';
                     return spanElement;
                 }
 

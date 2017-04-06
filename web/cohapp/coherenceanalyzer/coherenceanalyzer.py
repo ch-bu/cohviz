@@ -804,6 +804,7 @@ def analyzeTextCohesion(text):
 
     return {'word_pairs': word_pairs,
             'links': links,
+            'word_cluster_index': word_cluster_index,
             'nodes': nodes,
             'numSentences': num_sentences,
             'numConcepts': num_concepts,

@@ -52,11 +52,9 @@ $form-radius: $global-radius;
         // display: none;
         // opacity: 0;
         font-size: 16px;
-        cursor: pointer;
       }
 
       circle {
-        pointer-events: all;
         stroke: none;
         stroke-width: 40px;
       }
@@ -136,14 +134,8 @@ body {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    overflow-y: scroll;
     padding-left: 0;
     padding-right: 0;
-
-    // svg {
-    //   width: 49%;
-    // }
-
   }
 }
 
@@ -151,7 +143,7 @@ body {
  * General stuff
  */
 p {
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
 h1, h2, h3, h4, h5 {
