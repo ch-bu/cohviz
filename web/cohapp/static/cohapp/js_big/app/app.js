@@ -149,21 +149,6 @@ app.replaceAll = function(str, find, replace) {
   return str.replace(new RegExp(find, 'g'), replace);
 };
 
-// app.type = function(string,element){
-//     console.log(string);
-//     (function writer(i){
-//         if(string.length <= i++){
-//         element.value = string;
-//         return;
-//     }
-
-//     element.value = string.substring(0,i);
-
-//     if( element.value[element.value.length-1] != " " )element.focus();
-//         var rand = Math.floor(Math.random() * (100)) + 140;
-//         setTimeout(function(){writer(i);},rand);
-//     })(0);
-// };
 
 app.getCookie = function(name) {
     var cookieValue = null;
@@ -209,49 +194,49 @@ app.sameOrigin = function(url) {
 //  * @param  {String}  word          word of cluster that should be highlighted
 //  * @param  {Boolean} singleCluster Wheter a single cluster should be highlighted
 //  * @return {null}
-app.highlightWholeText = function(divId, clusters, colors) {
+// app.highlightWholeText = function(divId, clusters, colors) {
 
-    var clustersArray = [];
+//     var clustersArray = [];
 
-    // Store words of clusters in array
-    for (var cluster = 0; cluster < clusters.length; cluster++) {
-        clustersArray[cluster] = [].concat.apply([], Object.keys(clusters[cluster]).map(function(key) {
-            return [clusters[cluster][key].source.word, clusters[cluster][key].target.word];
-        }));
-    }
+//     // Store words of clusters in array
+//     for (var cluster = 0; cluster < clusters.length; cluster++) {
+//         clustersArray[cluster] = [].concat.apply([], Object.keys(clusters[cluster]).map(function(key) {
+//             return [clusters[cluster][key].source.word, clusters[cluster][key].target.word];
+//         }));
+//     }
 
-    $(divId).find('p').each(function(paragraph) {
-        var textParagraph = $(this).text();
-        $(this).html(app.colorText(textParagraph, this, clustersArray, colors));
-    });
-};
+//     $(divId).find('p').each(function(paragraph) {
+//         var textParagraph = $(this).text();
+//         $(this).html(app.colorText(textParagraph, this, clustersArray, colors));
+//     });
+// };
 
 
-app.colorText = function(text, paragraph, clusters, colors) {
-    // Save text in variable
-    var newText = text;
-    // Get each word in paragraph and remove punctuation from text
-    var words = text.replace(/[.,\/#!$%\^&\*;:{}=_`~()]/g,"").split(" ");
+// app.colorText = function(text, paragraph, clusters, colors) {
+//     // Save text in variable
+//     var newText = text;
+//     // Get each word in paragraph and remove punctuation from text
+//     var words = text.replace(/[.,\/#!$%\^&\*;:{}=_`~()]/g,"").split(" ");
 
-    // Split whole text string
-    var newTextSplit = newText.replace(/[^\wöäüÄÖÜß-\s]|_/g, function ($1) { return ' ' + $1 + ' ';}).replace(/[ ]+/g, ' ').split(' ');
+//     // Split whole text string
+//     var newTextSplit = newText.replace(/[^\wöäüÄÖÜß-\s]|_/g, function ($1) { return ' ' + $1 + ' ';}).replace(/[ ]+/g, ' ').split(' ');
 
-    // Loop over whole text
-    for (var i = 0; i < newTextSplit.length; i++) {
-        var splitWord = newTextSplit[i];
+//     // Loop over whole text
+//     for (var i = 0; i < newTextSplit.length; i++) {
+//         var splitWord = newTextSplit[i];
 
-        for (var cluster = 0; cluster < clusters.length; cluster++) {
-            if ($.inArray(splitWord, clusters[cluster]) != -1) {
-                newTextSplit[i] = splitWord.replace(splitWord,
-                    '<a style="background-color: ' +
-                    colors(cluster) + ';color: #fff;border-radius: 3px; padding: 1px 3px;" class="cluster' + cluster + '">' +
-                    splitWord + '</a>');
-            }
-        }
-    }
+//         for (var cluster = 0; cluster < clusters.length; cluster++) {
+//             if ($.inArray(splitWord, clusters[cluster]) != -1) {
+//                 newTextSplit[i] = splitWord.replace(splitWord,
+//                     '<a style="background-color: ' +
+//                     colors(cluster) + ';color: #fff;border-radius: 3px; padding: 1px 3px;" class="cluster' + cluster + '">' +
+//                     splitWord + '</a>');
+//             }
+//         }
+//     }
 
-    return newTextSplit.join(' ');
-};
+//     return newTextSplit.join(' ');
+// };
 
 app.highlightSelectedWord = function(divId, wordSelected, relations, colors, index) {
     var self = this;
@@ -292,45 +277,45 @@ app.highlightSelectedWord = function(divId, wordSelected, relations, colors, ind
     });
 };
 
-app.getLinksNodes = function(wordpairs) {
-    // Variable declaration
-    var links = [];
-    var uniqueLinks = [];
-    var nodes = [];
-    var edges = [];
+// app.getLinksNodes = function(wordpairs) {
+//     // Variable declaration
+//     var links = [];
+//     var uniqueLinks = [];
+//     var nodes = [];
+//     var edges = [];
 
-    // Save all word-pairs in different format
-    wordpairs.forEach(function(pair) {
-        links.push(pair.source['lemma']);
-        links.push(pair.target['lemma']);
-    });
+//     // Save all word-pairs in different format
+//     wordpairs.forEach(function(pair) {
+//         links.push(pair.source['lemma']);
+//         links.push(pair.target['lemma']);
+//     });
 
-    // Remove duplicates
-    $.each(links, function(i, el){
-        if($.inArray(el, uniqueLinks) === -1) uniqueLinks.push(el);
-    });
+//     // Remove duplicates
+//     $.each(links, function(i, el){
+//         if($.inArray(el, uniqueLinks) === -1) uniqueLinks.push(el);
+//     });
 
-    $.each(uniqueLinks, function(i) {
-        nodes.push({"index": i, "id": uniqueLinks[i]});
-    });
+//     $.each(uniqueLinks, function(i) {
+//         nodes.push({"index": i, "id": uniqueLinks[i]});
+//     });
 
-    // Generate links
-    $.each(wordpairs, function(i) {
-        // Push to edges
-        edges.push({'source': wordpairs[i].source['lemma'],
-          'target': wordpairs[i].target['lemma']});
-    });
+//     // Generate links
+//     $.each(wordpairs, function(i) {
+//         // Push to edges
+//         edges.push({'source': wordpairs[i].source['lemma'],
+//           'target': wordpairs[i].target['lemma']});
+//     });
 
-    // Save nodes and edges to graph object
-    var graph = {
-        "nodes": nodes,
-        "links": edges,
-    };
+//     // Save nodes and edges to graph object
+//     var graph = {
+//         "nodes": nodes,
+//         "links": edges,
+//     };
 
-    console.log(graph);
+//     console.log(graph);
 
-    return graph;
-};
+//     return graph;
+// };
 
 
 /**

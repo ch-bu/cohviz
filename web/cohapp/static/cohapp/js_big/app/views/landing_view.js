@@ -149,11 +149,16 @@ app.LandingView = Backbone.View.extend({
     // Is element in Data?
     if (lemmasForWord) {
 
-      e.currentTarget.style.color = this.colors(this.analyzer.get('word_cluster_index')[hoveredElement]);
+      var lemma = lemmasForWord[0];
+
+      if (lemma == e.target.innerText || this.analyzer.get('lemmaWordRelations')[lemma].indexOf(e.target.innerText) > -1) {
+        e.currentTarget.style.color = this.colors(this.analyzer.get('word_cluster_index')[lemma]);
+      }
+
       // spanElement.style.color = colors(index[wordSelected]);
       e.currentTarget.className += 'highlight-related';
       // // Get selected word
-      var nodeSelected = d3.select('#node-' + lemmasForWord[0]);
+      var nodeSelected = d3.select('#node-' + lemma);
       var nodeData = nodeSelected.data()[0];
 
       // Change text of selected element
@@ -178,7 +183,6 @@ app.LandingView = Backbone.View.extend({
       .style('stroke-width', 0);
 
     $('#editor-full-medium-editor').find('span').each(function(index, span) {
-      console.log(index);
       span.style.color = null;
       span.className = "";
     });
@@ -240,22 +244,36 @@ app.LandingView = Backbone.View.extend({
 
   renderCmap: function(pairs, numConcepts, numClusters, svgID, height, width, colors)  {
     var self = this;
-    var svgHeight = height + 100;
+    var svgHeight = height + 200;
     var svgWidth = width;
     var margin = {top: 0, right: 0, bottom: 0, left: 0};
+    var voronoi;
 
     // Create svg
     var svg = d3.select(svgID).append("svg")
-      .attr('width', svgWidth - 10)
-      .attr("height", svgHeight);
+      .attr('width', svgWidth - 5)
+      .attr("height", svgHeight)
+      .attr('transform', 'scale(0.5)');
 
     // Add wrapper for svg
-    var g = svg.append('g');
+    var g = svg.append('g')
+      .attr('width', svgWidth)
+      .attr('height', svgHeight);
 
-    // Call zoom
-    svg.call(d3.zoom()
-      .scaleExtent([1 /10, 10])
-      .on('zoom', zoomed));
+    // Overlay svg with rectangle
+    svg.append('rect')
+      .attr('class', 'overlay')
+      .attr('width', svgWidth)
+      .attr('height', svgHeight)
+      .style('fill', 'red')
+      .style('opacity', 0);
+      // .on('mousemove', mouseMoveHandler)
+      // .on('mouseleave', mouseLeaveHandler);
+
+    // // Call zoom
+    // svg.call(d3.zoom()
+    //   .scaleExtent([1, 1])
+    //   .on('zoom', zoomed));
 
     // Init progress bar
     var progressBar = svg.append('line')
@@ -273,9 +291,9 @@ app.LandingView = Backbone.View.extend({
 
     // Create force simulation
     var simulation = d3.forceSimulation(self.analyzer.get('nodes'))
-      .force('charge', d3.forceManyBody().strength(-400))
+      .force('charge', d3.forceManyBody().strength(-250))
       .force('link', d3.forceLink(self.analyzer.get('links'))
-        .distance(50)
+        .distance(80)
         .id(function(d) {
           return d.id;
         }))
@@ -293,6 +311,12 @@ app.LandingView = Backbone.View.extend({
         simulation.tick();
       }
 
+      // Add voronoi
+      voronoi = d3.voronoi()
+        .x(function(d) { return d.x; })
+        .y(function(d) { return d.y; })
+        .extent([[0, 0], [svgWidth, svgHeight]])(self.analyzer.get('nodes'));
+
       // Add links
       var link = g.append('g')
         .attr('class', 'links')
@@ -303,6 +327,15 @@ app.LandingView = Backbone.View.extend({
         .attr("y1", function(d) { return d.source.y; })
         .attr("x2", function(d) { return d.target.x; })
         .attr("y2", function(d) { return d.target.y; });
+
+      // Append voronoi paths to scatterplot
+      svg.selectAll('path')
+        .data(voronoi.polygons(self.analyzer.get('nodes')))
+        .enter().append('path')
+        .attr('d', function(d, i) { return 'M' + d.join('L') + 'Z'; })
+        .attr('id', function(d, i) {
+          return 'voronoi ';
+        });
 
       // Create g element that stores
       // circles and text and call dragging on it
@@ -343,7 +376,7 @@ app.LandingView = Backbone.View.extend({
     });
 
     function zoomed() {
-      g.attr('transform', d3.event.transform);
+      svg.attr('transform', d3.event.transform);
     }
 
     function mouseover(mouseOverObject) {
