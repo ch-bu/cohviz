@@ -13,7 +13,7 @@ app.SubjectLoginView = Backbone.View.extend({
 		// Prevent default behavior
 		event.preventDefault();
 
-		// Get input 
+		// Get input
 		var username = this.$el.find('#username').val();
 
 		// Remove vocal mutations and lowercase username
@@ -27,10 +27,10 @@ app.SubjectLoginView = Backbone.View.extend({
 			.replace(/ß/g,"ss").toLowerCase();
 
 		// Check if string is valid
-		var regex = /^([a-z]{2,4}(0[1-9]|1[012])[a-z]{2,4})$/;
+		var regex = /^([a-z]{2,4}(0[1-9]|[12]\d|3[01])[a-z]{2,4}[2-5]{1}[0-9]{1})$/;
 
 		// Check if username is valid
-		if (username.length == 6 && regex.test(tidyUsername)) {
+		if (username.length == 8 && regex.test(tidyUsername)) {
 			// Get csrftoken
 			var csrftoken = app.getCookie('csrftoken');
 
