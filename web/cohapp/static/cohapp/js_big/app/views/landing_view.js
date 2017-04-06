@@ -73,9 +73,6 @@ app.LandingView = Backbone.View.extend({
     // Get text from medium editor
     var paragraphs = app.getParagraphs(this.$el.find('#editor-textinput'));
 
-    // Get plain text
-    var plainText = app.getPlainText(this.$el.find('#editor-textinput'));
-
     // Render loading ring
     this.$el.find('#editor-button-div').html(
       Handlebars.templates['loading-ring']());
