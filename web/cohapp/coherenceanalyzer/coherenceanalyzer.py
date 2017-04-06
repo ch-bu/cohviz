@@ -584,15 +584,6 @@ def analyzeTextCohesion(text):
 
     # Remove percent sign
     text = re.sub(r'%', '', text)
-    text = re.sub(r'“', '', text)
-    text = re.sub(r'–', '', text)
-    text = re.sub(r'„', '', text)
-    text = re.sub(r'‚', '', text)
-    text = re.sub(r'‘', '', text)
-    text = re.sub(r'Dr\.', 'Doktor', text)
-    text = re.sub(r'St\.', 'Sankt', text)
-    text = re.sub(r'bzw\.', 'beziehungsweise', text)
-    text = re.sub(r'[zZ]\. ?[bB]\.', 'zum Beispiel', text)
 
     # Remove trailing white space
     text = text.strip()
@@ -660,7 +651,7 @@ def analyzeTextCohesion(text):
     tags = getPOSElement('singular', r'.*Sg', tags)
     tags = getPOSElement('accusative', r'.*N.Reg.Acc', tags)
     tags = getPOSElement('dative', r'.*N.Reg.Dat', tags)
-    tags = getPOSElement('nominative', r'.*N.Reg.Nom', tags)
+    tags = getPOSElement('nominative', r'.*N.(Reg|Name).Nom', tags)
     tags = getPOSElement('genitive', r'.*N.Reg.Gen', tags)
     tags = getPOSElement('feminin', r'.*Fem', tags)
     tags = getPOSElement('neutrum', r'.*Neut', tags)
@@ -777,15 +768,43 @@ def analyzeTextCohesion(text):
     # Calculate clusters
     cluster = get_clusters(word_pairs, sentences)
 
+    # When clusters are calculated assign them to the word_pairs as
+    # an additional value
+    word_cluster_index = {}
+    for index, single_cluster in enumerate(cluster):
+        # Get words for current cluster
+        source_words = map(lambda x: x['source']['lemma'], single_cluster)
+        target_words = map(lambda x: x['target']['lemma'], single_cluster)
+
+        # Concatenate sources and targets in to one array
+        words = source_words + target_words
+
+        # Assign index to word_cluster_index dict
+        for word in words:
+            word_cluster_index[word] = index
+
+    # Now that we have the indexes for each cluster we can assign the index
+    # to the word_pairs
+    for word_pair in word_pairs:
+        word_pair['cluster'] = word_cluster_index[word_pair['source']['lemma']]
+
     # Get dictionary of orthographic forms of all lemmas
     word_lemma_mapping = get_lemma_mapping(word_pairs)
+
+    # Prepare data for frontend
+    links = [{'source': pair['source']['lemma'],
+              'target': pair['target']['lemma'],
+              'device': pair['device'],
+              'cluster': pair['cluster']} for pair in word_pairs]
+    nodes = [{'id': word,'index': ind} for ind, word in enumerate(word_lemma_mapping['lemma_word'])]
 
     # Get number of concepts
     num_concepts = len(set([concept['lemma']
                 for concept in tags if concept['noun'] == True]))
 
-    # Return data
     return {'word_pairs': word_pairs,
+            'links': links,
+            'nodes': nodes,
             'numSentences': num_sentences,
             'numConcepts': num_concepts,
             'clusters': cluster,

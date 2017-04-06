@@ -322,6 +322,8 @@ app.getLinksNodes = function(wordpairs) {
         "links": edges,
     };
 
+    console.log(graph);
+
     return graph;
 };
 
