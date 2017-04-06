@@ -78,6 +78,7 @@ class Measurement(models.Model):
                               on_delete=models.CASCADE)
     measure = models.PositiveSmallIntegerField()
     instruction = models.TextField(blank=True)
+    instruction_strategies = models.TextField(blank=True)
     instruction_review = models.TextField(blank=True)
     publication = models.DateField()
     nr_group = models.PositiveSmallIntegerField(default=1)
