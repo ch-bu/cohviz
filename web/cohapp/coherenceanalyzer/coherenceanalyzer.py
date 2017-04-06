@@ -587,6 +587,8 @@ def analyzeTextCohesion(text):
     text = re.sub(r'“', '', text)
     text = re.sub(r'–', '', text)
     text = re.sub(r'„', '', text)
+    text = re.sub(r'‚', '', text)
+    text = re.sub(r'‘', '', text)
     text = re.sub(r'Dr\.', 'Doktor', text)
     text = re.sub(r'St\.', 'Sankt', text)
     text = re.sub(r'bzw\.', 'beziehungsweise', text)
