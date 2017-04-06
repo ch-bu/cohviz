@@ -118,7 +118,7 @@ app.CmapView = Backbone.View.extend({
         var plainText = app.getPlainText(this.$el.find('#editor-textinput'));
 
         // Check if text is long enough
-        if (text.length < 1000) {
+        if (text.length < 300) {
             // Display toast
             Materialize.toast('Ihr Text ist leider zu kurz.', 4000);
         } else {
