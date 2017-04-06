@@ -115,7 +115,7 @@ app.getParagraphs = function(div) {
     // Remove tabs, newlines and too many spaces
     paragraphText.replace(/\s\s+/g, '');
 
-    return paragraphText;
+    return paragraphText.trim();
 };
 
 /**
