@@ -10,6 +10,7 @@ app.CmapView = Backbone.View.extend({
 		'click #help': 'renderInstructionModal',
 		'click #editor-button': 'analyzeText',
 		'click #editor-full-button': 'saveText',
+    'click #print': 'printText'
 	},
 
 	initialize: function() {
@@ -201,12 +202,28 @@ app.CmapView = Backbone.View.extend({
       var svgWidth = $('#editor-full-graph').width();
       var svgHeight = $('#editor-full-medium-editor').height();
 
+      // Add print symbol
+      this.$el.append('<i id="print" class="material-icons">print</i>');
+
       // Render graph
       this.renderCmap(this.analyzer.get('word_pairs'),
         this.analyzer.get('clusters'), this.analyzer.get('numClusters'),
         '#editor-full-graph', svgHeight, svgWidth, this.colors);
       },
 
+
+    /**
+     * Print text as pdf
+     * @return {[type]} [description]
+     */
+    printText: function() {
+        // Get plain Text
+        var plainText = app.getPlainText(this.$el.find('#editor-full-medium-editor'));
+        var doc = new jsPDF();
+        var splitText = doc.splitTextToSize(plainText, 180);
+        doc.text(splitText, 10, 10);
+        doc.save('cohviz_textoutput.pdf');
+    },
 
 	renderCmap: function(pairs, clust, numClusters, svgID, height, width, colors)  {
     var self = this;

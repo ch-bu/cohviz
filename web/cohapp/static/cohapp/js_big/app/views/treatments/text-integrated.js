@@ -9,6 +9,7 @@ app.TextIntegratedView = Backbone.View.extend({
         'click #help': 'renderInstructionModal',
         'click #editor-button': 'analyzeText',
         'click #editor-full-button': 'saveText',
+        'click #print': 'printText'
     },
 
     initialize: function() {
@@ -194,8 +195,24 @@ app.TextIntegratedView = Backbone.View.extend({
         this.$el.append(Handlebars.templates['modal-revision']({'instruction':
             this.userModel.get('instructionreview')}));
 
+        // Add print symbol
+        this.$el.append('<i id="print" class="material-icons">print</i>');
+
         $('#modal-revision').openModal();
 
+    },
+
+    /**
+     * Print text as pdf
+     * @return {[type]} [description]
+     */
+    printText: function() {
+        // Get plain Text
+        var plainText = app.getPlainText(this.$el.find('#editor-edit'));
+        var doc = new jsPDF();
+        var splitText = doc.splitTextToSize(plainText, 180);
+        doc.text(splitText, 10, 10);
+        doc.save('cohviz_textoutput.pdf');
     },
 
     saveText: function() {

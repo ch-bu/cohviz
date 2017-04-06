@@ -9,6 +9,7 @@ app.SimpleRevisionView = Backbone.View.extend({
         'click #help': 'renderInstructionModal',
         'click #editor-button': 'analyzeText',
         'click #save-text': 'saveText',
+        'click #print': 'printText'
     },
 
     initialize: function() {
@@ -147,6 +148,8 @@ app.SimpleRevisionView = Backbone.View.extend({
         this.$el.find('#editor-button-div').html(
                 '<a class="waves-effect waves-light btn" id="save-text">Text abschicken</a>');
 
+        this.$el.append('<i id="print" class="material-icons">print</i>');
+
         // Save data for draft
         this.textModel.set({
             'pre_num_sentences': this.analyzer.get('numSentences'),
@@ -195,6 +198,19 @@ app.SimpleRevisionView = Backbone.View.extend({
                 console.log(response.responseText);
             }
         });
+    },
+
+    /**
+     * Print text as pdf
+     * @return {[type]} [description]
+     */
+    printText: function() {
+        // Get plain Text
+        var plainText = app.getPlainText(this.$el.find('#editor-textinput'));
+        var doc = new jsPDF();
+        var splitText = doc.splitTextToSize(plainText, 180);
+        doc.text(splitText, 10, 10);
+        doc.save('cohviz_textoutput.pdf');
     },
 
     sendToServer: function() {
