@@ -164,7 +164,8 @@ app.LandingView = Backbone.View.extend({
       // Change text of selected element
       nodeSelected.select('text')
         .style('opacity', 1)
-        .style('font-weight', 'bold');
+        .style('font-weight', 'bold')
+        .style('font-size', '20px');
 
       nodeSelected.select('circle')
         .style('stroke', '#000')
@@ -176,7 +177,8 @@ app.LandingView = Backbone.View.extend({
   onTextHoverOff: function(e) {
     // Change text of selected element
     d3.selectAll('text')
-      .style('font-weight', 'normal');
+      .style('font-weight', 'normal')
+      .style('font-size', '16px');
 
     d3.selectAll('circle')
       .style('stroke', 'none')
@@ -252,28 +254,31 @@ app.LandingView = Backbone.View.extend({
     // Create svg
     var svg = d3.select(svgID).append("svg")
       .attr('width', svgWidth - 5)
-      .attr("height", svgHeight)
-      .attr('transform', 'scale(0.5)');
+      .attr("height", svgHeight);
+      // .attr('transform', 'scale(0.5)');
 
     // Add wrapper for svg
     var g = svg.append('g')
       .attr('width', svgWidth)
       .attr('height', svgHeight);
+      // .on("dragstart", dragstarted)
+      // .on("drag", dragged)
+      // .on("dragend", dragended);
 
     // Overlay svg with rectangle
-    svg.append('rect')
+    var rect = svg.append('rect')
       .attr('class', 'overlay')
       .attr('width', svgWidth)
       .attr('height', svgHeight)
       .style('fill', 'red')
-      .style('opacity', 0);
-      // .on('mousemove', mouseMoveHandler)
-      // .on('mouseleave', mouseLeaveHandler);
+      .style('opacity', 0)
+      .on('mousemove', mouseMoveHandler)
+      .on('mouseleave', mouseLeaveHandler);
 
-    // // Call zoom
-    // svg.call(d3.zoom()
-    //   .scaleExtent([1, 1])
-    //   .on('zoom', zoomed));
+    // Call zoom
+    svg.call(d3.zoom()
+      .scaleExtent([1 / 2, 1.5])
+      .on('zoom', zoomed));
 
     // Init progress bar
     var progressBar = svg.append('line')
@@ -297,7 +302,6 @@ app.LandingView = Backbone.View.extend({
         .id(function(d) {
           return d.id;
         }))
-      // .force("collide", d3.forceCollide().radius(function(d) { return d.r + 1.5; }).iterations(2))
       .force('center', d3.forceCenter(svgWidth / 2, svgHeight / 2))
       .force('collision', d3.forceCollide().radius(50))
       .force('x', d3.forceX())
@@ -311,12 +315,6 @@ app.LandingView = Backbone.View.extend({
         simulation.tick();
       }
 
-      // Add voronoi
-      voronoi = d3.voronoi()
-        .x(function(d) { return d.x; })
-        .y(function(d) { return d.y; })
-        .extent([[0, 0], [svgWidth, svgHeight]])(self.analyzer.get('nodes'));
-
       // Add links
       var link = g.append('g')
         .attr('class', 'links')
@@ -327,15 +325,6 @@ app.LandingView = Backbone.View.extend({
         .attr("y1", function(d) { return d.source.y; })
         .attr("x2", function(d) { return d.target.x; })
         .attr("y2", function(d) { return d.target.y; });
-
-      // Append voronoi paths to scatterplot
-      svg.selectAll('path')
-        .data(voronoi.polygons(self.analyzer.get('nodes')))
-        .enter().append('path')
-        .attr('d', function(d, i) { return 'M' + d.join('L') + 'Z'; })
-        .attr('id', function(d, i) {
-          return 'voronoi ';
-        });
 
       // Create g element that stores
       // circles and text and call dragging on it
@@ -350,9 +339,9 @@ app.LandingView = Backbone.View.extend({
         .attr('class', 'node')
         .attr('transform', function(d) {
           return 'translate(' + d.x + ',' + d.y + ')';
-        })
-        .on('mouseover', mouseover)
-        .on('mouseout', mouseout);
+        });
+        // .on('mouseover', mouseover)
+        // .on('mouseout', mouseout);
 
       // Append circle
       var circle = node.append('circle')
@@ -375,22 +364,49 @@ app.LandingView = Backbone.View.extend({
         });
     });
 
+    // function dragstarted(d) {
+    //   d3.event.sourceEvent.stopPropagation();
+    //   d3.select(this).classed("dragging", true);
+    // }
+
+    // function dragged(d) {
+    //   d3.select(this).attr("cx", d.x = d3.event.x).attr("cy", d.y = d3.event.y);
+    // }
+
+    // function dragended(d) {
+    //   d3.select(this).classed("dragging", false);
+    // }
+
     function zoomed() {
-      svg.attr('transform', d3.event.transform);
+      g.attr('transform', d3.event.transform);
+      rect.attr('transform', d3.event.transform);
     }
 
-    function mouseover(mouseOverObject) {
+    function mouseMoveHandler() {
+      // Change text of selected element
+      svg.selectAll('text')
+        .style('font-weight', 'normal')
+        .style('font-size', '16px');
+
+      svg.selectAll('circle')
+        .style('stroke', 'none')
+        .style('stroke-width', 0);
+
       // Get data
       var mouse = d3.mouse(this);
 
+      // Find nearest point to mouse coordinate
+      var nearestPoint = simulation.find(mouse[0], mouse[1]);
+
       // Select element that is hovered
-      var nodeSelected = g.select('#node-' + mouseOverObject.id);
+      var nodeSelected = g.select('#node-' + nearestPoint.id);
       var nodeData = nodeSelected.data()[0];
 
       // Change text of selected element
       nodeSelected.select('text')
         .style('opacity', 1)
-        .style('font-weight', 'bold');
+        .style('font-weight', 'bold')
+        .style('font-size', '20px');
 
       nodeSelected.select('circle')
         .style('stroke', '#000')
@@ -402,18 +418,18 @@ app.LandingView = Backbone.View.extend({
 
       // We need to get the text of the selected word in order
       // to highlight them
-      var wordSelected = mouseOverObject.id;
+      var wordSelected = nearestPoint.id;
 
       app.highlightSelectedWord('#editor-full-medium-editor', wordSelected,
         self.analyzer.get('lemmaWordRelations'), self.colors,
         self.analyzer.get('word_cluster_index'));
-
     }
 
-    function mouseout() {
+    function mouseLeaveHandler() {
       // Change text of selected element
       svg.selectAll('text')
-        .style('font-weight', 'normal');
+        .style('font-weight', 'normal')
+        .style('font-size', '16px');
 
       svg.selectAll('circle')
         .style('stroke', 'none')
@@ -431,9 +447,7 @@ app.LandingView = Backbone.View.extend({
         $(this).append('.');
 
       });
-
     }
-
   }
 
 });
