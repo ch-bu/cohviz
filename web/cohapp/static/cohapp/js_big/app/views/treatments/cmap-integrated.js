@@ -244,23 +244,6 @@ app.CmapView = Backbone.View.extend({
         // Get plain Text
         var plainText = app.getPlainText(this.$el.find('#editor-full-medium-editor'));
 
-        // Remove unnecessary white spaces
-        text = text.replace(/\s\,/g, ',');
-        text = text.replace(/\s\./g, '.');
-        text = text.replace(/\s!/g, '!');
-        text = text.replace(/\[\s/g, '[');
-        text = text.replace(/\s&/g, '&');
-        text = text.replace(/\s`/g, '`');
-        text = text.replace(/\s~/g, '~');
-        text = text.replace(/\s;/g, ';');
-        text = text.replace(/\s_/g, '_');
-        text = text.replace(/\s]/g, ']');
-        text = text.replace(/\s:/g, ':');
-        text = text.replace(/\s\?/g, '?');
-        text = text.replace(/\(\s/g, '(');
-        text = text.replace(/\s\)/g, ')');
-        text = text.replace(/\s\//g, '/');
-
         // Save post text to textModel
         this.textModel.set({'post_text': plainText,
                             'post_page_duration': revisionElapsed});

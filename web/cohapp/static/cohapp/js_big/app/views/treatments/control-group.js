@@ -169,35 +169,43 @@ app.SimpleRevisionView = Backbone.View.extend({
     saveText: function() {
         var self = this;
 
-        // Get seconds subject worked for revision
-        var revisionElapsed = (new Date() - this.postPageDurationStart) / 1000;
-
-        // Render loading ring
-        this.$el.find('#editor-button-div').html(
-            Handlebars.templates['loading-ring']());
-
-        // Get text
-        var text = app.getParagraphs(this.$el.find('#editor-textinput'));
-
         // Get plain Text
         var plainText = app.getPlainText(this.$el.find('#editor-textinput'));
 
-        // Save post text to textModel
-        this.textModel.set({'post_text': plainText,
-                            'post_page_duration': revisionElapsed});
+        if (app.getDifference(this.textModel.get('pre_text'), plainText) > 5) {
 
-        // Set text to analyzer
-        this.analyzer.set({'text': text});
+            // Get seconds subject worked for revision
+            var revisionElapsed = (new Date() - this.postPageDurationStart) / 1000;
 
-        // Fetch data
-        this.analyzer.save(null, {
-            success: function(response) {
-                self.sendToServer();
-            },
-            error: function(model, response) {
-                console.log(response.responseText);
-            }
-        });
+            // Render loading ring
+            this.$el.find('#editor-button-div').html(
+                Handlebars.templates['loading-ring']());
+
+            // Ge
+            var text = app.getParagraphs(this.$el.find('#editor-textinput'));
+
+            // Save post text to textModel
+            this.textModel.set({'post_text': plainText,
+                                'post_page_duration': revisionElapsed});
+
+            // Set text to analyzer
+            this.analyzer.set({'text': text});
+
+            // Fetch data
+            this.analyzer.save(null, {
+                success: function(response) {
+                    self.sendToServer();
+                },
+                error: function(model, response) {
+                    console.log(response.responseText);
+                }
+            });
+
+        } else {
+            Materialize.toast('Revidieren Sie Ihren Text bitte stärker.', 4000);
+        }
+
+
     },
 
     /**
