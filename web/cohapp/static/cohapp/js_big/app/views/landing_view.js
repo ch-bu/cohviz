@@ -239,9 +239,6 @@ app.LandingView = Backbone.View.extend({
       // Set local storage
       localStorage.setItem('firstVisit', false);
     }
-
-    // Loop over every paragraph
-    // app.highlightWholeText('#editor-full-medium-editor', this.clusters, this.colors);
   },
 
   renderCmap: function(pairs, numConcepts, numClusters, svgID, height, width, colors)  {
@@ -261,9 +258,6 @@ app.LandingView = Backbone.View.extend({
     var g = svg.append('g')
       .attr('width', svgWidth)
       .attr('height', svgHeight);
-      // .on("dragstart", dragstarted)
-      // .on("drag", dragged)
-      // .on("dragend", dragended);
 
     // Overlay svg with rectangle
     var rect = svg.append('rect')
@@ -324,7 +318,17 @@ app.LandingView = Backbone.View.extend({
         .attr("x1", function(d) { return d.source.x; })
         .attr("y1", function(d) { return d.source.y; })
         .attr("x2", function(d) { return d.target.x; })
-        .attr("y2", function(d) { return d.target.y; });
+        .attr("y2", function(d) { return d.target.y; })
+        .style('stroke-dasharray', function(d) {
+          if (d['device'] == 'coreference') {
+            return '5,5';
+          }
+        })
+        .style('d', function(d) {
+          if (d['device'] == 'coreference') {
+            return 'M5 20 l215 0';
+          }
+        });
 
       // Create g element that stores
       // circles and text and call dragging on it
@@ -363,19 +367,6 @@ app.LandingView = Backbone.View.extend({
           return d.id;
         });
     });
-
-    // function dragstarted(d) {
-    //   d3.event.sourceEvent.stopPropagation();
-    //   d3.select(this).classed("dragging", true);
-    // }
-
-    // function dragged(d) {
-    //   d3.select(this).attr("cx", d.x = d3.event.x).attr("cy", d.y = d3.event.y);
-    // }
-
-    // function dragended(d) {
-    //   d3.select(this).classed("dragging", false);
-    // }
 
     function zoomed() {
       g.attr('transform', d3.event.transform);
