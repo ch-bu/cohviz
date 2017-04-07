@@ -12,7 +12,9 @@ app.CmapView = Backbone.View.extend({
         'click #editor-full-button': 'saveText',
         'mouseover #editor-full-medium-editor span': 'onTextHover',
         'mouseout #editor-full-medium-editor span': 'onTextHoverOff',
-        'click #print': 'printText'
+        // 'click #print': 'printText',
+        'mouseover #editor-full-medium-editor span': 'onTextHover',
+        'mouseout #editor-full-medium-editor span': 'onTextHoverOff',
     },
 
     initialize: function() {
@@ -205,12 +207,12 @@ app.CmapView = Backbone.View.extend({
         var svgHeight = $('#editor-full-medium-editor').height();
 
         // Add print symbol
-        this.$el.append('<i id="print" class="material-icons">print</i>');
+        // this.$el.append('<i id="print" class="material-icons">print</i>');
 
         // Render graph
-        this.renderCmap(this.analyzer.get('word_pairs'),
-            this.analyzer.get('clusters'), this.analyzer.get('numClusters'),
-            '#editor-full-graph', svgHeight, svgWidth, this.colors);
+      this.renderCmap(this.analyzer.get('word_pairs'),
+        this.analyzer.get('numConcepts'), this.analyzer.get('numClusters'),
+        '#editor-full-graph', svgHeight, svgWidth, this.colors);
     },
 
     /**
@@ -219,11 +221,11 @@ app.CmapView = Backbone.View.extend({
      */
     printText: function() {
         // Get plain Text
-        var plainText = app.getPlainText(this.$el.find('#editor-full-medium-editor'));
-        var doc = new jsPDF();
-        var splitText = doc.splitTextToSize(plainText, 180);
-        doc.text(splitText, 10, 10);
-        doc.save('cohviz_textoutput.pdf');
+        // var plainText = app.getPlainText(this.$el.find('#editor-full-medium-editor'));
+        // var doc = new jsPDF();
+        // var splitText = doc.splitTextToSize(plainText, 180);
+        // doc.text(splitText, 10, 10);
+        // doc.save('cohviz_textoutput.pdf');
     },
 
     saveText: function() {
@@ -298,232 +300,242 @@ app.CmapView = Backbone.View.extend({
         });
     },
 
+  onTextHover: function(e) {
+    // Get span element that is hovered
+    var hoveredElement = e.currentTarget.innerText;
 
-    renderCmap: function(pairs, clust, numClusters, svgID, height, width, colors)  {
+    // Get lemmas for word
+    var lemmasForWord = this.analyzer.get('wordLemmaRelations')[hoveredElement];
+
+    // Is element in Data?
+    if (lemmasForWord) {
+
+      var lemma = lemmasForWord[0];
+
+      if (lemma == e.target.innerText || this.analyzer.get('lemmaWordRelations')[lemma].indexOf(e.target.innerText) > -1) {
+        e.currentTarget.style.color = this.colors(this.analyzer.get('word_cluster_index')[lemma]);
+      }
+
+      // spanElement.style.color = colors(index[wordSelected]);
+      e.currentTarget.className += 'highlight-related';
+      // // Get selected word
+      var nodeSelected = d3.select('#node-' + lemma);
+      var nodeData = nodeSelected.data()[0];
+
+      // Change text of selected element
+      nodeSelected.select('text')
+        .style('opacity', 1)
+        .style('font-weight', 'bold')
+        .style('font-size', '20px');
+
+      nodeSelected.select('circle')
+        .style('stroke', '#000')
+        .style('stroke-width', 1);
+    }
+
+  },
+
+  onTextHoverOff: function(e) {
+    // Change text of selected element
+    d3.selectAll('text')
+      .style('font-weight', 'normal')
+      .style('font-size', '16px');
+
+    d3.selectAll('circle')
+      .style('stroke', 'none')
+      .style('stroke-width', 0);
+
+    $('#editor-full-medium-editor').find('span').each(function(index, span) {
+      span.style.color = null;
+      span.className = "";
+    });
+  },
+
+  renderCmap: function(pairs, clust, numClusters, svgID, height, width, colors)  {
       var self = this;
-      var svgHeight = height / 2;
-      var svgWidth = width / 2;
+      var svgHeight = (window.innerHeight || e.clientHeight|| g.clientHeight) - 50;
+      var svgWidth = width;
       var margin = {top: 0, right: 0, bottom: 0, left: 0};
+      var voronoi;
 
-      /**
-       * Closure
-       * @param  {[type]} currentCluster [description]
-       * @return {[type]}                [description]
-       */
-      function runSimulation(currentCluster, clusterIndex) {
-        // Save temporary cluster
-        var cluster = currentCluster;
+      // Create svg
+      var svg = d3.select(svgID).append("svg")
+        .attr('width', svgWidth - 5)
+        .attr("height", svgHeight);
+        // .attr('transform', 'scale(0.5)');
 
-        // Get data for force simulation with
-        // nodes and links
-        var graph = app.getLinksNodes(cluster);
+      // Add wrapper for svg
+      var g = svg.append('g')
+        .attr('width', svgWidth)
+        .attr('height', svgHeight);
 
-        // Create svg
-        var svg = d3.select(svgID).append("svg");
-          // .attr("width", svgWidth + margin.left + margin.right)
-          // .attr("height", svgHeight + margin.top + margin.bottom);
+      // Overlay svg with rectangle
+      var rect = svg.append('rect')
+        .attr('class', 'overlay')
+        .attr('width', svgWidth)
+        .attr('height', svgHeight)
+        .style('fill', 'red')
+        .style('opacity', 0)
+        .on('mousemove', mouseMoveHandler)
+        .on('mouseleave', mouseLeaveHandler);
 
-        // Create force simulation
-        var simulation = d3.forceSimulation(graph.nodes)
-          .force('charge', d3.forceManyBody().strength(-240))
-          .force('link', d3.forceLink(graph.links)
-            .distance(200)
-            .id(function(d) {
-              return d.id;
-            }))
-          // .force("collide", d3.forceCollide().radius(function(d) { return d.r + 1.5; }).iterations(2))
-          .force('center', d3.forceCenter(svgWidth / 2, svgHeight / 2))
-          .force('x', d3.forceX())
-          .force('y', d3.forceY())
-          .stop();
+      // Call zoom
+      svg.call(d3.zoom()
+        .scaleExtent([1 / 2, 1.5])
+        .on('zoom', zoomed));
 
-        // Wrap everything in g element
-        var g = svg.append('g');
+      // Init progress bar
+      var progressBar = svg.append('line')
+        .attr('x1', 0)
+        .attr('x2', 0)
+        .attr('y1', 0)
+        .attr('y2', 0)
+        .style('stroke', 'red')
+        .style('stroke-width', '2');
 
-        // Stores all links
-        var linkedByIndex = {};
+      // Linear scale for progress bar
+      var scale = d3.scaleLinear()
+        .domain([0, 1])
+        .range([0, svgWidth]);
 
-        // Call zoom
-        svg.call(d3.zoom()
-          .scaleExtent([1 / 10, 10])
-          .on('zoom', zoomed));
+      // Create force simulation
+      var simulation = d3.forceSimulation(self.analyzer.get('nodes'))
+        .force('charge', d3.forceManyBody().strength(-250))
+        .force('link', d3.forceLink(self.analyzer.get('links'))
+          .distance(80)
+          .id(function(d) {
+            return d.id;
+          }))
+        .force('center', d3.forceCenter(svgWidth / 2, svgHeight / 2))
+        .force('collision', d3.forceCollide().radius(50))
+        .force('x', d3.forceX())
+        .force('y', d3.forceY())
+        .stop();
 
-        var loading = svg.append("text")
-          .attr("dy", "0.35em")
-          .attr("text-anchor", "middle")
-          .attr("font-family", "sans-serif")
-          .attr("font-size", 10)
-          .attr('x', svgWidth / 2)
-          .attr('y', svgHeight / 2)
-          .text("Simulating. One moment please…");
+      // Add timeout to process data
+      d3.timeout(function() {
+        // See https://github.com/d3/d3-force/blob/master/README.md#simulation_tick
+        for (var i = 0, n = Math.ceil(Math.log(simulation.alphaMin()) / Math.log(1 - simulation.alphaDecay())); i < n; ++i) {
+          simulation.tick();
+        }
 
-        // Run simulation in the background
-        d3.timeout(function() {
-          loading.remove();
-
-          // See https://github.com/d3/d3-force/blob/master/README.md#simulation_tick
-          for (var i = 0, n = Math.ceil(Math.log(simulation.alphaMin()) / Math.log(1 - simulation.alphaDecay())); i < n; ++i) {
-            simulation.tick();
-          }
-
-          // Add links
-          var link = g.append('g')
-            .attr('class', 'links')
-            .selectAll('line')
-            .data(graph.links)
-            .enter().append('line')
-            .attr("x1", function(d) { return d.source.x; })
-            .attr("y1", function(d) { return d.source.y; })
-            .attr("x2", function(d) { return d.target.x; })
-            .attr("y2", function(d) { return d.target.y; });
-
-          link.each(function(d) {
-            linkedByIndex[d.source.index + "," + d.target.index] = true;
+        // Add links
+        var link = g.append('g')
+          .attr('class', 'links')
+          .selectAll('line')
+          .data(self.analyzer.get('links'))
+          .enter().append('line')
+          .attr("x1", function(d) { return d.source.x; })
+          .attr("y1", function(d) { return d.source.y; })
+          .attr("x2", function(d) { return d.target.x; })
+          .attr("y2", function(d) { return d.target.y; })
+          .style('stroke-dasharray', function(d) {
+            if (d['device'] == 'coreference') {
+              return '5,5';
+            }
+          })
+          .style('d', function(d) {
+            if (d['device'] == 'coreference') {
+              return 'M5 20 l215 0';
+            }
           });
 
-          // Add data of simulation globally
-          self.simulations[clusterIndex] = {'simulation': simulation, 'linkedByIndex': linkedByIndex, 'svg': svg};
-
-          // Create g element that stores
-          // circles and text and call dragging on it
-          var node = g.append('g')
-            .attr('class', 'nodes')
-            .selectAll('.node')
-            .data(graph.nodes)
-            .enter().append('g')
-            .attr('id', function(d, i) {
-              return 'node-' + d.id;
-            })
-            .attr('class', 'node')
-            .attr('transform', function(d) {
-              return 'translate(' + d.x + ',' + d.y + ')';
-            })
-            .on('mouseover', mouseover)
-            .on('mouseout', mouseout);
-
-          // Append circle
-          var circle = node.append('circle')
-            .attr('r', 10)
-            .attr('cx', 0)
-            .attr('cy', 0)
-            .attr('fill', '#ccc');
-
-          // Append label to node container
-          var label = node.append('text')
-            .attr('dy', -10)
-            .attr('dx', 12)
-            .style('opacity', 0.8)
-            .attr('text-anchor', 'start')
-            .text(function(d) {
-              return d.id;
-            });
-        });
-
-        function mouseover(mouseOverObject) {
-          // Get data
-          var mouse = d3.mouse(this);
-
-          // Select element that is hovered
-          var nodeSelected = g.select('#node-' + mouseOverObject.id);
-          var nodeData = nodeSelected.data()[0];
-
-          // Change text of selected element
-          var textSelected = nodeSelected.select('text')
-            .style('opacity', 1)
-            .style('font-weight', 'bold');
-
-          // Highlight adjacent nodes
-          svg.selectAll('text')
-            .style('opacity', function(d) {
-             if (isConnected(nodeData, d)) {
-               return 1;
-             }
-
-             return 0.1;
-
-            });
-
-          svg.selectAll('circle')
-            .style('fill', function(d) {
-              if (isConnected(nodeData, d)) {
-                return '#000';
-              }
-
-              return '#f4f4f4';
-            })
-            .style('opacity', function(d) {
-              if (isConnected(nodeData, d)) {
-                return 1;
-              }
-
-              return 0.2;
-            });
-
-          /////////////////////
-          // Highlight links //
-          /////////////////////
-          svg.selectAll('line')
-            .style('stroke', function(d) {
-              return d.source.id === nodeData.id || d.target.id === nodeData.id ? '#4c4c4c' : '#f4f4f4';
-            });
-
-          /////////////////////////////
-          // Highlight words in text //
-          /////////////////////////////
-
-          // We need to get the text of the selected word in order
-          // to highlight them
-          var wordSelected = textSelected.text();
-
-          // Get all words that are semantically related
-          // to the selected word
-          var wordsRelated = [];
-
-          svg.selectAll('text')
-           .each(function(d) {
-             if (isConnected(nodeData, d)) {
-               wordsRelated.push(d);
-             }
-           });
-
-          // Get all words and corresponding orthoForms
-          // console.log(self.analyzer.toJSON());
-          var lemmaWordRelations = self.analyzer.get('lemmaWordRelations');
-          var orthos = wordsRelated.map(function(obj) {
-            return self.analyzer.get('lemmaWordRelations')[obj.id];
+        // Create g element that stores
+        // circles and text and call dragging on it
+        var node = g.append('g')
+          .attr('class', 'nodes')
+          .selectAll('.node')
+          .data(self.analyzer.get('nodes'))
+          .enter().append('g')
+          .attr('id', function(d, i) {
+            return 'node-' + d.id;
+          })
+          .attr('class', 'node')
+          .attr('transform', function(d) {
+            return 'translate(' + d.x + ',' + d.y + ')';
           });
+          // .on('mouseover', mouseover)
+          // .on('mouseout', mouseout);
 
-          orthos = [].concat.apply([], orthos);
+        // Append circle
+        var circle = node.append('circle')
+          .attr('r', 10)
+          .attr('cx', 0)
+          .attr('cy', 0)
+          .style('fill', function(d, i) {
+            return self.colors(self.analyzer.get('word_cluster_index')[d.id]);
+          })
+          .attr('fill', '#ccc');
 
-          app.highlightSelectedWord('#editor-full-medium-editor', orthos);
-        }
+        // Append label to node container
+        var label = node.append('text')
+          .attr('dy', -8)
+          .attr('dx', 10)
+          .style('opacity', 0.8)
+          .attr('text-anchor', 'start')
+          .text(function(d) {
+            return d.id;
+          });
+      });
 
-        function isConnected(a, b) {
-          return isConnectedAsTarget(a, b) || isConnectedAsSource(a, b) || a.index == b.index;
-        }
-
-        function isConnectedAsSource(a, b) {
-          return linkedByIndex[a.index + "," + b.index];
-        }
-
-        function isConnectedAsTarget(a, b) {
-          return linkedByIndex[b.index + "," + a.index];
-        }
-
-        function zoomed() {
-          g.attr('transform', d3.event.transform);
-        }
+      function zoomed() {
+        g.attr('transform', d3.event.transform);
+        rect.attr('transform', d3.event.transform);
       }
 
-      // Store clusters temporarily
-      var clusters = this.analyzer.get('clusters');
+      function mouseMoveHandler() {
+        // Change text of selected element
+        svg.selectAll('text')
+          .style('font-weight', 'normal')
+          .style('font-size', '16px');
 
-      // Create svg for each cluster
-      for (var i = 0; i < clusters.length; i++) {
-        runSimulation(clusters[i], i);
+        svg.selectAll('circle')
+          .style('stroke', 'none')
+          .style('stroke-width', 0);
+
+        // Get data
+        var mouse = d3.mouse(this);
+
+        // Find nearest point to mouse coordinate
+        var nearestPoint = simulation.find(mouse[0], mouse[1]);
+
+        // Select element that is hovered
+        var nodeSelected = g.select('#node-' + nearestPoint.id);
+        var nodeData = nodeSelected.data()[0];
+
+        // Change text of selected element
+        nodeSelected.select('text')
+          .style('opacity', 1)
+          .style('font-weight', 'bold')
+          .style('font-size', '20px');
+
+        nodeSelected.select('circle')
+          .style('stroke', '#000')
+          .style('stroke-width', 1);
+
+        /////////////////////////////
+        // Highlight words in text //
+        /////////////////////////////
+
+        // We need to get the text of the selected word in order
+        // to highlight them
+        var wordSelected = nearestPoint.id;
+
+        app.highlightSelectedWord('#editor-full-medium-editor', wordSelected,
+          self.analyzer.get('lemmaWordRelations'), self.colors,
+          self.analyzer.get('word_cluster_index'));
       }
 
-      function mouseout() {
+      function mouseLeaveHandler() {
+        // Change text of selected element
+        svg.selectAll('text')
+          .style('font-weight', 'normal')
+          .style('font-size', '16px');
+
+        svg.selectAll('circle')
+          .style('stroke', 'none')
+          .style('stroke-width', 0);
+
         $('#editor-full-medium-editor').find('p').each(function(paragraph) {
           var textParagraph = $(this).text();
           // Wrap everything in span elements
@@ -535,132 +547,8 @@ app.CmapView = Backbone.View.extend({
           $(this).html(jquerySpan);
           $(this).append('.');
         });
-
-        // Get all nodes
-        var nodes = d3.selectAll('.node');
-
-        nodes.selectAll('text')
-           .style('opacity', 0.8)
-           .style('font-weight', 'normal');
-
-        d3.selectAll('circle')
-          .style('fill', '#ccc')
-          .style('opacity', 1);
-
-        d3.selectAll('.links').selectAll('line')
-         .style('stroke', '#ccc');
       }
-    },
-
-    onTextHover: function(e) {
-      // Get span element that is hovered
-      var hoveredElement = e.currentTarget.innerText;
-
-      // Get lemmas for word
-      var lemmasForWord = this.analyzer.get('wordLemmaRelations')[hoveredElement];
-
-      // Is element in Data?
-      if (lemmasForWord) {
-        // Get cluster of word
-
-        // Loop over every cluster and see in which cluster the word is
-        var clusters = this.analyzer.get('clusters');
-        var indexOfCluster = null;
-
-        for (var key in clusters) {
-          clusters[key].map(function(d, i) {
-            var source = d.source.word;
-            var target = d.target.word;
-
-            if (hoveredElement == source || hoveredElement == target) {
-              indexOfCluster = key;
-            }
-          });
-        }
-
-        var linkedByIndex = this.simulations[indexOfCluster].linkedByIndex;
-        var svg = this.simulations[indexOfCluster].svg;
-
-        // Get selected word
-        var nodeSelected = d3.select('#node-' + lemmasForWord[0]);
-        var nodeData = nodeSelected.data()[0];
-
-        // Change text of selected element
-        var textSelected = nodeSelected.select('text')
-          .style('opacity', 1)
-          .style('font-weight', 'bold');
-
-        // Highlight adjacent nodes
-        svg.selectAll('text')
-          .style('opacity', function(d) {
-           if (isConnected(nodeData, d)) {
-             return 1;
-           }
-
-           return 0.1;
-
-          });
-
-        svg.selectAll('circle')
-          .style('fill', function(d) {
-            if (isConnected(nodeData, d)) {
-              return '#000';
-            }
-
-            return '#f4f4f4';
-          })
-          .style('opacity', function(d) {
-            if (isConnected(nodeData, d)) {
-              return 1;
-            }
-
-            return 0.2;
-          });
-
-        /////////////////////
-        // Highlight links //
-        /////////////////////
-        svg.selectAll('line')
-          .style('stroke', function(d) {
-            return d.source.id === nodeData.id || d.target.id === nodeData.id ? '#4c4c4c' : '#f4f4f4';
-          });
-      }
-
-      function isConnected(a, b) {
-        return isConnectedAsTarget(a, b) || isConnectedAsSource(a, b) || a.index == b.index;
-      }
-
-      function isConnectedAsSource(a, b) {
-        return linkedByIndex[a.index + "," + b.index];
-      }
-
-      function isConnectedAsTarget(a, b) {
-        return linkedByIndex[b.index + "," + a.index];
-      }
-    },
-
-    onTextHoverOff: function(e) {
-      // var gElement = d3.selectAll('g');
-
-      // gElement.select('circle')
-      //   .style('fill', '#ccc');
-
-      // gElement.select('text')
-      //   .style('font-weight', 'normal');
-
-      d3.selectAll('text')
-         .style('opacity', 0.8)
-         .style('font-weight', 'normal');
-
-      d3.selectAll('circle')
-        .style('fill', '#ccc')
-        .style('opacity', 1);
-
-      d3.selectAll('.links').selectAll('line')
-       .style('stroke', '#ccc');
-    },
-
-
+    }
 });
 
 new app.CmapView();

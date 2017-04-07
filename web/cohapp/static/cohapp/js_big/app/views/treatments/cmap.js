@@ -10,7 +10,7 @@ app.CmapView = Backbone.View.extend({
 		'click #help': 'renderInstructionModal',
 		'click #editor-button': 'analyzeText',
 		'click #editor-full-button': 'saveText',
-    'click #print': 'printText'
+    // 'click #print': 'printText'
 	},
 
 	initialize: function() {
@@ -203,7 +203,7 @@ app.CmapView = Backbone.View.extend({
       var svgHeight = $('#editor-full-medium-editor').height();
 
       // Add print symbol
-      this.$el.append('<i id="print" class="material-icons">print</i>');
+      // this.$el.append('<i id="print" class="material-icons">print</i>');
 
       // Render graph
       this.renderCmap(this.analyzer.get('word_pairs'),
