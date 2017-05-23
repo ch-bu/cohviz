@@ -164,7 +164,7 @@ app.CmapView = Backbone.View.extend({
                 '<a class="waves-effect waves-light btn" id="save-text">Text abschicken</a>');
 
         // Save data for draft
-        this.textModel.set({'pre_text': this.analyzer.get('text'),
+        this.textModel.set({
             'pre_num_sentences': this.analyzer.get('numSentences'),
             'pre_num_clusters': this.analyzer.get('numCluster'),
             'pre_num_coherent_sentences': this.analyzer.get('cohSentences'),
