@@ -32,3 +32,6 @@ web/toolapp/settings.py
 
 # Ignore map files
 web/cohapp/static/cohapp/**/*.map
+
+# Ignore npm debugging log
+web/npm-debug.log

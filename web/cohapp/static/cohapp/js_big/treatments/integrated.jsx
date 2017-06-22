@@ -1,8 +1,19 @@
-class Hello extends React.Component {
+import {getInstruction} from '../components/jsx-strings.jsx';
+
+class TreatmentIntegrated extends React.Component {
   render() {
-    console.log('test');
-    return <h1>Hello</h1>;
+    // Get jsx string of instruction
+    let instruction = getInstruction();
+
+    return (
+      <div>
+         {instruction}
+      </div>
+      );
   }
 }
 
-console.log('lalala');
+ReactDOM.render(
+  <TreatmentIntegrated />,
+  document.getElementById('treatment-integrated')
+);
