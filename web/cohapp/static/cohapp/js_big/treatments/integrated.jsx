@@ -1,15 +1,15 @@
-import {getInstruction, my_urls} from '../components/jsx-strings.jsx';
+import {getInstruction, my_urls, preloader} from '../components/jsx-strings.jsx';
 
 class TreatmentIntegrated extends React.Component {
   constructor(props) {
     super(props);
 
-    // Set initial state
-    this.state = {
-      data: null
-    };
-
     var self = this;
+
+    this.state = {
+      user: null,
+      measurement: null
+    };
 
     // Get urls
     var urls = my_urls;
@@ -25,21 +25,42 @@ class TreatmentIntegrated extends React.Component {
     }).then(function(response) {
       return response.json();
     }).then(function(data) {
-      self.setState({data: data});
+      self.setState({user: data});
+    });
+
+    // Fetch measurement data
+    fetch(urls.measurement + this.experiment_id, {
+      method: 'GET',
+      credentials: 'same-origin'
+    }).then(function(response) {
+      return response.json();
+    }).catch(function(error) {
+      console.log(error);
+    }).then(function(data) {
+      self.setState({measurement: data[0]});
     });
 
   }
 
   render() {
-    console.log(this.state);
-    // Get jsx string of instruction
-    let instruction = getInstruction();
+    // Show preloader if state user not shown
+    let template = preloader;
+
+    // User data has been fetched
+    if (this.state.user != null) {
+      // Measurement data has been fetched
+      if (this.state.measurement != null) {
+        // Render instruction for current measurement
+        template = getInstruction(this.state.measurement.instruction);
+      }
+
+    }
 
     return (
       <div>
-         {instruction}
+         {template}
       </div>
-      );
+    );
   }
 }
 

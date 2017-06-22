@@ -65,7 +65,7 @@ class MeasurementView(APIView):
 
     authentication_classes = (CsrfExemptSessionAuthentication,
                               BasicAuthentication)
-    permission_classes = (IsAdminUser,)
+    permission_classes = (AllowAny,)
 
     def get(self, request, experiment_password):
 
