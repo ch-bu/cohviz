@@ -1,4 +1,5 @@
 import {getInstruction, my_urls, preloader} from '../components/jsx-strings.jsx';
+import Instruction from '../components/instruction.jsx';
 
 class TreatmentIntegrated extends React.Component {
   constructor(props) {
@@ -34,8 +35,6 @@ class TreatmentIntegrated extends React.Component {
       credentials: 'same-origin'
     }).then(function(response) {
       return response.json();
-    }).catch(function(error) {
-      console.log(error);
     }).then(function(data) {
       self.setState({measurement: data[0]});
     });
@@ -51,9 +50,8 @@ class TreatmentIntegrated extends React.Component {
       // Measurement data has been fetched
       if (this.state.measurement != null) {
         // Render instruction for current measurement
-        template = getInstruction(this.state.measurement.instruction);
+        template = <Instruction instruction_text={this.state.measurement.instruction} />
       }
-
     }
 
     return (
@@ -62,6 +60,8 @@ class TreatmentIntegrated extends React.Component {
       </div>
     );
   }
+
+
 }
 
 ReactDOM.render(
