@@ -14,6 +14,7 @@ var wrap = require('gulp-wrap');
 var declare = require('gulp-declare');
 var concat = require('gulp-concat');
 var handlebars = require('gulp-handlebars');
+var shell = require('gulp-shell');
 // var babel = require('babel-core');
 
 /**
@@ -58,6 +59,7 @@ gulp.task('scripts-vendor', function() {
       './cohapp/static/cohapp/js_big/vendor/handlebars.js',
       './cohapp/static/cohapp/js_big/vendor/medium-editor.js',
       './cohapp/static/cohapp/js_big/vendor/backbone.js',
+      // './cohapp/static/cohapp/js_big/vendor/'
     ])
       .pipe($.newer('./cohapp/static/cohapp/js/vendor/'))
       .pipe($.sourcemaps.init())
@@ -90,6 +92,12 @@ gulp.task('handlebars', function() {
     .pipe(gulp.dest('./cohapp/static/cohapp/js/', {overwrite: true}))
     .pipe(gulp.dest('./static/cohapp/js/', {overwrite: true}));
 });
+
+/**
+ * Run webpack command to bundle files
+ */
+gulp.task('webpack', shell.task([
+  'webpack']));
 
 /**
  * Uglify scripts for app. Write sourcemaps to it
@@ -153,7 +161,7 @@ gulp.task('sass', function() {
       'android >= 4.4',
       'bb >= 10'
     ];
-    
+
     gulp.src('./cohapp/static/cohapp/scss/custom.scss')
         .pipe($.newer('./cohapp/static/cohapp/'))
         .pipe($.sourcemaps.init())
@@ -169,25 +177,25 @@ gulp.task('sass', function() {
 });
 
 gulp.task('lint', function () {
-    // ESLint ignores files with "node_modules" paths. 
-    // So, it's best to have gulp ignore the directory as well. 
-    // Also, Be sure to return the stream from the task; 
-    // Otherwise, the task may end before the stream has finished. 
+    // ESLint ignores files with "node_modules" paths.
+    // So, it's best to have gulp ignore the directory as well.
+    // Also, Be sure to return the stream from the task;
+    // Otherwise, the task may end before the stream has finished.
     return gulp.src('./cohapp/static/cohapp/js_big/app/*.js')
-        // eslint() attaches the lint output to the "eslint" property 
-        // of the file object so it can be used by other modules. 
+        // eslint() attaches the lint output to the "eslint" property
+        // of the file object so it can be used by other modules.
         .pipe(eslint())
-        // eslint.format() outputs the lint results to the console. 
-        // Alternatively use eslint.formatEach() (see Docs). 
+        // eslint.format() outputs the lint results to the console.
+        // Alternatively use eslint.formatEach() (see Docs).
         .pipe(eslint.format())
-        // To have the process exit with an error code (1) on 
-        // lint error, return the stream and pipe to failAfterError last. 
+        // To have the process exit with an error code (1) on
+        // lint error, return the stream and pipe to failAfterError last.
         .pipe(eslint.failAfterError());
 });
 
 
 gulp.task('watch', ['sass', 'scripts-app'], function() {
-    
+
     // browserSync({
     //     logPrefix: 'Coherence App',
     //     notify: false,
@@ -203,6 +211,7 @@ gulp.task('watch', ['sass', 'scripts-app'], function() {
 
 	gulp.watch('./cohapp/static/cohapp/scss/custom.scss', ['sass']);
 	gulp.watch('./cohapp/static/cohapp/js_big/app/**/*.js', ['scripts-app']);
+  gulp.watch('./cohapp/static/cohapp/js_big/**/*.jsx', ['webpack']);
   gulp.watch('./cohapp/static/cohapp/js_big/app/views/treatments/*.js',
     ['treatment-minify']);
   gulp.watch('./cohapp/templates/cohapp/handlebars/*.hbs', ['handlebars']);

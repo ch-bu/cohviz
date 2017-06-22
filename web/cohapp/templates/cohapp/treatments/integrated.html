@@ -1,0 +1,21 @@
+{% extends 'cohapp/base_experiment.html' %}
+
+{% block title %}Experiment{% endblock %}
+
+{% load staticfiles %}
+
+{% block container %}
+
+
+<div id="treatment-integrated" class="row">
+
+</div>
+
+{% endblock %}
+
+{% block endendscripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.6.1/react-dom.min.js"></script>
+<script src="{% static 'cohapp/js/treatments/integrated.min.js' %}"></script>
+{% endblock %}
+
