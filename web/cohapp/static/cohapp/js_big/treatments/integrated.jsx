@@ -84,24 +84,7 @@ class TreatmentIntegrated extends React.Component {
    * @return {None}
    */
   renderEditor() {
-    // Post text data to component
-    // fetch(this.urls.textanalyzer + this.experiment_id, {
-    //   method: 'POST',
-    //   credentials: 'same-origin',
-    //   body: JSON.stringify({
-    //     text: 'Hans ist ein Baum. Im Baum gibt es Wölfe'
-    //   }),
-    //   headers: new Headers({
-    //     'Content-Type': 'application/json'
-    //   })
-    // }).then((response) => {
-    //   return response.json();
-    // }).catch((error) => {
-    //   console.log(error);
-    // }).then((data) => {
-    //   console.log(data);
-    // });
-
+    // Display editor by state change
     this.setState({showEditor: true}, () => {
         // Start timer for draft
         this.setState({durationDraft: new Date()});
@@ -113,11 +96,25 @@ class TreatmentIntegrated extends React.Component {
    */
   analyzeText() {
     // Save time for draft
-    this.setState({durationDraft: (new Date() - this.state.durationDraft) / 1000}, () => {
-      console.log(this.state.durationDraft);
-    });
+    this.setState({durationDraft: (new Date() - this.state.durationDraft) / 1000});
 
-    console.log('analyze Text');
+    // Analyze Text
+    fetch(this.urls.textanalyzer + this.experiment_id, {
+      method: 'POST',
+      credentials: 'same-origin',
+      body: JSON.stringify({
+        text: 'Hans geht durch den Gang. Der Gang ist ein Baum. Im Baum gibt es Wölfe.'
+      }),
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
+    }).then((response) => {
+      return response.json();
+    }).catch((error) => {
+      console.log(error);
+    }).then((data) => {
+      console.log(data);
+    });
   }
 }
 
