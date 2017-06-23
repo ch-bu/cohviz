@@ -1,5 +1,6 @@
-import {getInstruction, my_urls, preloader} from '../components/jsx-strings.jsx';
+import {my_urls} from '../components/jsx-strings.jsx';
 import Instruction from '../components/instruction.jsx';
+import Preloader from '../components/preloader.jsx';
 
 class TreatmentIntegrated extends React.Component {
   constructor(props) {
@@ -43,7 +44,7 @@ class TreatmentIntegrated extends React.Component {
 
   render() {
     // Show preloader if state user not shown
-    let template = preloader;
+    let template = <Preloader />;
 
     // User data has been fetched
     if (this.state.user != null) {

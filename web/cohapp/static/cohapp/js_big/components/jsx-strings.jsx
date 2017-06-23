@@ -1,9 +1,3 @@
-var preloader = <div className="row">
-    <div className="progress">
-        <div className="indeterminate"></div>
-    </div>
-  </div>;
-
 var my_urls = function urls() {
 
     var container = {};
@@ -36,4 +30,4 @@ var my_urls = function urls() {
     return container;
 }();
 
-export {getInstruction, my_urls, preloader};
+export {my_urls};
