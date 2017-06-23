@@ -3,7 +3,7 @@ class Instruction extends React.Component {
 		super(props);
 
     // Bind this to methods
-    this.renderEditor = this.renderEditor.bind(this);
+    this.renderEditorParent = this.renderEditorParent.bind(this);
 	}
 
   render() {
@@ -13,16 +13,22 @@ class Instruction extends React.Component {
           <p>{this.props.instruction_text}</p>
         </div>
         <div className="s12 m8 offset-m2 l5 offset-l3 col center-align">
-          <a id="instruction-read" className="center-align waves-effect waves-light btn" onClick={this.renderEditor}>Ich habe die Instruktion gelesen</a>
+          <a id="instruction-read" className="center-align waves-effect waves-light btn" onClick={this.renderEditorParent}>Ich habe die Instruktion gelesen</a>
         </div>
       </div>
       )
   }
 
-  renderEditor() {
-    console.log('click');
+  /**
+   * User clicks that she has
+   * written the instruction and the
+   * editor opens up.
+   * @return {None}
+   */
+  renderEditorParent() {
+    // Run function to change showEditor boolean to true
+    this.props.renderEditor();
   }
 };
-
 
 export default Instruction;

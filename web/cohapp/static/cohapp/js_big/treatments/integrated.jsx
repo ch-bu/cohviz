@@ -10,7 +10,8 @@ class TreatmentIntegrated extends React.Component {
 
     this.state = {
       user: null,
-      measurement: null
+      measurement: null,
+      showEditor: false
     };
 
     // Get urls
@@ -40,6 +41,8 @@ class TreatmentIntegrated extends React.Component {
       self.setState({measurement: data[0]});
     });
 
+    // Bind this to methods
+    this.renderEditor = this.renderEditor.bind(this);
   }
 
   render() {
@@ -50,8 +53,16 @@ class TreatmentIntegrated extends React.Component {
     if (this.state.user != null) {
       // Measurement data has been fetched
       if (this.state.measurement != null) {
-        // Render instruction for current measurement
-        template = <Instruction instruction_text={this.state.measurement.instruction} />
+
+        if (this.state.showEditor) {
+          template = <h1>Template</h1>;
+        } else {
+          // Render instruction for current measurement
+          template = <Instruction
+              instruction_text={this.state.measurement.instruction}
+              renderEditor={this.renderEditor} />
+        }
+
       }
     }
 
@@ -62,7 +73,14 @@ class TreatmentIntegrated extends React.Component {
     );
   }
 
-
+  /**
+   * Render editor when user clicks
+   * that she has read the instruction
+   * @return {None}
+   */
+  renderEditor() {
+    this.setState({showEditor: true});
+  }
 }
 
 ReactDOM.render(
