@@ -15,7 +15,8 @@ class TreatmentIntegrated extends React.Component {
       measurement: null,
       showEditor: false,
       showInstruction: false,
-      durationDraft: null
+      durationDraft: null,
+      draftAnalyzed: null
     };
 
     // Get urls
@@ -95,6 +96,8 @@ class TreatmentIntegrated extends React.Component {
    * Analyze Text
    */
   analyzeText() {
+    var self = this;
+
     // Save time for draft
     this.setState({durationDraft: (new Date() - this.state.durationDraft) / 1000});
 
@@ -103,7 +106,7 @@ class TreatmentIntegrated extends React.Component {
       method: 'POST',
       credentials: 'same-origin',
       body: JSON.stringify({
-        text: 'Hans geht durch den Gang. Der Gang ist ein Baum. Im Baum gibt es Wölfe.'
+        text: 'Michael ist ein Haus. Im Haus gibt es Schränke.'
       }),
       headers: new Headers({
         'Content-Type': 'application/json'
@@ -113,7 +116,7 @@ class TreatmentIntegrated extends React.Component {
     }).catch((error) => {
       console.log(error);
     }).then((data) => {
-      console.log(data);
+      self.setState({'draftAnalyzed': data});
     });
   }
 }

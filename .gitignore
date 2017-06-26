@@ -10,6 +10,7 @@ web/cohapp/coherenceanalyzer/RFTagger/
 web/cohapp/coherenceanalyzer/GN_V90_XML/
 web/cohapp/coherenceanalyzer/mongodb/
 web/cohapp/coherenceanalyzer/temp/
+web/cohapp/static/cohapp/css/*
 
 # Ignore sublime project files
 cohviz.sublime-project

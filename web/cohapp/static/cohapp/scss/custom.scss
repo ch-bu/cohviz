@@ -76,73 +76,87 @@ body {
   @include svg-attributes();
 }
 
-/**
- * Medium Editor for Landing page
- */
-#editor-medium-editor {
+// /**
+//  * Medium Editor for Landing page
+//  */
+// #editor-medium-editor {
 
-  min-height: 50vh;
+//   min-height: 50vh;
+
+//   #editor-textinput {
+//     margin-top: 0.6em;
+//     outline: 0px solid transparent;
+//     font-size: 1.6rem;
+
+//     p {
+//       font-size: 1.4rem;
+//     }
+
+//     @media only screen and (max-width: 44em){
+//       p {
+//         font-size: 1.4rem;
+//       }
+//     }
+//   }
+// }
+
+// /**
+//  * Medium Editor full with
+//  */
+// #editor-full-wrapper {
+
+//   .col {
+//     padding-right: 1px;
+//   }
+
+//   #editor-full-medium-editor {
+//     padding: 0 5px;
+//     height: 70vh;
+//     outline: 0px solid transparent;
+//     overflow: auto;
+//     border: 1px solid #ededed;
+
+//     span {
+//       &.highlight-related {
+//         // color: #26a69a;
+//         color: #000;
+//         font-weight: bold;
+//       }
+//     }
+//   }
+
+//   #editor-full-buttons {
+//     height: 5vh;
+//     text-align: center;
+//   }
+
+//   #editor-full-graph {
+
+//     path {
+//       fill: none;
+//       stroke: red;
+//     }
+
+//     height: 80vh;
+//     display: flex;
+//     flex-direction: row;
+//     flex-wrap: wrap;
+//     padding-left: 0;
+//     // overflow-y: scroll;
+//     padding-right: 0;
+//   }
+// }
+
+
+#editor {
+  font-size: 1.4rem;
 
   #editor-textinput {
     margin-top: 0.6em;
     outline: 0px solid transparent;
-
     p {
-      font-size: 1.6rem;
+      font-size: 1.4rem;
     }
-
-    @media only screen and (max-width: 44em){
-      p {
-        font-size: 1.4rem;
-      }
-    }
-  }
-}
-
-/**
- * Medium Editor full with
- */
-#editor-full-wrapper {
-
-  .col {
-    padding-right: 1px;
-  }
-
-  #editor-full-medium-editor {
-    padding: 0 5px;
-    height: 70vh;
-    outline: 0px solid transparent;
-    overflow: auto;
-    border: 1px solid #ededed;
-
-    span {
-      &.highlight-related {
-        // color: #26a69a;
-        color: #000;
-        font-weight: bold;
-      }
-    }
-  }
-
-  #editor-full-buttons {
-    height: 5vh;
-    text-align: center;
-  }
-
-  #editor-full-graph {
-
-    path {
-      fill: none;
-      stroke: red;
-    }
-
-    height: 80vh;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    padding-left: 0;
-    // overflow-y: scroll;
-    padding-right: 0;
   }
 }
 
@@ -316,7 +330,7 @@ h1, h2, h3, h4, h5 {
   #instruction {
     margin-top: 5vh;
 
-    @include instruction-mixin(1.6em);
+    @include instruction-mixin(1.6rem);
   }
 }
 
@@ -339,6 +353,6 @@ h1, h2, h3, h4, h5 {
 }
 
 
-#preloader {
-  margin-top: 10vh;
-}
+// #preloader {
+//   margin-top: 10vh;
+// }
