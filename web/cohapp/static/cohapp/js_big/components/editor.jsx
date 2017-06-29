@@ -7,7 +7,8 @@ class Editor extends React.Component {
     this.state = {'displayButton': true};
 
     this.analyzeText = this.analyzeText.bind(this);
-    this.getText = this.getText.bind(this);
+    this.returnInnerHTML = this.returnInnerHTML.bind(this);
+    this.updateDraft = this.updateDraft.bind(this);
   }
 
   render() {
@@ -21,14 +22,20 @@ class Editor extends React.Component {
 
     return (
       <div className="row" id="editor">
-       <div id="editor-medium-editor" className="col s11 m8 offset-m2 l6 offset-l3">
-          <div id="editor-textinput" ref={(el) => { this.textInput = el; }}></div>
+       <div id="editor-medium-editor" className="col s11 m8 offset-m2 l8 offset-l2">
+          <div id="editor-textinput" ref={(el) => { this.textInput = el; }}
+              dangerouslySetInnerHTML={this.returnInnerHTML()}
+              onKeyUp={this.updateDraft} ></div>
           <div id="editor-button-div" className="s12 m8 offset-m2 l6 offset-l3 col center-align">
             {buttonElement}
           </div>
         </div>
       </div>
       )
+  }
+
+  updateDraft() {
+    this.props.updateDraft(this.textInput.innerHTML);
   }
 
   componentDidMount() {
@@ -40,30 +47,16 @@ class Editor extends React.Component {
         hideOnClick: true
       },
     });
+  }
 
+  returnInnerHTML() {
+    return {__html: this.props.draftText};
   }
 
   analyzeText() {
-    // Replace button when clicked
     this.setState({'displayButton': false});
-
-    // Get text from medium editor
-    var text = this.getText();
-
-    // Analyze text
-    this.props.analyzeText();
   }
 
-  getText() {
-    console.log(this.textInput.getDOMNode);
-    // var res = [];
-
-    // for(var m in this.textInput) {
-    //     if(typeof this.textInput[m] == "function") {
-    //         console.log(m);
-    //     }
-    // }
-  }
 };
 
 export default Editor;

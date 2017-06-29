@@ -16,10 +16,11 @@ class TreatmentIntegrated extends React.Component {
       measurement: null,
       showEditor: false,
       showInstruction: false,
-      showFeedback: false,
+      showRevisionPrompt: false,
       showRevision: false,
       durationDraft: null,
-      draftAnalyzed: null
+      draftAnalyzed: null,
+      draftText: ''
     };
 
     // Get urls
@@ -53,6 +54,8 @@ class TreatmentIntegrated extends React.Component {
     // Bind this to methods
     this.renderEditor = this.renderEditor.bind(this);
     this.analyzeText = this.analyzeText.bind(this);
+    this.renderInstruction = this.renderInstruction.bind(this);
+    this.updateDraft = this.updateDraft.bind(this);
   }
 
   render() {
@@ -72,7 +75,11 @@ class TreatmentIntegrated extends React.Component {
               renderEditor={this.renderEditor} />
         // Render editor
         } else if (this.state.showEditor) {
-          template = <Editor analyzeText={this.analyzeText} />;
+          template = <Editor analyzeText={this.analyzeText}
+                             updateDraft={this.updateDraft}
+                             draftText={this.state.draftText} />;
+        } else if (this.state.showRevisionPrompt) {
+          template = <h1>Feedback</h1>;
         }
       }
     }
@@ -81,8 +88,9 @@ class TreatmentIntegrated extends React.Component {
       <div>
           <HeaderExperiment showEditor={this.state.showEditor}
                             showInstruction={this.state.showInstruction}
-                            showFeedback={this.state.showFeedback}
-                            showRevision={this.state.showRevision} />
+                            showRevisionPrompt={this.state.showRevisionPrompt}
+                            showRevision={this.state.showRevision}
+                            renderInstruction={this.renderInstruction} />
          {template}
       </div>
     );
@@ -95,10 +103,31 @@ class TreatmentIntegrated extends React.Component {
    */
   renderEditor() {
     // Display editor by state change
-    this.setState({showEditor: true, showInstruction: false, showFee: false}, () => {
+    this.setState({showEditor: true, showInstruction: false, showRevisionPrompt: false,
+                   showRevision: false}, () => {
         // Start timer for draft
-        this.setState({durationDraft: new Date()});
+        // this.setState({durationDraft: new Date()});
     });
+  }
+
+  /**
+   * Render instruction of experiment
+   * We want to give users control to
+   * have another look at the instruction
+   * @return {None}
+   */
+  renderInstruction() {
+    this.setState({showEditor: false, showInstruction: true, showRevisionPrompt: false,
+                   showRevision: false});
+  }
+
+  /**
+   * Render
+   * @return {[type]} [description]
+   */
+  renderRevisionPrompt() {
+    this.setState({showEditor: false, showInstruction: false, showRevisionPrompt: true,
+                   showRevision: false});
   }
 
   /**
@@ -127,6 +156,13 @@ class TreatmentIntegrated extends React.Component {
     }).then((data) => {
       self.setState({'draftAnalyzed': data});
     });
+  }
+
+  /**
+   * Store text from draft
+   */
+  updateDraft(text) {
+    this.setState({'draftText': text});
   }
 }
 
