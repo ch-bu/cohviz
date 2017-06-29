@@ -26,6 +26,8 @@ $form-padding: $global-padding;
 // Setting the form border radius
 $form-radius: $global-radius;
 
+$p-font-size: 1.3rem;
+
 
 // ******************* Mixins ***********************************
 
@@ -73,6 +75,7 @@ $form-radius: $global-radius;
 
 body {
   font-family: 'Open Sans', sans-serif;
+  background-color: #f6f6f6;
   @include svg-attributes();
 }
 
@@ -148,17 +151,6 @@ body {
 // }
 
 
-#editor {
-  font-size: 1.4rem;
-
-  #editor-textinput {
-    margin-top: 0.6em;
-    outline: 0px solid transparent;
-    p {
-      font-size: 1.4rem;
-    }
-  }
-}
 
 /**
  * General stuff
@@ -327,11 +319,11 @@ h1, h2, h3, h4, h5 {
     cursor: pointer;
   }
 
-  #instruction {
-    margin-top: 5vh;
+  // #instruction {
+  //   margin-top: 5vh;
 
-    @include instruction-mixin(1.6rem);
-  }
+  //   @include instruction-mixin(1.6rem);
+  // }
 }
 
 #editor-double-text {
@@ -356,3 +348,78 @@ h1, h2, h3, h4, h5 {
 // #preloader {
 //   margin-top: 10vh;
 // }
+
+
+// Instruktion for experiment
+#instruction {
+  p {
+    font-size: $p-font-size;;
+  }
+
+  #instruction-read {
+    font-size: 1rem;
+  }
+}
+
+// Editor
+#editor {
+  // font-size: 1.4rem;
+  position: relative;
+  min-height: 58vh;
+  font-size: $p-font-size;;
+
+  #editor-textinput {
+    background-color: #fafafa;
+    min-height: 58vh;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 0.6em;
+    outline: 0px solid transparent;
+
+    p {
+      font-size: $p-font-size;
+    }
+  }
+
+  #editor-button-div {
+    position: absolute;
+    bottom: -50px;
+    left: 0;
+
+    a {
+      font-size: 1rem;
+    }
+  }
+}
+
+
+// Header instruction
+#header-experiment {
+
+  ul {
+    background-color: #24292e;
+    align-items: center;
+    justify-content: space-around;
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+    height: 100px;
+    position: relative;
+
+    li {
+      background-color: #24292e;
+      font-size: 1.3rem;
+      cursor: pointer;
+      display: inline-block;
+      width: 25%;
+      color: #fff;
+      height: 100%;
+      padding-top: 30px;
+      text-align: center;
+
+      &:hover {
+        background-color: #26a69a;
+      }
+    }
+  }
+}

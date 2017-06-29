@@ -11,7 +11,7 @@ class Instruction extends React.Component {
   render() {
     return (
       <div className="row" id="instruction">
-        <div className="s12 m8 offset-m2 l6 offset-l3 col">
+        <div className="s12 m10 offset-m1 l6 offset-l3 col">
           <p>{this.props.instruction_text}</p>
         </div>
         <div className="s12 m8 offset-m2 l6 offset-l3 col center-align">

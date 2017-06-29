@@ -2,6 +2,7 @@ import {my_urls} from '../components/jsx-strings.jsx';
 import Instruction from '../components/instruction.jsx';
 import Preloader from '../components/preloader.jsx';
 import Editor from '../components/editor.jsx';
+import HeaderExperiment from '../components/header-experiment.jsx';
 
 class TreatmentIntegrated extends React.Component {
   constructor(props) {
@@ -74,6 +75,7 @@ class TreatmentIntegrated extends React.Component {
 
     return (
       <div>
+          <HeaderExperiment />
          {template}
       </div>
     );
