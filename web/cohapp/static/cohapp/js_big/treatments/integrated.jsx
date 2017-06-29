@@ -16,6 +16,8 @@ class TreatmentIntegrated extends React.Component {
       measurement: null,
       showEditor: false,
       showInstruction: false,
+      showFeedback: false,
+      showRevision: false,
       durationDraft: null,
       draftAnalyzed: null
     };
@@ -58,24 +60,29 @@ class TreatmentIntegrated extends React.Component {
     let template = <Preloader />;
 
     // User data has been fetched
-    if (this.state.user != null) {
+    if (this.state.user != null || this.state.measurement) {
       // Measurement data has been fetched
       if (this.state.measurement != null) {
-        // Instruction has been read
-        if (this.state.showEditor) {
-          template = <Editor analyzeText={this.analyzeText} />;
-        } else if (this.state.showInstruction) {
+
+        // Render instruction
+        if (this.state.showInstruction) {
           // Render instruction for current measurement
           template = <Instruction
-              instruction_text={this.state.measurement.instruction}
+              instructionText={this.state.measurement.instruction}
               renderEditor={this.renderEditor} />
+        // Render editor
+        } else if (this.state.showEditor) {
+          template = <Editor analyzeText={this.analyzeText} />;
         }
       }
     }
 
     return (
       <div>
-          <HeaderExperiment />
+          <HeaderExperiment showEditor={this.state.showEditor}
+                            showInstruction={this.state.showInstruction}
+                            showFeedback={this.state.showFeedback}
+                            showRevision={this.state.showRevision} />
          {template}
       </div>
     );
@@ -88,7 +95,7 @@ class TreatmentIntegrated extends React.Component {
    */
   renderEditor() {
     // Display editor by state change
-    this.setState({showEditor: true}, () => {
+    this.setState({showEditor: true, showInstruction: false, showFee: false}, () => {
         // Start timer for draft
         this.setState({durationDraft: new Date()});
     });

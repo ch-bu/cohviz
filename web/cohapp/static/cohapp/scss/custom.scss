@@ -26,7 +26,7 @@ $form-padding: $global-padding;
 // Setting the form border radius
 $form-radius: $global-radius;
 
-$p-font-size: 1.3rem;
+$p-font-size: 1.2rem;
 
 
 // ******************* Mixins ***********************************
@@ -407,7 +407,7 @@ h1, h2, h3, h4, h5 {
     position: relative;
 
     li {
-      background-color: #24292e;
+      // background-color: rgb(36, 41, 46);
       font-size: 1.3rem;
       cursor: pointer;
       display: inline-block;
@@ -416,10 +416,10 @@ h1, h2, h3, h4, h5 {
       height: 100%;
       padding-top: 30px;
       text-align: center;
-
-      &:hover {
-        background-color: #26a69a;
-      }
     }
   }
+}
+
+.highlight-experiment-status {
+  background-color: #26a69a;
 }
