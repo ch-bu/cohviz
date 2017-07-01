@@ -26,7 +26,7 @@ $form-padding: $global-padding;
 // Setting the form border radius
 $form-radius: $global-radius;
 
-$p-font-size: 1.4rem;
+$p-font-size: 1.6rem;
 
 
 // ******************* Mixins ***********************************
@@ -70,6 +70,9 @@ $p-font-size: 1.4rem;
 
   }
 
+@mixin margin-top() {
+  margin-top: 4vh;
+}
 
 // ******************* Generell stuff *****************************
 
@@ -352,8 +355,20 @@ h1, h2, h3, h4, h5 {
 
 // Instruktion for experiment
 #instruction {
+  @include margin-top();
+
+  #instruction-text {
+    border-left: 2px dashed #ccc;
+  }
+
+
   p {
+    font-family: Georgia;
     font-size: $p-font-size;;
+  }
+
+  p:first-child {
+    margin-top: 0;
   }
 
   #instruction-read {
@@ -363,22 +378,32 @@ h1, h2, h3, h4, h5 {
 
 // Editor
 #editor {
-  // font-size: 1.4rem;
+  @include margin-top();
+
   position: relative;
   min-height: 58vh;
   font-size: $p-font-size;;
 
   #editor-textinput {
-    background-color: #fafafa;
+    font-family: Georgia;
     min-height: 58vh;
-    padding: 10px;
+    padding: 0 10px 0 10px;
     border-radius: 5px;
-    margin-top: 0.6em;
     outline: 0px solid transparent;
+    border-left: 2px dashed #ccc;
 
     p {
       font-size: $p-font-size;
     }
+
+    p:first-child {
+      margin-top: 0;
+    }
+  }
+
+  #editor-medium-editor {
+    padding: 0;
+    margin-top: 0;
   }
 
   #editor-button-div {
@@ -409,6 +434,7 @@ h1, h2, h3, h4, h5 {
     li {
       // background-color: rgb(36, 41, 46);
       font-size: 1.3rem;
+      font-weight: 100;
       cursor: pointer;
       display: inline-block;
       width: 25%;

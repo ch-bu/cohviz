@@ -75,7 +75,7 @@ class TreatmentIntegrated extends React.Component {
               renderEditor={this.renderEditor} />
         // Render editor
         } else if (this.state.showEditor) {
-          template = <Editor analyzeText={this.analyzeText}
+            template = <Editor analyzeText={this.analyzeText}
                              updateDraft={this.updateDraft}
                              draftText={this.state.draftText}
                              editorVisible={this.state.showEditor} />;
@@ -165,6 +165,11 @@ class TreatmentIntegrated extends React.Component {
    */
   updateDraft(text) {
     this.setState({'draftText': text});
+
+    // Store text in local storage
+    if (typeof(Storage) !== "undefined") {
+      localStorage.setItem('textdraft', text);
+    }
   }
 }
 

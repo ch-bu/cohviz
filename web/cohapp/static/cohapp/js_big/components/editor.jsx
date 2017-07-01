@@ -26,7 +26,7 @@ class Editor extends React.Component {
           <div id="editor-textinput" ref={(el) => { this.textInput = el; }}
               dangerouslySetInnerHTML={this.returnInnerHTML()}
               onKeyUp={this.updateDraft} ></div>
-          <div id="editor-button-div" className="s12 m8 offset-m2 l6 offset-l3 col center-align">
+          <div id="editor-button-div" className="s12 m8 offset-m2 l6 offset-l3 col">
             {buttonElement}
           </div>
         </div>
