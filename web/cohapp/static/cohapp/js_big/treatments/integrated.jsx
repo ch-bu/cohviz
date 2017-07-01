@@ -1,4 +1,5 @@
 import {my_urls} from '../components/jsx-strings.jsx';
+import {getPlainText} from '../components/helperfunctions.js';
 import Instruction from '../components/instruction.jsx';
 import Preloader from '../components/preloader.jsx';
 import Editor from '../components/editor.jsx';
@@ -20,7 +21,8 @@ class TreatmentIntegrated extends React.Component {
       showRevision: false,
       durationDraft: null,
       draftAnalyzed: null,
-      draftText: ''
+      draftText: '',
+      draftPlainText: '',
     };
 
     // Get urls
@@ -105,8 +107,8 @@ class TreatmentIntegrated extends React.Component {
    */
   renderEditor() {
     // Display editor by state change
-    this.setState({showEditor: true, showInstruction: false, showRevisionPrompt: false,
-                   showRevision: false}, () => {
+    this.setState({showEditor: true, showInstruction: false,
+                   showRevisionPrompt: false, showRevision: false}, () => {
         // Start timer for draft
         // this.setState({durationDraft: new Date()});
     });
@@ -119,8 +121,8 @@ class TreatmentIntegrated extends React.Component {
    * @return {None}
    */
   renderInstruction() {
-    this.setState({showEditor: false, showInstruction: true, showRevisionPrompt: false,
-                   showRevision: false});
+    this.setState({showEditor: false, showInstruction: true,
+                   showRevisionPrompt: false, showRevision: false});
   }
 
   /**
@@ -128,8 +130,8 @@ class TreatmentIntegrated extends React.Component {
    * @return {[type]} [description]
    */
   renderRevisionPrompt() {
-    this.setState({showEditor: false, showInstruction: false, showRevisionPrompt: true,
-                   showRevision: false});
+    this.setState({showEditor: false, showInstruction: false,
+                   showRevisionPrompt: true, showRevision: false});
   }
 
   /**
@@ -138,26 +140,36 @@ class TreatmentIntegrated extends React.Component {
   analyzeText() {
     var self = this;
 
-    // Save time for draft
-    this.setState({durationDraft: (new Date() - this.state.durationDraft) / 1000});
+    this.setState({showEditor: false, showInstruction: false,
+                   showRevisionPrompt: false, showRevision: false});
 
-    // Analyze Text
-    fetch(this.urls.textanalyzer + this.experiment_id, {
-      method: 'POST',
-      credentials: 'same-origin',
-      body: JSON.stringify({
-        text: 'Michael ist ein Haus. Im Haus gibt es Schränke.'
-      }),
-      headers: new Headers({
-        'Content-Type': 'application/json'
-      })
-    }).then((response) => {
-      return response.json();
-    }).catch((error) => {
-      console.log(error);
-    }).then((data) => {
-      self.setState({'draftAnalyzed': data});
+    // Save time for draft
+    // this.setState({durationDraft: (new Date() - this.state.durationDraft) / 1000});
+
+    this.setState({'draftPlainText': getPlainText(this.state.draftText)}, () => {
+      // Analyze Text
+      fetch(this.urls.textanalyzer + this.experiment_id, {
+        method: 'POST',
+        credentials: 'same-origin',
+        body: JSON.stringify({
+          text: self.state.draftPlainText
+        }),
+        headers: new Headers({
+          'Content-Type': 'application/json'
+        })
+      }).then((response) => {
+        return response.json();
+      }).catch((error) => {
+        console.log(error);
+      }).then((data) => {
+        console.log(data);
+        self.setState({'draftAnalyzed': data,
+                showEditor: false, showInstruction: false,
+                showRevisionPrompt: true, showRevision: false});
+      });
     });
+
+
   }
 
   /**

@@ -12,13 +12,11 @@ class Editor extends React.Component {
   }
 
   render() {
-
     // Store button and loading Ring in variables
     var button = <a className="waves-effect waves-light btn" id="editor-button"
                    onClick={this.analyzeText}>Analyziere meinen Text</a>;
-    var loadingRing = <Preloader />;
-
-    let buttonElement = this.state.displayButton ? button : loadingRing;
+    // var loadingRing = ;
+    var buttonElement = this.state.displayButton ? button : <Preloader />;
 
     return (
       <div className="row" id="editor">
@@ -51,6 +49,10 @@ class Editor extends React.Component {
     return true;
   }
 
+  /**
+   * Enable Medium Editor after component mounted
+   * @return {undefined}
+   */
   componentDidMount() {
     // Enable editor
     var editor = new MediumEditor(this.textInput, {
@@ -67,7 +69,10 @@ class Editor extends React.Component {
   }
 
   analyzeText() {
-    this.setState({'displayButton': false});
+    // this.setState({'displayButton': false});
+
+    // Analyze the draft
+    this.props.analyzeText();
   }
 
 };
