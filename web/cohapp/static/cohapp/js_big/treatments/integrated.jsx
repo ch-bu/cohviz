@@ -91,7 +91,8 @@ class TreatmentIntegrated extends React.Component {
                             showInstruction={this.state.showInstruction}
                             showRevisionPrompt={this.state.showRevisionPrompt}
                             showRevision={this.state.showRevision}
-                            renderInstruction={this.renderInstruction} />
+                            renderInstruction={this.renderInstruction}
+                            renderEditor={this.renderEditor} />
          {template}
       </div>
     );
