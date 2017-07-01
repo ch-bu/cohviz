@@ -77,7 +77,8 @@ class TreatmentIntegrated extends React.Component {
         } else if (this.state.showEditor) {
           template = <Editor analyzeText={this.analyzeText}
                              updateDraft={this.updateDraft}
-                             draftText={this.state.draftText} />;
+                             draftText={this.state.draftText}
+                             editorVisible={this.state.showEditor} />;
         } else if (this.state.showRevisionPrompt) {
           template = <h1>Feedback</h1>;
         }
