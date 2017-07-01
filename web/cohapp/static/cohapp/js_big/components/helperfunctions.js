@@ -1,3 +1,9 @@
+/**
+ * Take an html string and return the inner
+ * html of every paragraph
+ * @param  {htmlText} A string of an html element
+ * @return {String} The inner text of the html element
+ */
 var getPlainText = function(htmlText) {
     var self = this;
 
@@ -8,14 +14,9 @@ var getPlainText = function(htmlText) {
 
     var paragraphText = '';
 
-    // console.log(paragraphs);
-
     for (let paragraph = 0; paragraph < paragraphs.length; paragraph++) {
       paragraphText += paragraphs[paragraph].innerText + " ";
     }
-    // paragraphs.each(function(paragraph) {
-    //    paragraphText += paragraphs[paragraph].innerText + " ";
-    // });
 
     return paragraphText;
 };

@@ -13,12 +13,15 @@ class TreatmentIntegrated extends React.Component {
 
     // Setup state variables
     this.state = {
+      // Meta variables
       user: null,
       measurement: null,
+      // Display variables
       showEditor: false,
       showInstruction: false,
       showRevisionPrompt: false,
       showRevision: false,
+      // Data variables
       durationDraft: null,
       draftAnalyzed: null,
       draftText: '',
@@ -54,10 +57,13 @@ class TreatmentIntegrated extends React.Component {
     });
 
     // Bind this to methods
-    this.renderEditor = this.renderEditor.bind(this);
+
     this.analyzeText = this.analyzeText.bind(this);
-    this.renderInstruction = this.renderInstruction.bind(this);
     this.updateDraft = this.updateDraft.bind(this);
+    this.renderInstruction = this.renderInstruction.bind(this);
+    this.renderEditor = this.renderEditor.bind(this);
+    this.renderRevisionPrompt = this.renderRevisionPrompt.bind(this);
+    this.renderRevision = this.renderRevision.bind(this);
   }
 
   render() {
@@ -74,7 +80,7 @@ class TreatmentIntegrated extends React.Component {
           // Render instruction for current measurement
           template = <Instruction
               instructionText={this.state.measurement.instruction}
-              renderEditor={this.renderEditor} />
+              renderNextState={this.renderEditor} />;
         // Render editor
         } else if (this.state.showEditor) {
             template = <Editor analyzeText={this.analyzeText}
@@ -82,7 +88,11 @@ class TreatmentIntegrated extends React.Component {
                              draftText={this.state.draftText}
                              editorVisible={this.state.showEditor} />;
         } else if (this.state.showRevisionPrompt) {
-          template = <h1>Feedback</h1>;
+          template = <Instruction
+              instructionText={this.state.measurement.instruction_review}
+              renderNextState={this.renderRevision} />;
+        } else if (this.state.showRevision) {
+          template = <h1>Revision</h1>;
         }
       }
     }
@@ -94,7 +104,9 @@ class TreatmentIntegrated extends React.Component {
                             showRevisionPrompt={this.state.showRevisionPrompt}
                             showRevision={this.state.showRevision}
                             renderInstruction={this.renderInstruction}
-                            renderEditor={this.renderEditor} />
+                            renderEditor={this.renderEditor}
+                            renderRevisionPrompt={this.renderRevisionPrompt}
+                            renderRevision={this.renderRevision} />
          {template}
       </div>
     );
@@ -132,6 +144,15 @@ class TreatmentIntegrated extends React.Component {
   renderRevisionPrompt() {
     this.setState({showEditor: false, showInstruction: false,
                    showRevisionPrompt: true, showRevision: false});
+  }
+
+  /**
+   * Render revision
+   * @return {[type]} [description]
+   */
+  renderRevision() {
+    this.setState({showEditor: false, showInstruction: false,
+                   showRevisionPrompt: false, showRevision: true});
   }
 
   /**
