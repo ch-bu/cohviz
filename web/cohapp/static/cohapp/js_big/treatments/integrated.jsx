@@ -21,6 +21,11 @@ class TreatmentIntegrated extends React.Component {
       showInstruction: false,
       showRevisionPrompt: false,
       showRevision: false,
+      // State variables
+      seenInstruction: false,
+      seenEditor: false,
+      seenRevisionPrompt: false,
+      seenRevision: false,
       // Data variables
       durationDraft: null,
       draftAnalyzed: null,
@@ -57,13 +62,14 @@ class TreatmentIntegrated extends React.Component {
     });
 
     // Bind this to methods
-
     this.analyzeText = this.analyzeText.bind(this);
     this.updateDraft = this.updateDraft.bind(this);
     this.renderInstruction = this.renderInstruction.bind(this);
     this.renderEditor = this.renderEditor.bind(this);
     this.renderRevisionPrompt = this.renderRevisionPrompt.bind(this);
     this.renderRevision = this.renderRevision.bind(this);
+    this.userClickedInstruction = this.userClickedInstruction.bind(this);
+    this.userClickedRevisionPrompt = this.userClickedRevisionPrompt.bind(this);
   }
 
   render() {
@@ -80,7 +86,7 @@ class TreatmentIntegrated extends React.Component {
           // Render instruction for current measurement
           template = <Instruction
               instructionText={this.state.measurement.instruction}
-              renderNextState={this.renderEditor} />;
+              renderNextState={this.userClickedInstruction} />;
         // Render editor
         } else if (this.state.showEditor) {
             template = <Editor analyzeText={this.analyzeText}
@@ -90,7 +96,7 @@ class TreatmentIntegrated extends React.Component {
         } else if (this.state.showRevisionPrompt) {
           template = <Instruction
               instructionText={this.state.measurement.instruction_review}
-              renderNextState={this.renderRevision} />;
+              renderNextState={this.userClickedRevisionPrompt} />;
         } else if (this.state.showRevision) {
           template = <h1>Revision</h1>;
         }
@@ -113,20 +119,6 @@ class TreatmentIntegrated extends React.Component {
   }
 
   /**
-   * Render editor when user clicks
-   * that she has read the instruction
-   * @return {None}
-   */
-  renderEditor() {
-    // Display editor by state change
-    this.setState({showEditor: true, showInstruction: false,
-                   showRevisionPrompt: false, showRevision: false}, () => {
-        // Start timer for draft
-        // this.setState({durationDraft: new Date()});
-    });
-  }
-
-  /**
    * Render instruction of experiment
    * We want to give users control to
    * have another look at the instruction
@@ -138,21 +130,70 @@ class TreatmentIntegrated extends React.Component {
   }
 
   /**
-   * Render
-   * @return {[type]} [description]
+   * Render editor when user clicks
+   * that she has read the instruction
+   * @return {None}
+   */
+  renderEditor() {
+    // Only render editor if the instruction has been read
+    if (this.state.seenInstruction) {
+      // Display editor by state change
+      this.setState({showEditor: true, showInstruction: false,
+                     showRevisionPrompt: false, showRevision: false});
+    }
+
+  }
+
+  /**
+   * Render revision prompt
+   * @return {undefined}
    */
   renderRevisionPrompt() {
-    this.setState({showEditor: false, showInstruction: false,
-                   showRevisionPrompt: true, showRevision: false});
+    // Only render revision prompt if instruction has been read
+    // and text has been written
+    if (this.state.seenInstruction && this.state.seenEditor) {
+      this.setState({showEditor: false, showInstruction: false,
+                     showRevisionPrompt: true, showRevision: false});
+    }
   }
 
   /**
    * Render revision
-   * @return {[type]} [description]
+   * @return {undefined}
    */
   renderRevision() {
-    this.setState({showEditor: false, showInstruction: false,
-                   showRevisionPrompt: false, showRevision: true});
+    // Only render revision prompt if instruction has been read
+    // and text has been written and revision prompt has been read
+    if (this.state.seenInstruction && this.state.seenEditor &&
+        this.state.seenRevisionPrompt) {
+      this.setState({showEditor: false, showInstruction: false,
+                     showRevisionPrompt: false, showRevision: true});
+    }
+  }
+
+  /**
+   * When user clicks the instruction we
+   * want to know that and only display
+   * the revisionprompt or the revision if
+   * the instruction has been read
+   * @return {undefined}
+   */
+  userClickedInstruction() {
+    this.setState({'seenInstruction': true}, () => {
+      this.renderEditor();
+    })
+  }
+
+  /**
+   * When user clicks the instruction for the
+   * revision prompt allow user to use the
+   * revision prompt tab
+   * @return {undefined}
+   */
+  userClickedRevisionPrompt() {
+    this.setState({'seenRevisionPrompt': true}, () => {
+      this.renderRevision();
+    })
   }
 
   /**
@@ -184,7 +225,7 @@ class TreatmentIntegrated extends React.Component {
         console.log(error);
       }).then((data) => {
         console.log(data);
-        self.setState({'draftAnalyzed': data,
+        self.setState({'draftAnalyzed': data, 'seenEditor': true,
                 showEditor: false, showInstruction: false,
                 showRevisionPrompt: true, showRevision: false});
       });
