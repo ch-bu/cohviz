@@ -3,6 +3,7 @@ import {getPlainText} from '../components/helperfunctions.js';
 import Instruction from '../components/instruction.jsx';
 import Preloader from '../components/preloader.jsx';
 import Editor from '../components/editor.jsx';
+import Revision from '../components/revision.jsx';
 import HeaderExperiment from '../components/header-experiment.jsx';
 
 class TreatmentIntegrated extends React.Component {
@@ -47,6 +48,7 @@ class TreatmentIntegrated extends React.Component {
     }).then(function(response) {
       return response.json();
     }).then(function(data) {
+      console.log(data);
       self.setState({user: data});
     });
 
@@ -98,7 +100,8 @@ class TreatmentIntegrated extends React.Component {
               instructionText={this.state.measurement.instruction_review}
               renderNextState={this.userClickedRevisionPrompt} />;
         } else if (this.state.showRevision) {
-          template = <h1>Revision</h1>;
+          template = <Revision measurement={this.state.user.next_measure}
+                               draftText={this.state.draftText} />;
         }
       }
     }
@@ -224,7 +227,6 @@ class TreatmentIntegrated extends React.Component {
       }).catch((error) => {
         console.log(error);
       }).then((data) => {
-        console.log(data);
         self.setState({'draftAnalyzed': data, 'seenEditor': true,
                 showEditor: false, showInstruction: false,
                 showRevisionPrompt: true, showRevision: false});
