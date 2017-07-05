@@ -9,6 +9,7 @@ import numpy as np
 from pygermanet import load_germanet
 from more_itertools import unique_everseen
 from nltk.stem.snowball import GermanStemmer
+from nltk.tokenize import sent_tokenize
 import itertools
 
 
@@ -576,8 +577,8 @@ def analyzeTextCohesion(text):
     """
 
     # Check if text is string or unicode
-    if type(text) is not str:
-        raise TypeError('you did not pass a string as argument')
+    # if type(text) is not str:
+    #     raise TypeError('you did not pass a string as argument')
 
     # Remove brackets and parenthesis from text
     text = re.sub(r"[\(\[].*?[\)\]]", "", text)
@@ -657,10 +658,10 @@ def analyzeTextCohesion(text):
 
     # Get specific elements of words
     tags = getPOSElement('singular', r'.*Sg', tags)
-    tags = getPOSElement('accusative', r'.*N.Reg.Acc', tags)
-    tags = getPOSElement('dative', r'.*N.Reg.Dat', tags)
+    tags = getPOSElement('accusative', r'.*N.(Reg|Name).Acc', tags)
+    tags = getPOSElement('dative', r'.*N.(Reg|Name).Dat', tags)
     tags = getPOSElement('nominative', r'.*N.(Reg|Name).Nom', tags)
-    tags = getPOSElement('genitive', r'.*N.Reg.Gen', tags)
+    tags = getPOSElement('genitive', r'.*N.(Reg|Name).Gen', tags)
     tags = getPOSElement('feminin', r'.*Fem', tags)
     tags = getPOSElement('neutrum', r'.*Neut', tags)
     tags = getPOSElement('noun', r'.*N.Name.*|.*N.Reg', tags)
@@ -692,7 +693,7 @@ def analyzeTextCohesion(text):
         nouns_full = [word for word in sentence if word['noun']]
         nominatives = filter(lambda x: x['nominative'], sentence)
 
-        # Append noun if it only occurs once
+        # There is only one noun in the current sentence
         if len(nouns) == 1:
             # Append lonely noun
             word_pairs.append({'source': {'word': nouns_full[0]['orth'],
@@ -700,9 +701,9 @@ def analyzeTextCohesion(text):
                 'target': {'word': nouns_full[0]['orth'], 'lemma': nouns_full[0]['lemma'], 'sentence': val},
                 'device': 'single word'})
 
-        # If there are multiple nouns append all combinations of nouns
+        # There are at least two nouns in the sentence
         elif len(nouns) > 1:
-            # Check if there are nominatives within the sentence
+            # There is a nominative among the nouns
             if len(nominatives) > 0:
                 # Loop over every combination of nouns in current sentence
                 for subset in itertools.combinations_with_replacement(nouns_full, 2):
@@ -712,7 +713,7 @@ def analyzeTextCohesion(text):
                             # Only combine nominatives with accusative, dative
                             # and genitive
                             if subset[1]['accusative'] or subset[1]['dative'] or \
-                                subset[1]['genitive']:
+                                subset[1]['genitive'] or subset[1]['nominative']:
                                 # Append word pairs
                                 word_pairs.append({'source': {'word': subset[0]['orth'],
                                     'lemma': subset[0]['lemma'], 'sentence': val},
@@ -724,32 +725,48 @@ def analyzeTextCohesion(text):
                             # Only combine nominatives with accusative, dative,
                             # and genitive
                             if subset[0]['accusative'] or subset[0]['dative'] or \
-                                subset[0]['genitive']:
+                                subset[0]['genitive'] or subset[0]['nominative']:
                                 # Append word pairs
                                 word_pairs.append({'source': {'word': subset[1]['orth'],
                                     'lemma': subset[1]['lemma'], 'sentence': val},
                                     'target': {'word': subset[0]['orth'],
                                     'lemma': subset[0]['lemma'], 'sentence': val},
                                     'device': 'within sentence'})
+            # There are no nominatives in the sentence
             else:
                 # Loop over every combination of nouns in current sentence
                 for subset in itertools.combinations_with_replacement(nouns_full, 2):
                     if subset[0] != subset[1]:
                         # Combine accusative with dative
-                        if subset[0]['accusative'] and subset[1]['dative']:
+                        if subset[0]['accusative'] and subset[1]['dative'] and \
+                           subset[0]['genitive']:
                             # Append word pairs
                             word_pairs.append({'source': {'word': subset[0]['orth'],
                                 'lemma': subset[0]['lemma'], 'sentence': val},
                                 'target': {'word': subset[1]['orth'],
                                 'lemma': subset[1]['lemma'], 'sentence': val},
                                 'device': 'within sentence'})
-                        elif subset[1]['accusative'] and subset[0]['dative']:
+                        elif subset[1]['accusative'] and subset[0]['dative'] and \
+                             subset[1]['genitive']:
                             # Append word pairs
                             word_pairs.append({'source': {'word': subset[0]['orth'],
                                 'lemma': subset[0]['lemma'], 'sentence': val},
                                 'target': {'word': subset[1]['orth'],
                                 'lemma': subset[1]['lemma'], 'sentence': val},
                                 'device': 'within sentence'})
+
+
+    # Get hypernym hyponym pairs
+    # hyponym_hyper_pairs = []
+
+    # Get coreference resolutions
+    # coreferences = []
+
+    # Get compounds
+    # compounds = []
+
+    # Get stem relations
+    # stem_relations = []
 
     # Get hypernym hyponym pairs
     hyponym_hyper_pairs = getHypoHyperPairs(sentences, gn)
@@ -766,6 +783,14 @@ def analyzeTextCohesion(text):
     # Merge all word pairs
     word_pairs = word_pairs + hyponym_hyper_pairs + coreferences + compounds + \
         stem_relations
+
+    ######################################
+    # Calculate number of relations
+    ######################################
+
+    word_tuples = map(lambda x: (x['source']['lemma'], x['target']['lemma']), word_pairs)
+    word_tuples = list(set([(pair['source']['lemma'], pair['target']['lemma'])
+        for pair in word_pairs if pair['source']['lemma'] != pair['target']['lemma']]))
 
     # Calc number of sentences
     num_sentences = len(sentences)
@@ -810,16 +835,115 @@ def analyzeTextCohesion(text):
     num_concepts = len(set([concept['lemma']
                 for concept in tags if concept['noun'] == True]))
 
+    #######################################
+    # Render text for integrated group
+    #######################################
+
+    # Split text into sentences
+    tokenized_sentences = sent_tokenize(text.decode('utf-8'))
+
+    # Split words within sentences
+    words_split_per_sentence = [sentence.split() for sentence in tokenized_sentences]
+
+    # print(words_split_per_sentence)
+    # Prepare html string
+    html_string = ''
+
+    # Loop over every sentence
+    for index, sentence in enumerate(words_split_per_sentence):
+        # Store cluster uf current sentence
+        cluster_current = []
+
+        # Store the end of line character
+        # We need to store the character to append it
+        # afterwards
+        end_of_line_character = sentence[-1][-1]
+
+        # Remove end of line characters
+        words = [re.sub(r'[.\!?]', '', s) for s in sentence]
+
+        # Loop over every word in current sentence
+        for word in words:
+            # We need to reset the carrier for every word otherwise
+            # every word will be appended with the carrier
+            carrier = None
+
+            # Check if word ends with a special character
+            if word.endswith(':') or word.endswith(',') or word.endswith(';'):
+                carrier = word[-1]
+                word = re.sub(r'[:,;]', '', word)
+
+            # Check if there is a lemma for current word and catch
+            # any KeyError
+            try:
+                # Get lemma for word
+                lemma = word_lemma_mapping['word_lemma'][word][0]
+
+                # Get cluster number for word
+                cluster_of_word = word_cluster_index[lemma]
+
+                # Push cluster ot current cluster list
+                cluster_current.append(cluster_of_word)
+
+                # Append html string with span tag and according class
+                html_string += '<span class="cluster-' + str(cluster_of_word) + '">' + word + '</span>'
+
+            # The word does not occur in the word lemma dicitonary
+            # It should not be assigned a class for highlighting
+            except KeyError:
+                html_string += '<span>' + word + '</span>'
+
+            # Append carrier if it exists
+            html_string += carrier if carrier else ''
+            html_string += ' '
+
+        ############################################################
+        # Check if cluster changes for next sentence
+        ############################################################
+        if index != (len(words_split_per_sentence) - 1):
+            # Get words for next sentence
+            words_next_sentence = [re.sub(r'[.\!?]', '', s) for s in words_split_per_sentence[index + 1]]
+
+            # Initialize cluster of next sentence
+            cluster_next = []
+
+            for word in words_next_sentence:
+                # Catch errors
+                try:
+                    lemma = word_lemma_mapping['word_lemma'][word][0]
+
+                    cluster_of_word_next_sentence = word_cluster_index[lemma]
+
+                    cluster_next.append(cluster_of_word_next_sentence)
+                except KeyError:
+                    pass
+
+        # See if cluster of adjacent sentence differ
+        cluster_changed = set(cluster_current) != set(cluster_next)
+
+        # Append end of line character and add an empty space.
+        # The empty space is necessary otherwise the next sentence
+        # will directly align to the current sentence
+        html_string = html_string[:-1]
+        html_string += end_of_line_character
+        html_string += '&#8660; ' if cluster_changed else ''
+        html_string += ' '
+
     return {'word_pairs': word_pairs,
             'links': links,
-            'word_cluster_index': word_cluster_index,
             'nodes': nodes,
             'numSentences': num_sentences,
             'numConcepts': num_concepts,
             'clusters': cluster,
+            'numRelations': len(word_tuples),
             'numCluster': len(cluster),
             'local cohesion': local_cohesion['local_cohesion'],
             'cohSentences': local_cohesion['cohSentences'],
             'cohNotSentences': local_cohesion['cohNotSentences'],
             'lemmaWordRelations': word_lemma_mapping['lemma_word'],
-            'wordLemmaRelations': word_lemma_mapping['word_lemma']}
+            'wordLemmaRelations': word_lemma_mapping['word_lemma'],
+            'numCompounds': len(compounds),
+            'numCoreferences': len(coreferences),
+            'numStemRelations': len(stem_relations),
+            'numHypoHyper': len(hyponym_hyper_pairs),
+            'html_string': html_string}

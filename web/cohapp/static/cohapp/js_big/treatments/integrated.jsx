@@ -227,6 +227,7 @@ class TreatmentIntegrated extends React.Component {
       }).catch((error) => {
         console.log(error);
       }).then((data) => {
+        console.log(data);
         self.setState({'draftAnalyzed': data, 'seenEditor': true,
                 showEditor: false, showInstruction: false,
                 showRevisionPrompt: true, showRevision: false});
