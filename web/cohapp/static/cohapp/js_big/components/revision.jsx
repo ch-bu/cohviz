@@ -18,7 +18,8 @@ class Revision extends React.Component {
                                          draftAnalyzed={this.props.draftAnalyzed}
                                          updateRevision={this.props.updateRevision}
                                          editorVisible={this.props.editorVisible}
-                                         revisionText={this.props.revisionText} />;
+                                         revisionText={this.props.revisionText}
+                                         analyzeRevision={this.props.analyzeRevision}/>;
         break;
       default:
         <Preloader />;

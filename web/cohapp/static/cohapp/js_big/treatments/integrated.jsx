@@ -28,11 +28,13 @@ class TreatmentIntegrated extends React.Component {
       seenRevisionPrompt: false,
       seenRevision: false,
       // Data variables
-      durationDraft: null,
+      // durationDraft: null,
       draftAnalyzed: null,
       draftText: '',
       draftPlainText: '',
-      revisionText: ''
+      revisionAnalyzed: null,
+      revisionText: '',
+      revisionPlainText: ''
     };
 
     // Get urls
@@ -108,7 +110,8 @@ class TreatmentIntegrated extends React.Component {
                                draftAnalyzed={this.state.draftAnalyzed}
                                updateRevision={this.updateRevision}
                                editorVisible={this.state.showRevision}
-                               revisionText={this.state.revisionText} />;
+                               revisionText={this.state.revisionText}
+                               analyzeRevision={this.analyzeRevision} />;
         }
       }
     }
@@ -257,27 +260,30 @@ class TreatmentIntegrated extends React.Component {
     // Save time for draft
     // this.setState({durationDraft: (new Date() - this.state.durationDraft) / 1000});
 
-    // this.setState({'draftPlainText': getPlainText(this.state.draftText)}, () => {
-    //   // Analyze Text
-    //   fetch(this.urls.textanalyzer + this.experiment_id, {
-    //     method: 'POST',
-    //     credentials: 'same-origin',
-    //     body: JSON.stringify({
-    //       text: self.state.draftPlainText
-    //     }),
-    //     headers: new Headers({
-    //       'Content-Type': 'application/json'
-    //     })
-    //   }).then((response) => {
-    //     return response.json();
-    //   }).catch((error) => {
-    //     console.log(error);
-    //   }).then((data) => {
-    //     self.setState({'draftAnalyzed': data, 'seenEditor': true,
-    //             showEditor: false, showInstruction: false,
-    //             showRevisionPrompt: true, showRevision: false});
-    //   });
-    // });
+    // console.log(getPlainText(this.state.revisionText));
+    this.setState({'revisionPlainText': getPlainText(this.state.revisionText)}, () => {
+      // console.log(self.state.revisionPlainText);
+      // Analyze Text
+      fetch(this.urls.textanalyzer + this.experiment_id, {
+        method: 'POST',
+        credentials: 'same-origin',
+        body: JSON.stringify({
+          text: self.state.revisionPlainText
+        }),
+        headers: new Headers({
+          'Content-Type': 'application/json'
+        })
+      }).then((response) => {
+        return response.json();
+      }).catch((error) => {
+        console.log(error);
+      }).then((data) => {
+        console.log(data);
+        // self.setState({'draftAnalyzed': data, 'seenEditor': true,
+        //         showEditor: false, showInstruction: false,
+        //         showRevisionPrompt: true, showRevision: false});
+      });
+    });
   }
 
   /**
@@ -296,7 +302,6 @@ class TreatmentIntegrated extends React.Component {
    * Store text from revision
    */
   updateRevision(text) {
-    console.log(text);
     this.setState({'revisionText': text});
 
     // Store text in local storage

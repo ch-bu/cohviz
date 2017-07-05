@@ -17,7 +17,7 @@ class MeasureIntegrated extends React.Component {
               dangerouslySetInnerHTML={this.returnInnerHTML()}
               onKeyUp={this.updateRevision} ></div>
           <div id="editor-button-div" className="s12 m8 offset-m2 l6 offset-l3 col">
-            <a onClick={this.analyzeText}
+            <a onClick={this.props.analyzeRevision}
                className="waves-effect waves-light btn" id="editor-button">Analyziere meinen Text</a>
           </div>
         </div>
@@ -27,7 +27,7 @@ class MeasureIntegrated extends React.Component {
 
   /**
    * Return dangerous html to editor
-   * @return {dict} html content
+   * @return {dict} html
    */
   returnInnerHTML() {
     return {__html: this.props.revisionText}
@@ -66,10 +66,6 @@ class MeasureIntegrated extends React.Component {
     }
 
     return true;
-  }
-
-  analyzeText() {
-    console.log('analyzeText');
   }
 };
 

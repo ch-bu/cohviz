@@ -847,7 +847,7 @@ def analyzeTextCohesion(text):
 
     # print(words_split_per_sentence)
     # Prepare html string
-    html_string = ''
+    html_string = '<p>'
 
     # Loop over every sentence
     for index, sentence in enumerate(words_split_per_sentence):
@@ -927,7 +927,9 @@ def analyzeTextCohesion(text):
         html_string = html_string[:-1]
         html_string += end_of_line_character
         html_string += '&#8660; ' if cluster_changed else ''
-        html_string += ' '
+
+    # End paragraph
+    html_string += '</p>'
 
     return {'word_pairs': word_pairs,
             'links': links,
