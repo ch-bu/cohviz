@@ -32,6 +32,7 @@ class TreatmentIntegrated extends React.Component {
       draftAnalyzed: null,
       draftText: '',
       draftPlainText: '',
+      revisionText: ''
     };
 
     // Get urls
@@ -65,7 +66,9 @@ class TreatmentIntegrated extends React.Component {
 
     // Bind this to methods
     this.analyzeText = this.analyzeText.bind(this);
+    this.analyzeRevision = this.analyzeRevision.bind(this);
     this.updateDraft = this.updateDraft.bind(this);
+    this.updateRevision = this.updateRevision.bind(this);
     this.renderInstruction = this.renderInstruction.bind(this);
     this.renderEditor = this.renderEditor.bind(this);
     this.renderRevisionPrompt = this.renderRevisionPrompt.bind(this);
@@ -101,7 +104,11 @@ class TreatmentIntegrated extends React.Component {
               renderNextState={this.userClickedRevisionPrompt} />;
         } else if (this.state.showRevision) {
           template = <Revision measurement={this.state.user.next_measure}
-                               draftText={this.state.draftText} />;
+                               draftText={this.state.draftText}
+                               draftAnalyzed={this.state.draftAnalyzed}
+                               updateRevision={this.updateRevision}
+                               editorVisible={this.state.showRevision}
+                               revisionText={this.state.revisionText} />;
         }
       }
     }
@@ -211,6 +218,8 @@ class TreatmentIntegrated extends React.Component {
     // Save time for draft
     // this.setState({durationDraft: (new Date() - this.state.durationDraft) / 1000});
 
+
+
     this.setState({'draftPlainText': getPlainText(this.state.draftText)}, () => {
       // Analyze Text
       fetch(this.urls.textanalyzer + this.experiment_id, {
@@ -227,14 +236,48 @@ class TreatmentIntegrated extends React.Component {
       }).catch((error) => {
         console.log(error);
       }).then((data) => {
-        console.log(data);
-        self.setState({'draftAnalyzed': data, 'seenEditor': true,
+        self.setState({'draftAnalyzed': data, 'revisionText': data.html_string,
+               'seenEditor': true,
                 showEditor: false, showInstruction: false,
                 showRevisionPrompt: true, showRevision: false});
       });
     });
+  }
 
 
+  /**
+   * Analyze Text
+   */
+  analyzeRevision() {
+    var self = this;
+
+    this.setState({showEditor: false, showInstruction: false,
+                   showRevisionPrompt: false, showRevision: false});
+
+    // Save time for draft
+    // this.setState({durationDraft: (new Date() - this.state.durationDraft) / 1000});
+
+    // this.setState({'draftPlainText': getPlainText(this.state.draftText)}, () => {
+    //   // Analyze Text
+    //   fetch(this.urls.textanalyzer + this.experiment_id, {
+    //     method: 'POST',
+    //     credentials: 'same-origin',
+    //     body: JSON.stringify({
+    //       text: self.state.draftPlainText
+    //     }),
+    //     headers: new Headers({
+    //       'Content-Type': 'application/json'
+    //     })
+    //   }).then((response) => {
+    //     return response.json();
+    //   }).catch((error) => {
+    //     console.log(error);
+    //   }).then((data) => {
+    //     self.setState({'draftAnalyzed': data, 'seenEditor': true,
+    //             showEditor: false, showInstruction: false,
+    //             showRevisionPrompt: true, showRevision: false});
+    //   });
+    // });
   }
 
   /**
@@ -246,6 +289,19 @@ class TreatmentIntegrated extends React.Component {
     // Store text in local storage
     if (typeof(Storage) !== "undefined") {
       localStorage.setItem('textdraft', text);
+    }
+  }
+
+  /**
+   * Store text from revision
+   */
+  updateRevision(text) {
+    console.log(text);
+    this.setState({'revisionText': text});
+
+    // Store text in local storage
+    if (typeof(Storage) !== "undefined") {
+      localStorage.setItem('textrevision', text);
     }
   }
 }

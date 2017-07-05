@@ -1,5 +1,5 @@
 import Preloader from './preloader.jsx';
-import MeasureIntegrated from './measure-integrated.jsx';
+import MeasureIntegrated from './treatments/measure-integrated.jsx';
 
 class Revision extends React.Component {
   constructor(props) {
@@ -14,7 +14,11 @@ class Revision extends React.Component {
     // to measurement send from server
     switch (this.props.measurement) {
       case 'Integriert':
-        measurement = <MeasureIntegrated draftText={this.props.draftText} />;
+        measurement = <MeasureIntegrated draftText={this.props.draftText}
+                                         draftAnalyzed={this.props.draftAnalyzed}
+                                         updateRevision={this.props.updateRevision}
+                                         editorVisible={this.props.editorVisible}
+                                         revisionText={this.props.revisionText} />;
         break;
       default:
         <Preloader />;

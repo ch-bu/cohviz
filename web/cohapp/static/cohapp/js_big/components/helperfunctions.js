@@ -15,8 +15,11 @@ var getPlainText = function(htmlText) {
     var paragraphText = '';
 
     for (let paragraph = 0; paragraph < paragraphs.length; paragraph++) {
-      paragraphText += paragraphs[paragraph].innerText + " ";
+      paragraphText += paragraphs[paragraph].textContent + " ";
     }
+
+    paragraphText = paragraphText.replace('&#9849;', '');
+    paragraphText = paragraphText.replace('⇔', '');
 
     return paragraphText;
 };
