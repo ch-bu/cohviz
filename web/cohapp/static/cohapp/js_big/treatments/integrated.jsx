@@ -5,6 +5,7 @@ import Preloader from '../components/preloader.jsx';
 import Editor from '../components/editor.jsx';
 import Revision from '../components/revision.jsx';
 import HeaderExperiment from '../components/header-experiment.jsx';
+import 'whatwg-fetch';
 
 class TreatmentIntegrated extends React.Component {
   constructor(props) {
@@ -78,6 +79,7 @@ class TreatmentIntegrated extends React.Component {
     this.renderRevision = this.renderRevision.bind(this);
     this.userClickedInstruction = this.userClickedInstruction.bind(this);
     this.userClickedRevisionPrompt = this.userClickedRevisionPrompt.bind(this);
+    this.sendDataToServer = this.sendDataToServer.bind(this);
   }
 
   render() {
@@ -248,7 +250,6 @@ class TreatmentIntegrated extends React.Component {
     });
   }
 
-
   /**
    * Analyze Text
    */
@@ -282,7 +283,9 @@ class TreatmentIntegrated extends React.Component {
         self.setState({'revisionAnalyzed': data,
                 showEditor: false, showInstruction: false,
                 showRevisionPrompt: false, showRevision: false,
-                showThankYouPage: true});
+                showThankYouPage: true}, () => {
+                  self.sendDataToServer();
+        });
       });
     });
   }
@@ -309,6 +312,13 @@ class TreatmentIntegrated extends React.Component {
     if (typeof(Storage) !== "undefined") {
       localStorage.setItem('textrevision', text);
     }
+  }
+
+  /**
+   * Send data to server
+   */
+  sendDataToServer() {
+    console.log('send');
   }
 }
 
