@@ -16,6 +16,7 @@ var getPlainText = function(htmlText) {
 
     for (let paragraph = 0; paragraph < paragraphs.length; paragraph++) {
       paragraphText += paragraphs[paragraph].textContent + " ";
+      paragraphText += '[LINEBREAK]';
     }
 
     paragraphText = paragraphText.replace('&#9849;', '');

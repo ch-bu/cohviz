@@ -22,6 +22,7 @@ class TreatmentIntegrated extends React.Component {
       showInstruction: false,
       showRevisionPrompt: false,
       showRevision: false,
+      showThankYouPage: false,
       // State variables
       seenInstruction: false,
       seenEditor: false,
@@ -112,6 +113,8 @@ class TreatmentIntegrated extends React.Component {
                                editorVisible={this.state.showRevision}
                                revisionText={this.state.revisionText}
                                analyzeRevision={this.analyzeRevision} />;
+        } else if (this.state.showThankYouPage) {
+
         }
       }
     }
@@ -221,8 +224,6 @@ class TreatmentIntegrated extends React.Component {
     // Save time for draft
     // this.setState({durationDraft: (new Date() - this.state.durationDraft) / 1000});
 
-
-
     this.setState({'draftPlainText': getPlainText(this.state.draftText)}, () => {
       // Analyze Text
       fetch(this.urls.textanalyzer + this.experiment_id, {
@@ -278,10 +279,10 @@ class TreatmentIntegrated extends React.Component {
       }).catch((error) => {
         console.log(error);
       }).then((data) => {
-        console.log(data);
-        // self.setState({'draftAnalyzed': data, 'seenEditor': true,
-        //         showEditor: false, showInstruction: false,
-        //         showRevisionPrompt: true, showRevision: false});
+        self.setState({'revisionAnalyzed': data,
+                showEditor: false, showInstruction: false,
+                showRevisionPrompt: false, showRevision: false,
+                showThankYouPage: true});
       });
     });
   }
