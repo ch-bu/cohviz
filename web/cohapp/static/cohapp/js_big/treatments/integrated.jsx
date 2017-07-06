@@ -221,7 +221,7 @@ class TreatmentIntegrated extends React.Component {
     var self = this;
 
     this.setState({showEditor: false, showInstruction: false,
-                   showRevisionPrompt: false, showRevision: false});
+                   showRevisionPrompt: true, showRevision: false});
 
     // Save time for draft
     // this.setState({durationDraft: (new Date() - this.state.durationDraft) / 1000});
@@ -243,9 +243,7 @@ class TreatmentIntegrated extends React.Component {
         console.log(error);
       }).then((data) => {
         self.setState({'draftAnalyzed': data, 'revisionText': data.html_string,
-               'seenEditor': true,
-                showEditor: false, showInstruction: false,
-                showRevisionPrompt: true, showRevision: false});
+               'seenEditor': true});
       });
     });
   }
