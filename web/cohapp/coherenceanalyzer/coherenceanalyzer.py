@@ -696,11 +696,6 @@ def analyzeTextCohesion(text):
     # if type(text) is not str:
     #     raise TypeError('you did not pass a string as argument')
     #
-    # Split text by line breaks
-    paragraph_split = text.split('[LINEBREAK]')
-
-    # Remove brackets and parenthesis from text
-    text = re.sub(r"[\(\[].*?[\)\]]", "", text)
 
     # Remove percent sign
     text = re.sub(r'%', '', text)
@@ -712,6 +707,12 @@ def analyzeTextCohesion(text):
     text = re.sub(r'St\.', 'Sankt', text)
     text = re.sub(r'bzw\.', 'beziehungsweise', text)
     text = re.sub(r'[zZ]\. ?[bB]\.', 'zum Beispiel', text)
+
+    # Split text by line breaks
+    paragraph_split = text.split('[LINEBREAK]')
+
+    # Remove brackets and parenthesis from text
+    text = re.sub(r"[\(\[].*?[\)\]]", "", text)
 
     # Remove trailing white space
     text = text.strip()

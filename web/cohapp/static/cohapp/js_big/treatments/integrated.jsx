@@ -106,7 +106,9 @@ class TreatmentIntegrated extends React.Component {
         } else if (this.state.showRevisionPrompt) {
           template = <Instruction
               instructionText={this.state.measurement.instruction_review}
-              renderNextState={this.userClickedRevisionPrompt} />;
+              renderNextState={this.userClickedRevisionPrompt}
+              seenInstruction={this.state.seenInstruction}
+              draftAnalyzed={this.state.draftAnalyzed} />;
         } else if (this.state.showRevision) {
           template = <Revision measurement={this.state.user.next_measure}
                                draftText={this.state.draftText}
