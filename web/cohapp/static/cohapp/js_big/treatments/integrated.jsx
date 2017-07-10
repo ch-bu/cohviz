@@ -149,8 +149,14 @@ class TreatmentIntegrated extends React.Component {
    * @return {None}
    */
   renderInstruction() {
-    this.setState({showEditor: false, showInstruction: true,
-                   showRevisionPrompt: false, showRevision: false});
+    // The user should only be allowed to see the instruction if it hasn't
+    // already submmitted the draft. We want to reduce variability in
+    // our experiment.
+    if (this.state.seenEditor == false) {
+      this.setState({showEditor: false, showInstruction: true,
+                     showRevisionPrompt: false, showRevision: false});
+    }
+
   }
 
   /**
@@ -159,13 +165,18 @@ class TreatmentIntegrated extends React.Component {
    * @return {None}
    */
   renderEditor() {
-    // Only render editor if the instruction has been read
-    if (this.state.seenInstruction) {
-      // Display editor by state change
-      this.setState({showEditor: true, showInstruction: false,
-                     showRevisionPrompt: false, showRevision: false});
+    // Do not let user change text when it has already been
+    // submitted. The user might change the draft Duration
+    // variable which would give us wrong data. Therefore
+    // restrict the access to the editor if seen once.
+    if (this.state.seenEditor == false) {
+      // Only render editor if the instruction has been read
+      if (this.state.seenInstruction) {
+        // Display editor by state change
+        this.setState({showEditor: true, showInstruction: false,
+                       showRevisionPrompt: false, showRevision: false});
+      }
     }
-
   }
 
   /**
@@ -323,7 +334,30 @@ class TreatmentIntegrated extends React.Component {
    * Send data to server
    */
   sendDataToServer() {
-    console.log('send');
+    // Save data for draft
+    //
+    let dataToSend = {
+        // Draft
+        'pre_text': this.state.draftPlainText,
+        'pre_page_duration': this.state.durationDraft,
+        'pre_num_sentences': this.state.draftAnalyzed.numSentences,
+        'pre_num_clusters': this.state.draftAnalyzed.numCluster,
+        'pre_num_coherent_sentences': this.state.draftAnalyzed.cohSentences,
+        'pre_num_non_coherent_sentences': this.state.draftAnalyzed.cohNotSentences,
+        'pre_num_concepts': this.state.draftAnalyzed.numConcepts,
+        'pre_local_cohesion': this.state.draftAnalyzed['local cohesion'],
+        // Revision
+        'post_text': this.state.revisionPlainText,
+        'post_page_duration': this.state.durationRevision,
+        'post_num_sentences': this.state.revisionAnalyzed.numSentences,
+        'post_num_clusters': this.state.revisionAnalyzed.numCluster,
+        'post_num_coherent_sentences': this.state.revisionAnalyzed.cohSentences,
+        'post_num_non_coherent_sentences': this.state.revisionAnalyzed.cohNotSentences,
+        'post_num_concepts': this.state.revisionAnalyzed.numConcepts,
+        'post_local_cohesion': this.state.revisionAnalyzed['local cohesion']
+    };
+
+    console.log(dataToSend);
   }
 }
 
