@@ -103,12 +103,14 @@ class TreatmentIntegrated extends React.Component {
                              updateDraft={this.updateDraft}
                              draftText={this.state.draftText}
                              editorVisible={this.state.showEditor} />;
+        // Render prompt for revision
         } else if (this.state.showRevisionPrompt) {
           template = <Instruction
               instructionText={this.state.measurement.instruction_review}
               renderNextState={this.userClickedRevisionPrompt}
               seenInstruction={this.state.seenInstruction}
               draftAnalyzed={this.state.draftAnalyzed} />;
+        // Render editor to revise draft
         } else if (this.state.showRevision) {
           template = <Revision measurement={this.state.user.next_measure}
                                draftText={this.state.draftText}
@@ -117,6 +119,7 @@ class TreatmentIntegrated extends React.Component {
                                editorVisible={this.state.showRevision}
                                revisionText={this.state.revisionText}
                                analyzeRevision={this.analyzeRevision} />;
+        // Show thankyoupage
         } else if (this.state.showThankYouPage) {
 
         }
@@ -223,7 +226,8 @@ class TreatmentIntegrated extends React.Component {
     var self = this;
 
     this.setState({showEditor: false, showInstruction: false,
-                   showRevisionPrompt: true, showRevision: false});
+                   showRevisionPrompt: true, showRevision: false,
+                   draftAnalyzed: null});
 
     // Save time for draft
     // this.setState({durationDraft: (new Date() - this.state.durationDraft) / 1000});
