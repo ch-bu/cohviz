@@ -31,6 +31,7 @@ class TreatmentIntegrated extends React.Component {
       seenRevision: false,
       // Data variables
       durationDraft: null,
+      durationRevision: null,
       draftAnalyzed: null,
       draftText: '',
       draftPlainText: '',
@@ -216,7 +217,9 @@ class TreatmentIntegrated extends React.Component {
    * @return {undefined}
    */
   userClickedRevisionPrompt() {
-    this.setState({seenRevisionPrompt: true}, () => {
+    this.setState({seenRevisionPrompt: true,
+                   // Set time for revision
+                   durationRevision: new Date()}, () => {
       this.renderRevision();
     })
   }
@@ -262,16 +265,12 @@ class TreatmentIntegrated extends React.Component {
   analyzeRevision() {
     var self = this;
 
+    // Set state variables
     this.setState({showEditor: false, showInstruction: false,
-                   showRevisionPrompt: false, showRevision: false});
-
-    // Save time for draft
-    // this.setState({durationDraft: (new Date() - this.state.durationDraft) / 1000});
-
-    // console.log(getPlainText(this.state.revisionText));
-    this.setState({'revisionPlainText': getPlainText(this.state.revisionText)}, () => {
-      // console.log(self.state.revisionPlainText);
-      // Analyze Text
+                   showRevisionPrompt: false, showRevision: false,
+                   durationRevision: (new Date() - this.state.durationRevision) / 1000,
+                   revisionPlainText: getPlainText(this.state.revisionText)}, () => {
+      // Analyze Text from server
       fetch(this.urls.textanalyzer + this.experiment_id, {
         method: 'POST',
         credentials: 'same-origin',
