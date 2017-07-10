@@ -214,11 +214,15 @@ class TreatmentIntegrated extends React.Component {
    * @return {undefined}
    */
   userClickedInstruction() {
-    this.setState({seenInstruction: true,
-                   // Set draftTime to zero
-                   durationDraft: new Date()}, () => {
-      this.renderEditor();
-    })
+    // Only update the data if user has not already
+    // seen the instruction
+    if (this.state.seenInstruction == false) {
+      this.setState({seenInstruction: true,
+                     // Set draftTime to zero
+                     durationDraft: new Date()}, () => {
+        this.renderEditor();
+      })
+    }
   }
 
   /**
@@ -357,7 +361,22 @@ class TreatmentIntegrated extends React.Component {
         'post_local_cohesion': this.state.revisionAnalyzed['local cohesion']
     };
 
-    console.log(dataToSend);
+    // Analyze Text from server
+    fetch(this.urls.textdata + this.experiment_id, {
+      method: 'POST',
+      credentials: 'same-origin',
+      body: JSON.stringify(dataToSend),
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
+    }).then((response) => {
+      return response.json();
+    }).catch((error) => {
+      console.log(error);
+    }).then((data) => {
+      location.reload();
+    });
+
   }
 }
 

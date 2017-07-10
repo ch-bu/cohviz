@@ -707,6 +707,7 @@ def analyzeTextCohesion(text):
     text = re.sub(r'St\.', 'Sankt', text)
     text = re.sub(r'bzw\.', 'beziehungsweise', text)
     text = re.sub(r'[zZ]\. ?[bB]\.', 'zum Beispiel', text)
+    text = re.sub(r'usw\.', 'und so weiter', text)
 
     # Split text by line breaks
     paragraph_split = text.split('[LINEBREAK]')
