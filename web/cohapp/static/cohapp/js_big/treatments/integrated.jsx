@@ -30,7 +30,7 @@ class TreatmentIntegrated extends React.Component {
       seenRevisionPrompt: false,
       seenRevision: false,
       // Data variables
-      // durationDraft: null,
+      durationDraft: null,
       draftAnalyzed: null,
       draftText: '',
       draftPlainText: '',
@@ -202,7 +202,9 @@ class TreatmentIntegrated extends React.Component {
    * @return {undefined}
    */
   userClickedInstruction() {
-    this.setState({'seenInstruction': true}, () => {
+    this.setState({seenInstruction: true,
+                   // Set draftTime to zero
+                   durationDraft: new Date()}, () => {
       this.renderEditor();
     })
   }
@@ -214,26 +216,26 @@ class TreatmentIntegrated extends React.Component {
    * @return {undefined}
    */
   userClickedRevisionPrompt() {
-    this.setState({'seenRevisionPrompt': true}, () => {
+    this.setState({seenRevisionPrompt: true}, () => {
       this.renderRevision();
     })
   }
 
   /**
-   * Analyze Text
+   * Analyze Text of draft.
+   * The draft is the first text before the subject
+   * can revise her text.
    */
   analyzeText() {
     var self = this;
 
+    // Set state variables
     this.setState({showEditor: false, showInstruction: false,
                    showRevisionPrompt: true, showRevision: false,
-                   draftAnalyzed: null});
-
-    // Save time for draft
-    // this.setState({durationDraft: (new Date() - this.state.durationDraft) / 1000});
-
-    this.setState({'draftPlainText': getPlainText(this.state.draftText)}, () => {
-      // Analyze Text
+                   draftAnalyzed: null,
+                   durationDraft: (new Date() - this.state.durationDraft) / 1000,
+                   draftPlainText: getPlainText(this.state.draftText)}, () => {
+      // Analyze Text from server
       fetch(this.urls.textanalyzer + this.experiment_id, {
         method: 'POST',
         credentials: 'same-origin',
@@ -248,8 +250,8 @@ class TreatmentIntegrated extends React.Component {
       }).catch((error) => {
         console.log(error);
       }).then((data) => {
-        self.setState({'draftAnalyzed': data, 'revisionText': data.html_string,
-               'seenEditor': true});
+        self.setState({draftAnalyzed: data, revisionText: data.html_string,
+               seenEditor: true});
       });
     });
   }
