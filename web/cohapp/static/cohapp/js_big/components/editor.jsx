@@ -15,8 +15,6 @@ class Editor extends React.Component {
     // Store button and loading Ring in variables
     var button = <a className="waves-effect waves-light btn" id="editor-button"
                    onClick={this.analyzeText}>Analyziere meinen Text</a>;
-    // var loadingRing = ;
-    var buttonElement = this.state.displayButton ? button : <Preloader />;
 
     return (
       <div className="row" id="editor">
@@ -25,7 +23,7 @@ class Editor extends React.Component {
               dangerouslySetInnerHTML={this.returnInnerHTML()}
               onKeyUp={this.updateDraft} ></div>
           <div id="editor-button-div" className="s12 m8 offset-m2 l6 offset-l3 col">
-            {buttonElement}
+            {this.state.displayButton ? button : <Preloader />}
           </div>
         </div>
       </div>
