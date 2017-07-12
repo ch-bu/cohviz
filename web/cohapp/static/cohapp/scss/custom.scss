@@ -449,3 +449,60 @@ h1, h2, h3, h4, h5 {
 .highlight-experiment-status {
   background-color: #26a69a;
 }
+
+
+// Clusters
+@mixin cluster($color) {
+  border-bottom: 2px solid $color;
+}
+
+
+.cluster-0 {
+  // background-color: #1f77b4;
+  @include cluster(#1f77b4);
+}
+
+.cluster-1 {
+  @include cluster(#ff7f0e);
+  // @include cluster();
+}
+
+.cluster-2 {
+  @include cluster(#2ca02c);
+  // @include cluster();
+}
+
+.cluster-3 {
+  @include cluster(#d62728);
+  // @include cluster();
+}
+
+.cluster-4 {
+  @include cluster(#9467bd);
+  // @include cluster();
+}
+
+.cluster-5 {
+  @include cluster(#8c564b);
+  // @include cluster();
+}
+
+.cluster-6 {
+  @include cluster(#e377c2);
+  // @include cluster();
+}
+
+.cluster-7 {
+  @include cluster(#7f7f7f);
+  // @include cluster();
+}
+
+.cluster-8 {
+  @include cluster(#bcbd22);
+  // @include cluster();
+}
+
+.cluster-9 {
+  @include cluster(#17becf);
+  // @include cluster();
+}
