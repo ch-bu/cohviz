@@ -3,10 +3,10 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    integrated: './cohapp/static/cohapp/js_big/treatments/integrated.jsx',
+    treatment: './cohapp/static/cohapp/js_big/components/treatment.jsx',
   },
   output: {
-    path: path.join(__dirname, 'static/cohapp/js/treatments'),
+    path: path.join(__dirname, 'static/cohapp/js'),
     filename: '[name].min.js',
   },
 

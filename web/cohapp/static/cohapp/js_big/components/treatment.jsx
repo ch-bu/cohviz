@@ -7,7 +7,7 @@ import Revision from '../components/revision.jsx';
 import HeaderExperiment from '../components/header-experiment.jsx';
 import 'whatwg-fetch';
 
-class TreatmentIntegrated extends React.Component {
+class Treatment extends React.Component {
   constructor(props) {
     super(props);
 
@@ -381,6 +381,6 @@ class TreatmentIntegrated extends React.Component {
 }
 
 ReactDOM.render(
-  <TreatmentIntegrated />,
-  document.getElementById('treatment-integrated')
+  <Treatment />,
+  document.getElementById('treatment')
 );

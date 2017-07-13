@@ -5,7 +5,7 @@ import json
 
 from datetime import datetime
 
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as django_login
@@ -174,7 +174,6 @@ def login_exp_redirect(request):
             experiment = redirectURL.split("/run-experiment/", 1)[1]
 
             return redirect('login_experiment', experiment_password=experiment)
-        # return HttpResponseRedirect(url=request.get_host() + redirectURL)
 
         return redirect('index')
 
@@ -236,8 +235,7 @@ def login_experiment(request, experiment_password):
             if user is not None:
                 # Check if subject exists for this experiment
                 subject = Subject.objects.filter(
-                    user=user,
-                    experiment=experimentId).first()
+                    user=user, experiment=experimentId).first()
 
                 # Subject exists for this given experiment
                 if subject is not None:
@@ -245,12 +243,12 @@ def login_experiment(request, experiment_password):
                     django_login(request, user)
 
                     # Redirect to experiment
-                    return HttpResponse('Run experiment user exists',
+                    return JsonResponse({'message': 'Run experiment, user exists'},
                                         status=200)
                 # Subject does not exist for this experiment
                 else:
-                    return HttpResponse(
-                        'Sie haben keinen Zugang zu dem Experiment', status=404)
+                    return JsonResponse({'message': 'You do not have access to this experiment'},
+                                        status=404)
 
             # User does not exist
             else:
@@ -271,21 +269,19 @@ def login_experiment(request, experiment_password):
                     django_login(request, user)
 
                     # Redirect to experiment
-                    return HttpResponse(
-                        'Subject has been generated now run experiment',
-                        status=200)
+                    return JsonResponse({'message': 'Subject generated'},
+                                        status=200)
 
                 # If user exists but not for this experiment, then don't
                 # allow to run experiment
-                return HttpResponse(
-                    'Es existiert bereits ein Nutzer mit Ihrer ID',
-                    status=404)
+                return JsonResponse({'message': 'User already exists'},
+                                    status=404)
 
         # Username doesn't match
         else:
-            return HttpResponse(
-                'Ihr Nutzername entspricht nicht dem Muster',
-                status=404)
+            return JsonResponse({'status':'false','message': 'Wrong username'},
+                      status=404)
+
 
 
 @login_required(login_url='/login_exp_redirect/')
@@ -354,7 +350,7 @@ def run_experiment(request, experiment_password):
             return render(request, 'cohapp/publication_future.html', context)
 
         # Render appropriate measure template
-        return render(request, 'cohapp/treatments/' + group.template)
+        return render(request, 'cohapp/treatment.html')
 
 
 @login_required()
