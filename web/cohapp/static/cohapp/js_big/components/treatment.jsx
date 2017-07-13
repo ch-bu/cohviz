@@ -37,6 +37,7 @@ class Treatment extends React.Component {
       draftPlainText: '',
       revisionAnalyzed: null,
       revisionText: '',
+      revisionTextHighlighted: '',
       revisionPlainText: ''
     };
 
@@ -54,7 +55,6 @@ class Treatment extends React.Component {
     }).then(function(response) {
       return response.json();
     }).then(function(data) {
-      console.log(data);
       self.setState({user: data});
     });
 
@@ -252,6 +252,7 @@ class Treatment extends React.Component {
                    showRevisionPrompt: true, showRevision: false,
                    draftAnalyzed: null,
                    durationDraft: (new Date() - this.state.durationDraft) / 1000,
+                   revisionText: this.state.draftText,
                    draftPlainText: getPlainText(this.state.draftText)}, () => {
       // Analyze Text from server
       fetch(this.urls.textanalyzer + this.experiment_id, {
@@ -268,7 +269,7 @@ class Treatment extends React.Component {
       }).catch((error) => {
         console.log(error);
       }).then((data) => {
-        self.setState({draftAnalyzed: data, revisionText: data.html_string,
+        self.setState({draftAnalyzed: data, revisionTextHighlighted: data.html_string,
                seenEditor: true});
       });
     });
