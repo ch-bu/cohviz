@@ -1,9 +1,12 @@
 import Preloader from './preloader.jsx';
 import MeasureIntegrated from './treatments/measure-integrated.jsx';
+import ControlGroup from './treatments/control-group.jsx';
 
 class Revision extends React.Component {
   constructor(props) {
     super(props);
+
+    console.log(this.props.measurement);
   }
 
   render() {
@@ -19,8 +22,13 @@ class Revision extends React.Component {
                                          updateRevision={this.props.updateRevision}
                                          editorVisible={this.props.editorVisible}
                                          revisionText={this.props.revisionText}
-                                         analyzeRevision={this.props.analyzeRevision}/>;
+                                         analyzeRevision={this.props.analyzeRevision} />;
         break;
+      case 'control group':
+        measurement = <ControlGroup draftText={this.props.draftText}
+                                    updateRevision={this.props.updateRevision}
+                                    editorVisible={this.props.editorVisible}
+                                    analyzeRevision={this.props.analyzeRevision} />;
       default:
         <Preloader />;
     }

@@ -1,6 +1,6 @@
 import Preloader from '../preloader.jsx';
 
-class MeasureIntegrated extends React.Component {
+class ControlGroup extends React.Component {
   constructor(props) {
     super(props);
 
@@ -30,7 +30,7 @@ class MeasureIntegrated extends React.Component {
    * @return {dict} html
    */
   returnInnerHTML() {
-    return {__html: this.props.revisionText}
+    return {__html: this.props.draftText}
   }
 
   // We need to store the revision in a state variable
@@ -69,4 +69,4 @@ class MeasureIntegrated extends React.Component {
   }
 };
 
-export default MeasureIntegrated;
+export default ControlGroup;
