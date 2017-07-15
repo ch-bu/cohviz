@@ -972,6 +972,7 @@ def analyzeTextCohesion(text):
             'cohNotSentences': local_cohesion['cohNotSentences'],
             'lemmaWordRelations': word_lemma_mapping['lemma_word'],
             'wordLemmaRelations': word_lemma_mapping['word_lemma'],
+            'wordClusterIndex': word_cluster_index,
             'numCompounds': len(compounds),
             'numCoreferences': len(coreferences),
             'numStemRelations': len(stem_relations),
