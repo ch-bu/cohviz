@@ -66,7 +66,8 @@ class CMap extends React.Component {
     /////////////////
 
     // Generate 20 distinct colors for the cmap
-    var colors = d3.scaleOrdinal(d3.schemeCategory10);
+    // var colors = d3.scaleOrdinal(d3.schemeCategory10);
+    var colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'];
 
     // Get width and height of parent div
     var width = this.cmap.offsetWidth;
@@ -169,7 +170,9 @@ class CMap extends React.Component {
         .attr('cx', 0)
         .attr('cy', 0)
         .attr('fill', function(d, i) {
-          return colors(self.props.draftAnalyzed['wordClusterIndex'][d.id]);
+          // console.log(d.id);
+          // console.log(self.props.draftAnalyzed['wordClusterIndex'][d.id]);
+          return colors[self.props.draftAnalyzed['wordClusterIndex'][d.id]];
         });
         // .attr('fill', '#ccc');
 
