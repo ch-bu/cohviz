@@ -4,6 +4,8 @@ class CMap extends React.Component {
   constructor(props) {
     super(props);
 
+    console.log(this.props);
+
     // Bind this to methods
     this.updateRevision = this.updateRevision.bind(this);
     this.returnInnerHTML = this.returnInnerHTML.bind(this);
