@@ -267,7 +267,6 @@ class Treatment extends React.Component {
       }).catch((error) => {
         console.log(error);
       }).then((data) => {
-        console.log(self.state.measurement);
         // Set state of revisionText according to measurement
         if (self.state.user.next_measure == 'control group' || self.state.user.next_measure == 'Cmap') {
           self.setState({revisionText: self.state.draftText});

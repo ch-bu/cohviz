@@ -19,8 +19,12 @@ var getPlainText = function(htmlText) {
       paragraphText += '[LINEBREAK]';
     }
 
-    paragraphText = paragraphText.replace('&#9849;', '');
-    paragraphText = paragraphText.replace('⇔', '');
+    console.log(paragraphText);
+
+    paragraphText = paragraphText.replace(/&#8660/g, '');
+    paragraphText = paragraphText.replace(/⇔/g, '');
+
+    console.log(paragraphText);
 
     return paragraphText;
 };
