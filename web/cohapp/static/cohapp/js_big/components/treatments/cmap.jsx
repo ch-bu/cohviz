@@ -90,6 +90,8 @@ class CMap extends React.Component {
       .attr('height', height)
       .style('fill', 'red')
       .style('opacity', 0);
+      // .on('mousemove', mouseMoveHandler);
+      // .on('mouseleave', mouseLeaveHandler);
 
     // Init progress bar
     var progressBar = svg.append('line')
@@ -186,6 +188,47 @@ class CMap extends React.Component {
           return d.id;
         });
     });
+
+    // function mouseMoveHandler() {
+    //   // Change text of selected element
+    //   svg.selectAll('text')
+    //     .style('font-weight', 'normal')
+    //     .style('font-size', '16px');
+
+    //   svg.selectAll('circle')
+    //     .style('stroke', 'none')
+    //     .style('stroke-width', 0);
+
+    //   // Get data
+    //   var mouse = d3.mouse(this);
+
+    //   // Find nearest point to mouse coordinate
+    //   var nearestPoint = simulation.find(mouse[0], mouse[1]);
+
+    //   // Select element that is hovered
+    //   var nodeSelected = g.select('#node-' + nearestPoint.id);
+    //   var nodeData = nodeSelected.data()[0];
+
+    //   // Change text of selected element
+    //   nodeSelected.select('text')
+    //     .style('opacity', 1)
+    //     .style('font-weight', 'bold')
+    //     .style('font-size', '20px');
+
+    //   nodeSelected.select('circle')
+    //     .style('stroke', '#000')
+    //     .style('stroke-width', 1);
+
+    //   /////////////////////////////
+    //   // Highlight words in text //
+    //   /////////////////////////////
+
+    //   // We need to get the text of the selected word in order
+    //   // to highlight them
+    //   var wordSelected = nearestPoint.id;
+
+    //   console.log(wordSelected);
+    // }
   }
 
   /**
