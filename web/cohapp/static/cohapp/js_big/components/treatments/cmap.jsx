@@ -14,16 +14,16 @@ class CMap extends React.Component {
   render() {
     return (
       <div className="row" id="editor">
-        <div id="editor-medium-editor" className="col s11 m4">
+        <div id="editor-medium-editor" className="col s11 m4 offset-m1">
           <div id="editor-textinput" ref={(el) => { this.textInput = el; }}
               dangerouslySetInnerHTML={this.returnInnerHTML()}
               onKeyUp={this.updateRevision} ></div>
-          <div id="editor-button-div" className="s12 m8 offset-m2 l6 offset-l3 col">
+          <div id="editor-button-div" className="s12 m4 offset-m1 col">
             <a onClick={this.props.analyzeRevision}
                className="waves-effect waves-light btn" id="editor-button">Analysiere meinen Text</a>
           </div>
         </div>
-        <div id="cmap" ref={(el) => { this.cmap = el; }} className="col s11 m8">
+        <div id="cmap" ref={(el) => { this.cmap = el; }} className="col s11 m7">
           <svg  ref={(el) => { this.svg = el; }} ></svg>
         </div>
       </div>
@@ -70,7 +70,7 @@ class CMap extends React.Component {
     var colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'];
 
     // Get width and height of parent div
-    var width = this.cmap.offsetWidth;
+    var width = this.cmap.offsetWidth - 20;
     var height = this.cmap.offsetHeight;
 
     // Init svg attributes
