@@ -1,4 +1,4 @@
-import Preloader from './preloader.jsx';
+import Preloader from '../preloader.jsx';
 
 class Instruction extends React.Component {
 	constructor(props) {

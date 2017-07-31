@@ -1,4 +1,4 @@
-import Preloader from '../preloader.jsx';
+import Preloader from '../../preloader.jsx';
 
 class ControlGroup extends React.Component {
   constructor(props) {

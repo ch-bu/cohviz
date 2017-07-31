@@ -1,15 +1,17 @@
-import {my_urls} from '../components/jsx-strings.jsx';
-import {getPlainText} from '../components/helperfunctions.js';
-import Instruction from '../components/instruction.jsx';
-import Preloader from '../components/preloader.jsx';
-import Editor from '../components/editor.jsx';
-import Revision from '../components/revision.jsx';
-import HeaderExperiment from '../components/header-experiment.jsx';
+import {my_urls} from '../jsx-strings.jsx';
+import {getPlainText} from '../helperfunctions.js';
+import Preloader from '../preloader.jsx';
+import Instruction from './instruction.jsx';
+import Editor from './editor.jsx';
+import Revision from './revision.jsx';
+import HeaderExperiment from './header-experiment.jsx';
 import 'whatwg-fetch';
 
 class Treatment extends React.Component {
   constructor(props) {
     super(props);
+
+    console.log('test');
 
     var self = this;
 

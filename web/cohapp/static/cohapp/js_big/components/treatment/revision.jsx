@@ -1,4 +1,4 @@
-import Preloader from './preloader.jsx';
+import Preloader from '../preloader.jsx';
 import Integrated from './treatments/integrated.jsx';
 import ControlGroup from './treatments/control-group.jsx';
 import CMap from './treatments/cmap.jsx';
