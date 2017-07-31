@@ -38,6 +38,9 @@ ADD . /code/
 # Run migrations
 # RUN python /code/manage.py migrate
 
+# Download spacy datasets
+RUN python -m spacy download en
+
 # Install pygermanet stuff
 # RUN mongod --dbpath /code/cohapp/coherenceanalyzer/mongodb &
 # RUN mongod --dbpath /code/cohapp/coherenceanalyzer/mongodb/ &
