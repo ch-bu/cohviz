@@ -11,6 +11,7 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 
 from coherenceanalyzer.coherenceanalyzer import analyzeTextCohesion
+from coherenceanalyzer.analyzerenglish import CohesionAnalyzerEnglish
 
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
@@ -467,7 +468,9 @@ class TextAnalyzer(APIView):
         # Text is not empty
         else:
             # Analyze text
-            analyzer = analyzeTextCohesion(text)
+            # analyzer = analyzeTextCohesion(text)
+            analyzer = CohesionAnalyzerEnglish(text)
+            analyzer = analyzer.get_data_for_visualization()
 
         # Get number of coherent sentences
         # cohS = analyzer.get_coherence_sentences()

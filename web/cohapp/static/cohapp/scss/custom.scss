@@ -171,6 +171,13 @@ h1, h2, h3, h4, h5 {
 
 // ************** Landing Page ***************************
 
+#landingpage-intro {
+  background-image: linear-gradient(to top,#58baff,#3884ff);
+  padding: 60px 0;
+  color: #fff;
+  min-height: 80vh;
+}
+
 
 // ******************** Login Page ******************************
 #login {
@@ -304,12 +311,6 @@ h1, h2, h3, h4, h5 {
     left: 1vh;
     cursor: pointer;
   }
-
-  // #instruction {
-  //   margin-top: 5vh;
-
-  //   @include instruction-mixin(1.6rem);
-  // }
 }
 
 #editor-double-text {
@@ -329,11 +330,6 @@ h1, h2, h3, h4, h5 {
 #modal-help, #modal-revision {
   @include instruction-mixin(1.2em);
 }
-
-
-// #preloader {
-//   margin-top: 10vh;
-// }
 
 
 // Instruktion for experiment

@@ -11,8 +11,6 @@ class Treatment extends React.Component {
   constructor(props) {
     super(props);
 
-    console.log('test');
-
     var self = this;
 
     // Setup state variables

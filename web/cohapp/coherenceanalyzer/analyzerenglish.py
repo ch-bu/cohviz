@@ -23,7 +23,7 @@ class CohesionAnalyzerEnglish:
             self.nlp = spacy.load('de')
 
         # Prepare text and remove unwanted characters
-        self.text = self.nlp(text.decode('utf-8'))
+        self.text = self.nlp(text.decode('utf-8').replace('[LINEBREAK]', ''))
 
         # Paragraphs
         self.paragraphs = text.decode('utf-8').split('[LINEBREAK]')
@@ -45,18 +45,25 @@ class CohesionAnalyzerEnglish:
         word_pairs = []
 
         for sentence in self.sents:
+            print(sentence)
+
+            for token in sentence:
+                print (token.orth_, token.dep_)
 
             # Get root from sentence
             root = [w for w in sentence if w.head is w][0]
 
             # Get subject
-            subject = list(root.lefts)[0]
+            try:
+                subject = [child for child in list(root.children) if any(child.dep_ in s for s in ['nsubj', 'nsubjpass'])][0]
+            except IndexError:
+                subject = None
 
             # Extract nouns from sentence
-            nouns = [word for word in sentence if any(word.pos_ in s for s in ["PROPN", "NOUN"])]
+            nouns = [word for word in sentence if any(word.dep_ in s for s in ["pobj", "obj"])]
 
             # Subject is a noun
-            if any(subject.pos_ in s for s in ["NOUN", "PROPN"]):
+            if subject:
                 # Build word pairs
                 for noun in nouns:
                     # Subject should not be the noun
@@ -454,7 +461,7 @@ class CohesionAnalyzerEnglish:
 
 
         return {'links': self.word_pairs,
-                'nodes': nodes,
+                'nodes': nodes_dict,
                 'numSentences': len(self.sents),
                 'numConcepts': len(nodes),
                 'clusters': cluster,
@@ -464,4 +471,5 @@ class CohesionAnalyzerEnglish:
                 'numCluster': len(cluster),
                 'numSentences': len(self.sents),
                 'numConcepts': len(self.concepts),
+                'wordClusterIndex': word_cluster_index,
                 'html_string': html_string}
