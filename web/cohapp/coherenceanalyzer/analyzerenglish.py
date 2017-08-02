@@ -32,10 +32,10 @@ class CohesionAnalyzerEnglish:
         self.sents = [sent for sent in self.text.sents]
 
         # Word pairs
-        self.word_pairs = self._generate_nouns() + self._generate_hyponyms_hyperonyms()
+        self.word_pairs = self._generate_nouns() + self._generate_hyponyms_hyperonyms_synonyms()
 
         # All concepts
-        self.concepts = list(set([pair['source'] for pair in self.word_pairs] + \
+        self.concepts = list(set([pair['source'] for pair in self.word_pairs] +
                        [pair['target'] for pair in self.word_pairs]))
 
     def _generate_nouns(self):
@@ -45,10 +45,10 @@ class CohesionAnalyzerEnglish:
         word_pairs = []
 
         for sentence in self.sents:
-            print(sentence)
+            # print(sentence)
 
-            for token in sentence:
-                print (token.orth_, token.dep_)
+            # for token in sentence:
+            #     print (token.orth_, token.dep_)
 
             # Get root from sentence
             root = [w for w in sentence if w.head is w][0]
@@ -60,16 +60,17 @@ class CohesionAnalyzerEnglish:
                 subject = None
 
             # Extract nouns from sentence
-            nouns = [word for word in sentence if any(word.dep_ in s for s in ["pobj", "obj"])]
+            nouns = [word for word in sentence if any(word.pos_ in s for s in ["NOUN", "PROPN"])]
 
             # Subject is a noun
             if subject:
-                # Build word pairs
-                for noun in nouns:
-                    # Subject should not be the noun
-                    if noun.lemma_ != subject.lemma_:
-                        # Append word pair
-                        word_pairs.append({'source': subject.lemma_, 'target': noun.lemma_})
+                if subject.pos_ != 'PRON':
+                    # Build word pairs
+                    for noun in nouns:
+                        # Subject should not be the noun
+                        if noun.lemma_ != subject.lemma_:
+                            # Append word pair
+                            word_pairs.append({'source': subject.lemma_, 'target': noun.lemma_})
             # There is no subject in the sentence
             else:
                 # Generate all combinations
@@ -82,7 +83,7 @@ class CohesionAnalyzerEnglish:
         return word_pairs
 
 
-    def _generate_hyponyms_hyperonyms(self):
+    def _generate_hyponyms_hyperonyms_synonyms(self):
         """Generates a word pair list of hyperonyms and
         hyponyms from a given dataset"""
 
@@ -105,6 +106,9 @@ class CohesionAnalyzerEnglish:
                     # Get all synsets of current noun
                     synsets_current_noun = [synset for synset in wn.synsets(noun)]
 
+                    # Get synonyms
+                    synonyms = [lemma.name() for synset in synsets_current_noun for lemma in synset.lemmas()]
+
                     # Get all hyponyms and hyperonyms from all synsets
                     hyponyms_current_noun = [synset.hyponyms() for synset in synsets_current_noun]
                     hypernyms_current_noun = [synset.hypernyms() for synset in synsets_current_noun]
@@ -118,13 +122,21 @@ class CohesionAnalyzerEnglish:
                     ################################
                     # Connect to next sentence
                     ################################
-                    # sentences_share_element = bool(set(hypernyms_hyponyms) & set(nouns_next_sentence))
                     sentences_shared_elements = list(set(hypernyms_hyponyms).intersection(nouns_next_sentence))
+                    shared_synonym = list(set(synonyms).intersection(nouns_next_sentence))
 
+                    # There are hyponyms and hypernyms
                     if len(sentences_shared_elements) > 0:
+                        print(hypernyms_hyponyms)
                         # print(sentences_share_element)
                         for shared_element in sentences_shared_elements:
                             word_pairs.append({'source': noun, 'target': shared_element})
+
+                    # There are synonyms
+                    if len(shared_synonym) > 0:
+                        print(synonyms)
+                        for synonym in shared_synonym:
+                            word_pairs.append({'source': noun, 'target': synonym})
 
         return word_pairs
 
