@@ -22,8 +22,12 @@ class CohesionAnalyzerEnglish:
             # Load spacy
             self.nlp = spacy.load('de')
 
+        # Remove parenthesis in the whole text
+        text_nlp = text.decode('utf-8').replace('[LINEBREAK]', '')
+        text_nlp = re.sub("([\(\[]).*?([\)\]])", "", text_nlp)
+
         # Prepare text and remove unwanted characters
-        self.text = self.nlp(text.decode('utf-8').replace('[LINEBREAK]', ''))
+        self.text = self.nlp(text_nlp)
 
         # Paragraphs
         self.paragraphs = text.decode('utf-8').split('[LINEBREAK]')
