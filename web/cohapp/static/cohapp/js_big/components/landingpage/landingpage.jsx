@@ -25,14 +25,14 @@ class LandingPage extends React.Component {
 
     return (
       <div className="row" id="editor">
-        <div id="editor-medium-editor" className="col s11 m4 offset-m1">
+        <div id="editor-medium-editor" className="col s11 m4">
           <div id="editor-textinput" ref={(el) => { this.textInput = el; }}
             dangerouslySetInnerHTML={this.returnInnerHTML()}></div>
-          <div id="editor-button-div" className="s12 m4 offset-m1 col">
+          <div id="editor-button-div" className="s12 m4 col">
             {this.state.loading ? <Preloader /> : button}
           </div>
         </div>
-        <div id="cmap" ref={(el) => { this.cmap = el; }} className="col s11 m7">
+        <div id="cmap" ref={(el) => { this.cmap = el; }} className="col s11 m8">
           <svg  ref={(el) => { this.svg = el; }} ></svg>
         </div>
       </div>
