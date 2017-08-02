@@ -36,7 +36,8 @@ class CohesionAnalyzerEnglish:
         self.sents = [sent for sent in self.text.sents]
 
         # Word pairs
-        self.word_pairs = self._generate_nouns() + self._generate_hyponyms_hyperonyms_synonyms()
+        nouns, self.subjects = self._generate_nouns()
+        self.word_pairs = nouns + self._generate_hyponyms_hyperonyms_synonyms()
 
         # All concepts
         self.concepts = list(set([pair['source'] for pair in self.word_pairs] +
@@ -47,6 +48,7 @@ class CohesionAnalyzerEnglish:
         return list of sentences with nouns"""
 
         word_pairs = []
+        subjects = []
 
         for sentence in self.sents:
             # Get root from sentence
@@ -64,6 +66,9 @@ class CohesionAnalyzerEnglish:
             # Subject is a noun
             if subject:
                 if subject.pos_ != 'PRON':
+                    # Append subject to list
+                    subjects.append(subject.lemma_)
+
                     # There is at least a noun
                     if len(nouns) > 0:
                         # Build word pairs
@@ -85,7 +90,7 @@ class CohesionAnalyzerEnglish:
                 for comb in combs:
                     word_pairs.append({'source': comb[0].lemma_, 'target': comb[1].lemma_})
 
-        return word_pairs
+        return word_pairs, subjects
 
 
     def _generate_hyponyms_hyperonyms_synonyms(self):
@@ -487,4 +492,5 @@ class CohesionAnalyzerEnglish:
                 'numSentences': len(self.sents),
                 'numConcepts': len(self.concepts),
                 'wordClusterIndex': word_cluster_index,
-                'html_string': html_string}
+                'html_string': html_string,
+                'subjects': self.subjects}
