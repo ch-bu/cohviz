@@ -172,12 +172,12 @@ class LandingPage extends React.Component {
         .attr("x2", function(d) { return d.target.x; })
         .attr("y2", function(d) { return d.target.y; })
         .style('stroke-dasharray', function(d) {
-          if (d['device'] == 'coreference') {
+          if (d['device'] == 'between') {
             return '5,5';
           }
         })
         .style('d', function(d) {
-          if (d['device'] == 'coreference') {
+          if (d['device'] == 'between') {
             return 'M5 20 l215 0';
           }
         });

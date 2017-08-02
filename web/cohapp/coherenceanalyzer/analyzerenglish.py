@@ -76,11 +76,15 @@ class CohesionAnalyzerEnglish:
                             # Subject should not be the noun
                             if noun.lemma_ != subject.lemma_:
                                 # Append word pair
-                                word_pairs.append({'source': subject.lemma_, 'target': noun.lemma_})
+                                word_pairs.append({'source': subject.lemma_,
+                                                   'target': noun.lemma_,
+                                                   'device': 'within'})
                     # When there is no noun tie the subject with itself
                     if len(nouns) == 1:
                         print(subject.orth_)
-                        word_pairs.append({'source': subject.lemma_, 'target': subject.lemma_})
+                        word_pairs.append({'source': subject.lemma_,
+                                           'target': subject.lemma_,
+                                           'device': 'within'})
             # There is no subject in the sentence
             else:
                 # Generate all combinations
@@ -88,7 +92,9 @@ class CohesionAnalyzerEnglish:
 
                 # Loop over every combination
                 for comb in combs:
-                    word_pairs.append({'source': comb[0].lemma_, 'target': comb[1].lemma_})
+                    word_pairs.append({'source': comb[0].lemma_,
+                                       'target': comb[1].lemma_,
+                                       'device': 'within'})
 
         return word_pairs, subjects
 
@@ -139,12 +145,16 @@ class CohesionAnalyzerEnglish:
                     if len(sentences_shared_elements) > 0:
                         # print(sentences_share_element)
                         for shared_element in sentences_shared_elements:
-                            word_pairs.append({'source': noun, 'target': shared_element})
+                            word_pairs.append({'source': noun,
+                                               'target': shared_element,
+                                               'device': 'between'})
 
                     # There are synonyms
                     if len(shared_synonym) > 0:
                         for synonym in shared_synonym:
-                            word_pairs.append({'source': noun, 'target': synonym})
+                            word_pairs.append({'source': noun,
+                                               'target': synonym,
+                                               'device': 'between'})
 
         return word_pairs
 
