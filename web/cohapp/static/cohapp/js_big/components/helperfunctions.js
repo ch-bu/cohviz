@@ -19,12 +19,11 @@ var getPlainText = function(htmlText) {
       paragraphText += '[LINEBREAK]';
     }
 
-    console.log(paragraphText);
-
     paragraphText = paragraphText.replace(/&#8660/g, '');
     paragraphText = paragraphText.replace(/⇔/g, '');
 
-    console.log(paragraphText);
+    // Remove double LINEBREAKS without content
+    paragraphText = paragraphText.replace('[LINEBREAK] [LINEBREAK]', '[LINEBREAK]');
 
     return paragraphText;
 };
