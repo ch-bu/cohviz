@@ -4,23 +4,12 @@ from nltk.corpus import wordnet as wn
 from itertools import combinations, chain
 import re
 import spacy
-from langdetect import detect
-
 
 class CohesionAnalyzerEnglish:
 
     def __init__(self, text):
-        # Get language of text
-        language = detect(text.decode('utf-8'))
-
-        # English text
-        if language == 'en':
-            # Load spacy
-            self.nlp = spacy.load('en')
-        # German text
-        elif language == 'de':
-            # Load spacy
-            self.nlp = spacy.load('de')
+        # Load spacy
+        self.nlp = spacy.load('en_core_web_md')
 
         # Remove parenthesis in the whole text
         text_nlp = text.decode('utf-8').replace('[LINEBREAK]', '')
@@ -37,11 +26,36 @@ class CohesionAnalyzerEnglish:
 
         # Word pairs
         nouns, self.subjects = self._generate_nouns()
-        self.word_pairs = nouns + self._generate_hyponyms_hyperonyms_synonyms()
+        self.word_pairs = nouns
 
         # All concepts
         self.concepts = list(set([pair['source'] for pair in self.word_pairs] +
                        [pair['target'] for pair in self.word_pairs]))
+
+
+    # def _generate_nouns_helper(self, subtree, subject):
+
+    #     word_pairs = []
+    #     subjects = [token for token in subtree if any(token.dep_ in s for s in ['nsubj', 'nsubjpass'])]
+    #     subject_index = subtree.index(subject)
+
+
+    #     print subject
+    #     print subtree
+    #     len_subjects = len(subjects)
+
+    #     for word in subtree:
+    #         print (word, word.dep_)
+    #         if len_subjects == 2:
+    #             if word.orth_ == subjects[1].orth_:
+    #                 return word_pairs
+    #         if any(word.dep_ in s for s in ['dobj', 'pobj', 'iobj', 'obj']):
+    #             # Append word pairs
+    #             word_pairs.append({'source': subject.lemma_,
+    #                 'target': word.lemma_,
+    #                 'device': 'within'})
+
+    #     return word_pairs
 
     def _generate_nouns(self):
         """Filter all nouns from sentences and
@@ -51,59 +65,167 @@ class CohesionAnalyzerEnglish:
         subjects = []
 
         for sentence in self.sents:
-            # Get root from sentence
-            root = [w for w in sentence if w.head is w][0]
 
+            noun_chunks = list(sentence.noun_chunks)
+
+            subject = [sub for sub in noun_chunks if sub.root.dep_ == 'nsubj']
+            subjects.append(subject)
+
+            if subject:
+                # Combine pairs
+                for chunk in noun_chunks:
+                    if chunk.orth_ != subject[0].orth_:
+                        word_pairs.append({'source': subject[0].text,
+                                           'target': chunk.text,
+                                           'device': 'within'})
+
+        print word_pairs
+            # print(noun_chunks)
+            # print(subject)
+
+            # try:
+            #     subjects = [token for token in sentence if any(token.dep_ in s for s in ['nsubj', 'nsubjpass'])]
+            # except IndexError:
+            #     subjects = None
+
+            # # There is a subject
+            # if subjects:
+            #     for subject in subjects:
+            #         # We do not have a pronoun
+            #         if subject.pos_ != 'PRON':
+            #             # Append subject to list
+            #             registered_subjects.append(subject.lemma_)
+
+            #             # Get subtree from subj
+            #             subtree = list(subject.head.subtree)
+
+            #             print self._generate_nouns_helper(subtree, subject)
+
+                        # word_pairs = word_pairs + _generate_nouns_helper(subtree, subjects, subject)
+
+                        # print subtree.right_edge
+
+                        # if len(list(subjects)) == 2:
+                        #     index_next_subject = subtree.index(subjects[1])
+
+                        #     if index_next_subject > 0:
+
+                        #         first_half = subtree[:index_next_subject]
+                        #         second_half = subtree[index_next_subject:]
+
+                                # for word in first_half:
+                                #     if )
+
+                        # print(subtree)
+
+                        # print numpy.where(subjects in subtree)
+
+
+                    # # print list(subject.head.children)
+                    # # Get subtree of token
+                    # words_taken = []
+
+
+                    # objects = [word for word in subtree if any(word.dep_ in s for s in ['nsubj', 'nsubjpass', 'dobj', 'pobj', 'iobj', 'obj'])]
+
+                    # for word in subtree:
+                    #     if word not in words_taken:
+                    #         if word.orth_ == subject
+
+                    # for obj in objects:
+                    #     if obj.orth_ !== subject.orth_:
+                    #         if
+                    #
+
+                    # for word in subtree:
+                    #     if any(word in s for s in list(subjects)):
+                    #         continue
+
+                    #     if any(word in s for s in ['dobj', 'pobj', 'iobj', 'obj']):
+                    #         print (subject, word)
+
+                    # print(subtree)
+
+
+                    # for word in subtree:
+                    #     if word in subjects:
+                    #         continue
+                    #     print('test')
+                    # print('continue')
+
+                    # # Combine objects with subject
+                    # for obj in objects:
+                    #     print obj
+
+            # print(list(roots[0].rights))
+
+            # for root in roots:
+            #     print(root)
+                # print list(root.lefts)
+
+                # print [(child, child.dep_) for child in list(root.children)]
+
+                # print [(token, token.dep_) for token in sentence]
+
+
+
+                                # try:
+                #     subjects = [child for child in list(root.children) if any(child.dep_ in s for s in ['nsubj', 'nsubjpass'])]
+                # except IndexError:
+                #     subjects = None
+
+
+                # print(subjects)
             # Get subject
-            try:
-                subject = [child for child in list(root.children) if any(child.dep_ in s for s in ['nsubj', 'nsubjpass'])][0]
-            except IndexError:
-                subject = None
+            # try:
+            #     subject = [child for child in list(root.children) if any(child.dep_ in s for s in ['nsubj', 'nsubjpass'])][0]
+            # except IndexError:
+            #     subject = None
 
             # Extract nouns from sentence
-            nouns = [word for word in sentence if any(word.pos_ in s for s in ["NOUN", "PROPN"])]
+            # nouns = [word for word in sentence if any(word.pos_ in s for s in ["NOUN", "PROPN"])]
 
-            # Subject is a noun
-            if subject:
-                if subject.pos_ != 'PRON':
-                    # Append subject to list
-                    subjects.append(subject.lemma_)
+            # # Subject is a noun
+            # if subject:
+            #     if subject.pos_ != 'PRON':
+            #         # Append subject to list
+            #         subjects.append(subject.lemma_)
 
-                    # There is at least a noun
-                    if len(nouns) > 0:
-                        # Build word pairs
-                        for noun in nouns:
-                            # Subject should not be the noun
-                            if noun.lemma_ != subject.lemma_:
-                                # Append word pair
-                                word_pairs.append({'source': subject.lemma_,
-                                                   'target': noun.lemma_,
-                                                   'device': 'within'})
-                    # When there is no noun tie the subject with itself
-                    if len(nouns) == 1:
-                        word_pairs.append({'source': subject.lemma_,
-                                           'target': subject.lemma_,
-                                           'device': 'within'})
-                # Subject is a pronoun
-                else:
-                    if len(nouns) == 1:
-                        # Combine noun with itself
-                        if len(nouns) == 1:
-                            print(subject.orth_)
-                            word_pairs.append({'source': nouns[0].lemma_,
-                                               'target': nouns[0].lemma_,
-                                               'device': 'within'})
+            #         # There is at least a noun
+            #         if len(nouns) > 0:
+            #             # Build word pairs
+            #             for noun in nouns:
+            #                 # Subject should not be the noun
+            #                 if noun.lemma_ != subject.lemma_:
+            #                     # Append word pair
+            #                     word_pairs.append({'source': subject.lemma_,
+            #                                        'target': noun.lemma_,
+            #                                        'device': 'within'})
+            #         # When there is no noun tie the subject with itself
+            #         if len(nouns) == 1:
+            #             word_pairs.append({'source': subject.lemma_,
+            #                                'target': subject.lemma_,
+            #                                'device': 'within'})
+            #     # Subject is a pronoun
+            #     else:
+            #         if len(nouns) == 1:
+            #             # Combine noun with itself
+            #             if len(nouns) == 1:
+            #                 print(subject.orth_)
+            #                 word_pairs.append({'source': nouns[0].lemma_,
+            #                                    'target': nouns[0].lemma_,
+            #                                    'device': 'within'})
 
             # There is no subject in the sentence
-            else:
-                # Generate all combinations
-                combs = combinations(nouns, 2)
+            # else:
+            #     # Generate all combinations
+            #     combs = combinations(nouns, 2)
 
-                # Loop over every combination
-                for comb in combs:
-                    word_pairs.append({'source': comb[0].lemma_,
-                                       'target': comb[1].lemma_,
-                                       'device': 'within'})
+            #     # Loop over every combination
+            #     for comb in combs:
+            #         word_pairs.append({'source': comb[0].lemma_,
+            #                            'target': comb[1].lemma_,
+            #                            'device': 'within'})
 
         return word_pairs, subjects
 
