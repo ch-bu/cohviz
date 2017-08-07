@@ -81,10 +81,19 @@ class CohesionAnalyzerEnglish:
                                                    'device': 'within'})
                     # When there is no noun tie the subject with itself
                     if len(nouns) == 1:
-                        print(subject.orth_)
                         word_pairs.append({'source': subject.lemma_,
                                            'target': subject.lemma_,
                                            'device': 'within'})
+                # Subject is a pronoun
+                else:
+                    if len(nouns) == 1:
+                        # Combine noun with itself
+                        if len(nouns) == 1:
+                            print(subject.orth_)
+                            word_pairs.append({'source': nouns[0].lemma_,
+                                               'target': nouns[0].lemma_,
+                                               'device': 'within'})
+
             # There is no subject in the sentence
             else:
                 # Generate all combinations
