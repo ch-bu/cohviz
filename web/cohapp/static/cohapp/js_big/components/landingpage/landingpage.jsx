@@ -206,21 +206,21 @@ class LandingPage extends React.Component {
         .attr('cy', 0)
         .attr('fill', function(d, i) {
           return colors[self.state.data['wordClusterIndex'][d.id]];
-        })
-        .style('stroke', (d, i) => {
-          // This node is a subject
-          // Make it black
-          if (self.state.data.subjects.indexOf(d.id) > -1) {
-            return 'black';
-          }
-        })
-        .style('stroke-width', (d, i) => {
-          // This node is a subject
-          // Give the node a width
-          if (self.state.data.subjects.indexOf(d.id) > -1) {
-            return 2;
-          }
         });
+        // .style('stroke', (d, i) => {
+        //   // This node is a subject
+        //   // Make it black
+        //   if (self.state.data.subjects.indexOf(d.id) > -1) {
+        //     return 'black';
+        //   }
+        // })
+        // .style('stroke-width', (d, i) => {
+        //   // This node is a subject
+        //   // Give the node a width
+        //   if (self.state.data.subjects.indexOf(d.id) > -1) {
+        //     return 2;
+        //   }
+        // });
 
       // Append label to node container
       var label = node.append('text')

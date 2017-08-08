@@ -464,7 +464,7 @@ class TextAnalyzer(APIView):
 
         # Text is empty
         if not text.strip():
-            return JsonResponse({})
+            return JsonResponse({}, status=500)
         # Text is not empty
         else:
             # Analyze text
@@ -483,5 +483,4 @@ class TextAnalyzer(APIView):
         #                  'numConcepts': analyzer.get_num_concepts(),
         #                  'numClusters': analyzer.get_num_clusters(),
         #                  'lemmaDic': analyzer.lemmaDic}
-
-        return Response(analyzer, status=200)
+        return JsonResponse(analyzer, status=200)

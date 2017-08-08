@@ -41,6 +41,9 @@ ADD . /code/
 # Download spacy datasets
 RUN python -m spacy download en
 
+# Download correct model
+RUN python -m spacy download en_core_web_md
+
 # Install pygermanet stuff
 # RUN mongod --dbpath /code/cohapp/coherenceanalyzer/mongodb &
 # RUN mongod --dbpath /code/cohapp/coherenceanalyzer/mongodb/ &
