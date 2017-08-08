@@ -1,7 +1,8 @@
 # encoding: utf-8
 
 from nltk.corpus import wordnet as wn
-from itertools import combinations, chain
+from itertools import combinations, permutations, chain, repeat
+from collections import Counter
 import re
 import spacy
 
@@ -14,6 +15,7 @@ class CohesionAnalyzerEnglish:
         # Remove parenthesis in the whole text
         text_nlp = text.decode('utf-8').replace('[LINEBREAK]', '')
         text_nlp = re.sub("([\(\[]).*?([\)\]])", "", text_nlp)
+        text_nlp = re.sub('\n', ' ', text_nlp)
 
         # Prepare text and remove unwanted characters
         self.text = self.nlp(text_nlp)
@@ -33,261 +35,162 @@ class CohesionAnalyzerEnglish:
                        [pair['target'] for pair in self.word_pairs]))
 
 
-    # def _generate_nouns_helper(self, subtree, subject):
-
-    #     word_pairs = []
-    #     subjects = [token for token in subtree if any(token.dep_ in s for s in ['nsubj', 'nsubjpass'])]
-    #     subject_index = subtree.index(subject)
-
-
-    #     print subject
-    #     print subtree
-    #     len_subjects = len(subjects)
-
-    #     for word in subtree:
-    #         print (word, word.dep_)
-    #         if len_subjects == 2:
-    #             if word.orth_ == subjects[1].orth_:
-    #                 return word_pairs
-    #         if any(word.dep_ in s for s in ['dobj', 'pobj', 'iobj', 'obj']):
-    #             # Append word pairs
-    #             word_pairs.append({'source': subject.lemma_,
-    #                 'target': word.lemma_,
-    #                 'device': 'within'})
-
-    #     return word_pairs
-
     def _generate_nouns(self):
         """Filter all nouns from sentences and
         return list of sentences with nouns"""
 
         word_pairs = []
         subjects = []
+        word_dict = {}
 
-        for sentence in self.sents:
-
+        for index, sentence in enumerate(self.sents):
+            # Get noun chunks
             noun_chunks = list(sentence.noun_chunks)
 
-            subject = [sub for sub in noun_chunks if sub.root.dep_ == 'nsubj']
+            # Get first subject
+            subject = [sub for sub in noun_chunks if any(sub.root.dep_ for s in ['nsubj', 'csubj', 'nsubjpass'])][0]
+            # print (subject, subject.root.dep_, subject.root.pos_)
+            # Append subject to list
             subjects.append(subject)
 
-            if subject:
-                # Combine pairs
+            # We only have one noun chunk
+            if len(noun_chunks) == 1:
+                # Add chunk to dic it not existent
+                if not noun_chunks[0].root.lemma_ in word_dict:
+                    word_dict[noun_chunks[0].root.lemma_] = noun_chunks[0].orth_
+
+                # Append
+                word_pairs.append({'source': word_dict[noun_chunks[0].root.lemma_],
+                                   'target': word_dict[noun_chunks[0].root.lemma_],
+                                   'device': 'within'})
+            # The subject is a pronoun and we have only one noun phrase
+            elif subject.root.pos_ == 'PRON':
+                if len(noun_chunks) == 2:
+                    if not noun_chunks[1].root.lemma_ in word_dict:
+                        word_dict[noun_chunks[1].root.lemma_] = noun_chunks[1].orth_
+
+                    # Append
+                    word_pairs.append({'source': word_dict[noun_chunks[1].root.lemma_],
+                                       'target': word_dict[noun_chunks[1].root.lemma_],
+                                       'device': 'within'})
+                # There are multiple noun_chunks
+                elif len(noun_chunks) > 2:
+                    # Get all combinations
+                    no_sub_combinations = combinations(noun_chunks, 2)
+
+                    # There are combinations
+                    if no_sub_combinations:
+                        # Add all combinations
+                        for comb in no_sub_combinations:
+                            if comb[0].root.pos_ != 'PRON' \
+                                and comb[1].root.pos_ != 'PRON':
+                                if comb[0].root.lemma_ in word_dict:
+                                    if comb[1].root.lemma_ in word_dict:
+                                        word_pairs.append({'source': word_dict[comb[0].root.lemma_],
+                                                           'target': word_dict[comb[1].root.lemma_],
+                                                           'device': 'between'})
+
+                                    else:
+                                        word_dict[comb[1].root.lemma_] = comb[1].orth_
+                                        word_pairs.append({'source': word_dict[comb[0].root.lemma_],
+                                                           'target': comb[1].orth_,
+                                                           'device': 'between'})
+                                else:
+                                    word_dict[comb[0].root.lemma_] = comb[0].orth_
+                                    word_pairs.append({'source': comb[0].orth_,
+                                                       'target': comb[1].orth_,
+                                                       'device': 'between'})
+            # We have a subject
+            elif subject and subject.root.dep_ != 'PRON':
+                # Combine subject with noun_chunks
                 for chunk in noun_chunks:
-                    if chunk.orth_ != subject[0].orth_:
-                        word_pairs.append({'source': subject[0].text,
-                                           'target': chunk.text,
-                                           'device': 'within'})
+                    # Do not combine the same chunk
+                    if chunk.orth_ != subject.orth_ \
+                        and chunk.root.pos_ != 'PRON' \
+                        and subject.root.pos_ != 'PRON':
+                        # We already stored a subject with the same root
+                        if subject.root.lemma_ in word_dict:
+                            # We alredy stored the noun chunk
+                            if chunk.root.lemma_ in word_dict:
+                                word_pairs.append({'source': word_dict[subject.root.lemma_],
+                                                   'target': word_dict[chunk.root.lemma_],
+                                                   'device': 'within'})
+                            # The noun chunk is new to us
+                            else:
+                                word_dict[chunk.root.lemma_] = chunk.orth_
+                                word_pairs.append({'source': word_dict[subject.root.lemma_],
+                                                   'target': chunk.orth_,
+                                                   'device': 'within'})
+                        # We haven't stored the current subject
+                        else:
+                            word_dict[subject.root.lemma_] = subject.orth_
+                            word_pairs.append({'source': subject.orth_,
+                                               'target': chunk.orth_,
+                                               'device': 'within'})
+            # If there is no subject combine every pair
+            elif not subject:
+                no_sub_combinations = combinations(noun_chunks, 2)
+                # There are combinations
+                if no_sub_combinations:
+                    # Add all combinations
+                    for comb in no_sub_combinations:
+                        if comb[0].root.pos_ != 'PRON' \
+                            and comb[1].root.pos_ != 'PRON':
+                            if comb[0].root.lemma_ in word_dict:
+                                if comb[1].root.lemma_ in word_dict:
+                                    word_pairs.append({'source': word_dict[comb[0].root.lemma_],
+                                                       'target': word_dict[comb[1].root.lemma_],
+                                                       'device': 'between'})
 
-        print word_pairs
-            # print(noun_chunks)
-            # print(subject)
-
-            # try:
-            #     subjects = [token for token in sentence if any(token.dep_ in s for s in ['nsubj', 'nsubjpass'])]
-            # except IndexError:
-            #     subjects = None
-
-            # # There is a subject
-            # if subjects:
-            #     for subject in subjects:
-            #         # We do not have a pronoun
-            #         if subject.pos_ != 'PRON':
-            #             # Append subject to list
-            #             registered_subjects.append(subject.lemma_)
-
-            #             # Get subtree from subj
-            #             subtree = list(subject.head.subtree)
-
-            #             print self._generate_nouns_helper(subtree, subject)
-
-                        # word_pairs = word_pairs + _generate_nouns_helper(subtree, subjects, subject)
-
-                        # print subtree.right_edge
-
-                        # if len(list(subjects)) == 2:
-                        #     index_next_subject = subtree.index(subjects[1])
-
-                        #     if index_next_subject > 0:
-
-                        #         first_half = subtree[:index_next_subject]
-                        #         second_half = subtree[index_next_subject:]
-
-                                # for word in first_half:
-                                #     if )
-
-                        # print(subtree)
-
-                        # print numpy.where(subjects in subtree)
-
-
-                    # # print list(subject.head.children)
-                    # # Get subtree of token
-                    # words_taken = []
+                                else:
+                                    word_dict[comb[1].root.lemma_] = comb[1].orth_
+                                    word_pairs.append({'source': word_dict[comb[0].root.lemma_],
+                                                       'target': comb[1].orth_,
+                                                       'device': 'between'})
+                            else:
+                                word_dict[comb[0].root.lemma_] = comb[0].orth_
+                                word_pairs.append({'source': comb[0].orth_,
+                                                   'target': comb[1].orth_,
+                                                   'device': 'between'})
 
 
-                    # objects = [word for word in subtree if any(word.dep_ in s for s in ['nsubj', 'nsubjpass', 'dobj', 'pobj', 'iobj', 'obj'])]
+            # Lets look at the next sentence if there is a link between the two
+            if index < (len(self.sents) - 1):
+                # Get noun chunks of next sentence
+                noun_chunks_next = list(self.sents[index + 1].noun_chunks)
 
-                    # for word in subtree:
-                    #     if word not in words_taken:
-                    #         if word.orth_ == subject
+                # Combine all chunks between two sentences
+                my_combinations = list(list(zip(r, p)) for (r, p) in zip(repeat(noun_chunks), permutations(noun_chunks_next)))
 
-                    # for obj in objects:
-                    #     if obj.orth_ !== subject.orth_:
-                    #         if
-                    #
+                # Calculate similarity between pairs
+                similarity_pairs = [(pair[0], pair[1], pair[0].similarity(pair[1])) for comb in my_combinations for pair in comb]
 
-                    # for word in subtree:
-                    #     if any(word in s for s in list(subjects)):
-                    #         continue
+                # We are only interested in pairs with a high similarity
+                similarity_filter = filter(lambda x: x[2] > .72, similarity_pairs)
 
-                    #     if any(word in s for s in ['dobj', 'pobj', 'iobj', 'obj']):
-                    #         print (subject, word)
+                # We have found chunks that are similar
+                if similarity_filter:
+                    # Loop over every pair and append
+                    for pair in similarity_filter:
+                        if pair[0].orth_ != pair[1].orth_:
+                            if pair[0].root.lemma_ in word_dict:
+                                if pair[1].root.lemma_ in word_dict:
+                                    word_pairs.append({'source': word_dict[pair[0].root.lemma_],
+                                                       'target': word_dict[pair[1].root.lemma_],
+                                                       'device': 'between'})
 
-                    # print(subtree)
-
-
-                    # for word in subtree:
-                    #     if word in subjects:
-                    #         continue
-                    #     print('test')
-                    # print('continue')
-
-                    # # Combine objects with subject
-                    # for obj in objects:
-                    #     print obj
-
-            # print(list(roots[0].rights))
-
-            # for root in roots:
-            #     print(root)
-                # print list(root.lefts)
-
-                # print [(child, child.dep_) for child in list(root.children)]
-
-                # print [(token, token.dep_) for token in sentence]
-
-
-
-                                # try:
-                #     subjects = [child for child in list(root.children) if any(child.dep_ in s for s in ['nsubj', 'nsubjpass'])]
-                # except IndexError:
-                #     subjects = None
-
-
-                # print(subjects)
-            # Get subject
-            # try:
-            #     subject = [child for child in list(root.children) if any(child.dep_ in s for s in ['nsubj', 'nsubjpass'])][0]
-            # except IndexError:
-            #     subject = None
-
-            # Extract nouns from sentence
-            # nouns = [word for word in sentence if any(word.pos_ in s for s in ["NOUN", "PROPN"])]
-
-            # # Subject is a noun
-            # if subject:
-            #     if subject.pos_ != 'PRON':
-            #         # Append subject to list
-            #         subjects.append(subject.lemma_)
-
-            #         # There is at least a noun
-            #         if len(nouns) > 0:
-            #             # Build word pairs
-            #             for noun in nouns:
-            #                 # Subject should not be the noun
-            #                 if noun.lemma_ != subject.lemma_:
-            #                     # Append word pair
-            #                     word_pairs.append({'source': subject.lemma_,
-            #                                        'target': noun.lemma_,
-            #                                        'device': 'within'})
-            #         # When there is no noun tie the subject with itself
-            #         if len(nouns) == 1:
-            #             word_pairs.append({'source': subject.lemma_,
-            #                                'target': subject.lemma_,
-            #                                'device': 'within'})
-            #     # Subject is a pronoun
-            #     else:
-            #         if len(nouns) == 1:
-            #             # Combine noun with itself
-            #             if len(nouns) == 1:
-            #                 print(subject.orth_)
-            #                 word_pairs.append({'source': nouns[0].lemma_,
-            #                                    'target': nouns[0].lemma_,
-            #                                    'device': 'within'})
-
-            # There is no subject in the sentence
-            # else:
-            #     # Generate all combinations
-            #     combs = combinations(nouns, 2)
-
-            #     # Loop over every combination
-            #     for comb in combs:
-            #         word_pairs.append({'source': comb[0].lemma_,
-            #                            'target': comb[1].lemma_,
-            #                            'device': 'within'})
+                                else:
+                                    word_dict[pair[1].root.lemma_] = pair[1].orth_
+                                    word_pairs.append({'source': word_dict[pair[0].root.lemma_],
+                                                       'target': pair[1].orth_,
+                                                       'device': 'between'})
+                            else:
+                                word_dict[pair[0].root.lemma_] = pair[0].orth_
+                                word_pairs.append({'source': pair[0].orth_,
+                                                   'target': pair[1].orth_,
+                                                   'device': 'between'})
 
         return word_pairs, subjects
-
-
-    def _generate_hyponyms_hyperonyms_synonyms(self):
-        """Generates a word pair list of hyperonyms and
-        hyponyms from a given dataset"""
-
-        word_pairs = []
-
-        # Loop over every sentence
-        for index, sentence in enumerate(self.sents):
-            # Do not loop over last sentence
-            if index < (len(self.sents) - 1):
-
-                # Get all nouns from current and next sentence
-                nouns_current_sentence = [noun.lemma_ for noun in sentence if any(noun.pos_ in s for s in ['PROPN', 'NOUN'])]
-                nouns_next_sentence = [noun.lemma_ for noun in self.sents[index + 1] if any(noun.pos_ in s for s in ['PROPN', 'NOUN'])]
-
-                # Loop over every noun in current sentence
-                for noun in nouns_current_sentence:
-                    ###############################
-                    # Get hypernyms and hyponyms
-                    ###############################
-                    # Get all synsets of current noun
-                    synsets_current_noun = [synset for synset in wn.synsets(noun)]
-
-                    # Get synonyms
-                    synonyms = [lemma.name() for synset in synsets_current_noun for lemma in synset.lemmas()]
-
-                    # Get all hyponyms and hyperonyms from all synsets
-                    hyponyms_current_noun = [synset.hyponyms() for synset in synsets_current_noun]
-                    hypernyms_current_noun = [synset.hypernyms() for synset in synsets_current_noun]
-
-                    # Get all synsets of hyperonyms and hypernyms
-                    synsets = [synset for synsets in (hyponyms_current_noun + hypernyms_current_noun) for synset in synsets]
-
-                    # Get all lemmas
-                    hypernyms_hyponyms = ([lemma.name().replace('_', ' ') for synset in synsets for lemma in synset.lemmas()])
-
-                    ################################
-                    # Connect to next sentence
-                    ################################
-                    sentences_shared_elements = list(set(hypernyms_hyponyms).intersection(nouns_next_sentence))
-                    shared_synonym = list(set(synonyms).intersection(nouns_next_sentence))
-
-                    # There are hyponyms and hypernyms
-                    if len(sentences_shared_elements) > 0:
-                        # print(sentences_share_element)
-                        for shared_element in sentences_shared_elements:
-                            word_pairs.append({'source': noun,
-                                               'target': shared_element,
-                                               'device': 'between'})
-
-                    # There are synonyms
-                    if len(shared_synonym) > 0:
-                        for synonym in shared_synonym:
-                            word_pairs.append({'source': noun,
-                                               'target': synonym,
-                                               'device': 'between'})
-
-        return word_pairs
 
 
     def _calculate_number_relations(self):
@@ -424,52 +327,7 @@ class CohesionAnalyzerEnglish:
         return word_cluster_index
 
 
-    def _get_lemma_word_mapping(self, nodes):
-        """Returns a dictionary with the lemma as key and the
-        inflected words as values"""
-
-        # Init mapping
-        mapping = {}
-
-        # Loop over every word in text
-        for token in self.text:
-            # Word is part of nodes for visualization
-            if token.lemma_ in nodes:
-                # We have already assigned this word to a key
-                if token.lemma_ in mapping:
-                    # Avoid duplicates
-                    if token.orth_ not in mapping[token.lemma_]:
-                        mapping[token.lemma_].append(token.orth_)
-                # This word is knew, let's start a knew key
-                else:
-                    mapping[token.lemma_] = [token.orth_]
-
-        return mapping
-
-
-    def _get_word_lemma_mapping(self, nodes):
-        """Returns a dictionary with the word as a key
-        and the lemma as a value"""
-
-        mapping = {}
-
-        # Loop over every word in text
-        for token in self.text:
-            # Word ist part of nodes for visualization
-            if token.lemma_ in nodes:
-                # We have already assigned this word to a key
-                if token.orth_ in mapping:
-                    # Avoid duplicates
-                    if token.lemma_ not in mapping[token.orth_]:
-                        mapping[token.orth_].append(token.lemma_)
-                # This word is knew, let's start a knew key
-                else:
-                    mapping[token.orth_] = [token.lemma_]
-
-        return mapping
-
-
-    def _get_html_string(self, word_lemma_mapping, word_cluster_index):
+    def _get_html_string(self, node_list, word_cluster_index):
         """Generates an html string with spans for each word in order
         to signal the mapping between visualization and text
 
@@ -480,119 +338,57 @@ class CohesionAnalyzerEnglish:
         Returns:
             String - An html formatted string
         """
+        # Init string to return
+        html_string = ''
 
-        html_string = '';
-
+        # Loop over every paragraph in text
         for paragraph in self.paragraphs:
-            #######################################
-            # Render text for integrated group
-            #######################################
+            # Start string
+            html_string += '<p>'
 
-            # Split text into sentences
+            # Divide text into sentences
             tokens = self.nlp(paragraph)
             tokenized_sentences = [sent for sent in tokens.sents]
 
-            # for sentence in tokenized_sentences:
-            #     print sentence.orth_.split()
-
-            # Split words within sentences
-            words_split_per_sentence = [sentence.orth_.split() for sentence in tokenized_sentences]
-
-            # Prepare html string
-            paragraph_string = '<p>'
-
             # Loop over every sentence
-            for index, sentence in enumerate(words_split_per_sentence):
-                # Store cluster uf current sentence
-                cluster_current = []
+            for index, sent in enumerate(tokenized_sentences):
+                # Do not look at the last sentence
+                if index != (len(tokenized_sentences) - 1):
+                    # Get cluster of current sentence
+                    indexes_cur_sentence = [word_cluster_index[node] for node in node_list if sent.text.find(node) != -1]
+                    indexes_next_sentence = [word_cluster_index[node] for node in node_list if tokenized_sentences[index + 1].text.find(node) != -1]
 
-                # Store the end of line character
-                # We need to store the character to append it
-                # afterwards
-                end_of_line_character = sentence[-1][-1]
+                    # Get most common cluster of current sentence
+                    most_common_cluster_cur = Counter(indexes_cur_sentence).most_common(1)
+                    most_common_cluster_next = Counter(indexes_next_sentence).most_common(1)
 
-                # Remove end of line characters
-                words = [re.sub(r'[.\!?]', '', s) for s in sentence]
+                    # Get cluster for each sentence
+                    cluster_cur = -1 if len(most_common_cluster_cur) == 0 else most_common_cluster_cur[0][0]
+                    cluster_next = -1 if len(most_common_cluster_next) == 0 else most_common_cluster_next[0][0]
 
-                # Loop over every word in current sentence
-                for word in words:
-                    # We need to reset the carrier for every word otherwise
-                    # every word will be appended with the carrier
-                    carrier = None
+                    # Did the cluster change?
+                    cluster_changed = False if cluster_cur == cluster_next else True
 
-                    # Check if word ends with a special character
-                    if word.endswith(':') or word.endswith(',') or word.endswith(';'):
-                        carrier = word[-1]
-                        word = re.sub(r'[:,;]', '', word)
+                    # Append sentence to string
+                    html_string += sent.text + ' '
 
-                    # Check if there is a lemma for current word and catch
-                    # any KeyError
-                    try:
-                        # Get lemma for word
-                        lemma = word_lemma_mapping[word][0]
-
-                        # Get cluster number for word
-                        cluster_of_word = word_cluster_index[lemma]
-
-                        # Push cluster ot current cluster list
-                        cluster_current.append(cluster_of_word)
-
-                        # Append html string with span tag and according class
-                        paragraph_string += '<span class="cluster-' + str(cluster_of_word) + '">' + word + '</span>'
-
-                    # The word does not occur in the word lemma dicitonary
-                    # It should not be assigned a class for highlighting
-                    except KeyError:
-                        paragraph_string += '<span>' + word + '</span>'
-
-                    # Append carrier if it exists
-                    paragraph_string += carrier if carrier else ''
-                    paragraph_string += ' '
-
-                ############################################################
-                # Check if cluster changes for next sentence
-                ############################################################
-                if index != (len(words_split_per_sentence) - 1) \
-                        and len(tokenized_sentences) > 1:
-                    # Get words for next sentence
-                    words_next_sentence = [re.sub(r'[.\!?]', '', s) for s in words_split_per_sentence[index + 1]]
-
-                    # Initialize cluster of next sentence
-                    cluster_next = []
-
-                    for word in words_next_sentence:
-                        # Catch errors
-                        try:
-                            lemma = word_lemma_mapping[word][0]
-
-                            cluster_of_word_next_sentence = word_cluster_index[lemma]
-
-                            cluster_next.append(cluster_of_word_next_sentence)
-                        except KeyError:
-                            pass
-
-                # If we only have one sentence append only the end of line character
-                if len(tokenized_sentences) <= 1:
-                    paragraph_string = paragraph_string[:-1]
-                    paragraph_string += end_of_line_character
-                    paragraph_string += ' '
-                # We have more than one sentence
+                    # Add cluster change symbol
+                    html_string = html_string + '&#8660; ' if cluster_changed else html_string
+                # Append last sentence
                 else:
-                    # See if cluster of adjacent sentence differ
-                    cluster_changed = set(cluster_current) != set(cluster_next)
+                    html_string += sent.text
 
-                    # Append end of line character and add an empty space.
-                    # The empty space is necessary otherwise the next sentence
-                    # will directly align to the current sentence
-                    paragraph_string = paragraph_string[:-1]
-                    paragraph_string += end_of_line_character
-                    paragraph_string += '&#8660; ' if cluster_changed else ''
-                    paragraph_string += ' '
+            # Finish paragraph
+            html_string += '</p>'
 
-            # End paragraph
-            paragraph_string += '</p>'
+        # Replace strings with
+        for node in node_list:
+            # Get cluster
+            cluster = word_cluster_index[node]
 
-            html_string += paragraph_string
+            # Change to span element
+            html_string = html_string.replace(node, '<span class="cluster-' + str(cluster) + '">' + node + '</span>')
+
 
         return html_string
 
@@ -611,27 +407,18 @@ class CohesionAnalyzerEnglish:
         nodes_list = list(set(list(chain(*nodes))))
         nodes_dict = [{'id': word, 'index': ind} for ind, word, in enumerate(nodes_list)]
 
-        # Generate dict with lemma as key and orth as value
-        lemma_word_mapping = self._get_lemma_word_mapping(nodes_list)
-
-        # Generate dict with orth as key and lemma as value
-        word_lemma_mapping = self._get_word_lemma_mapping(nodes_list)
-
         # Generate html string
-        html_string = self._get_html_string(word_lemma_mapping, word_cluster_index)
+        html_string = self._get_html_string(nodes_list, word_cluster_index)
 
-
+        # return self.word_pairs
         return {'links': self.word_pairs,
                 'nodes': nodes_dict,
                 'numSentences': len(self.sents),
                 'numConcepts': len(nodes),
                 'clusters': cluster,
-                'lemmaWordRelations': lemma_word_mapping,
-                'wordLemmaRelations': word_lemma_mapping,
                 'numRelations': self._calculate_number_relations(),
                 'numCluster': len(cluster),
                 'numSentences': len(self.sents),
                 'numConcepts': len(self.concepts),
                 'wordClusterIndex': word_cluster_index,
-                'html_string': html_string,
-                'subjects': self.subjects}
+                'html_string': html_string}
