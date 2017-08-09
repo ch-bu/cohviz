@@ -8,9 +8,16 @@ import spacy
 
 class CohesionAnalyzerEnglish:
 
-    def __init__(self, text):
-        # Load spacy
-        self.nlp = spacy.load('en_core_web_md')
+    def __init__(self, nlp):
+
+        # Save model as variable for whole class
+        self.nlp = nlp
+
+
+    def _preprocess_text(self, text):
+
+        # Get paragraphs
+        paragraphs = text.decode('utf-8').split('[LINEBREAK]')
 
         # Remove parenthesis in the whole text
         text_nlp = text.decode('utf-8').replace('[LINEBREAK]', '')
@@ -18,24 +25,15 @@ class CohesionAnalyzerEnglish:
         text_nlp = re.sub('\n', ' ', text_nlp)
 
         # Prepare text and remove unwanted characters
-        self.text = self.nlp(text_nlp)
-
-        # Paragraphs
-        self.paragraphs = text.decode('utf-8').split('[LINEBREAK]')
+        text = self.nlp(text_nlp)
 
         # Extract sentences
-        self.sents = [sent for sent in self.text.sents]
+        sentences = [sent for sent in text.sents]
 
-        # Word pairs
-        nouns, self.subjects = self._generate_nouns()
-        self.word_pairs = nouns
-
-        # All concepts
-        self.concepts = list(set([pair['source'] for pair in self.word_pairs] +
-                       [pair['target'] for pair in self.word_pairs]))
+        return text_nlp, sentences, paragraphs,
 
 
-    def _generate_nouns(self):
+    def _generate_nouns(self, sentences):
         """Filter all nouns from sentences and
         return list of sentences with nouns"""
 
@@ -43,7 +41,7 @@ class CohesionAnalyzerEnglish:
         subjects = []
         word_dict = {}
 
-        for index, sentence in enumerate(self.sents):
+        for index, sentence in enumerate(sentences):
             # Get noun chunks
             noun_chunks = list(sentence.noun_chunks)
 
@@ -155,9 +153,9 @@ class CohesionAnalyzerEnglish:
 
 
             # Lets look at the next sentence if there is a link between the two
-            if index < (len(self.sents) - 1):
+            if index < (len(sentences) - 1):
                 # Get noun chunks of next sentence
-                noun_chunks_next = list(self.sents[index + 1].noun_chunks)
+                noun_chunks_next = list(sentences[index + 1].noun_chunks)
 
                 # Combine all chunks between two sentences
                 my_combinations = list(list(zip(r, p)) for (r, p) in zip(repeat(noun_chunks), permutations(noun_chunks_next)))
@@ -206,14 +204,14 @@ class CohesionAnalyzerEnglish:
         return len(tuples)
 
 
-    def _get_clusters(self):
+    def _get_clusters(self, sentences, word_pairs):
         """Calculates the number of computed
         clusters"""
 
         # If we only have one sentence return word pairs
         # as single cluster
-        if len(self.sents) == 1:
-            return self.word_pairs
+        if len(sentences) == 1:
+            return word_pairs
 
         # Initialize clusters. The cluster
         # later stores all clusters as a list containing
@@ -225,16 +223,16 @@ class CohesionAnalyzerEnglish:
         assigned_words = []
 
         # Loop over every word pair
-        for num in range(0, len(self.word_pairs)):
+        for num in range(0, len(word_pairs)):
             # Store all words that are stored in the current cluster
-            current_word_pair = [self.word_pairs[num]['source'],
-                    self.word_pairs[num]['target']]
+            current_word_pair = [word_pairs[num]['source'],
+                                 word_pairs[num]['target']]
 
             # Only assign a new cluster if the current word pair has
             # not already been processed
             if (not bool(set(current_word_pair) & set(assigned_words))):
                 # Init current cluster
-                current_cluster = [self.word_pairs[num]]
+                current_cluster = [word_pairs[num]]
 
                 # Remember that we already added the words of the current cluster
                 assigned_words.append(current_word_pair[0])
@@ -255,12 +253,12 @@ class CohesionAnalyzerEnglish:
                     found = False
 
                     # Loop over every word pair again
-                    for num_again in range(0, len(self.word_pairs)):
+                    for num_again in range(0, len(word_pairs)):
                         # Word pairs do not match
                         if num_again not in index_pairs_added:
                             # Store both words of current pair in list
-                            iter_word_pair = [self.word_pairs[num_again]['source'],
-                                    self. word_pairs[num_again]['target']]
+                            iter_word_pair = [word_pairs[num_again]['source'],
+                                    word_pairs[num_again]['target']]
 
                             # Lemmas in current cluster
                             current_cluster_lemma_source = map(lambda x: x['source'], current_cluster)
@@ -276,7 +274,7 @@ class CohesionAnalyzerEnglish:
                             # If they share an element append to current cluster
                             if shared_element:
                                 # Append pair to current cluster
-                                current_cluster.append(self.word_pairs[num_again])
+                                current_cluster.append(word_pairs[num_again])
 
                                 # Remember that we already appended this
                                 # pair to the current cluster
@@ -327,7 +325,7 @@ class CohesionAnalyzerEnglish:
         return word_cluster_index
 
 
-    def _get_html_string(self, node_list, word_cluster_index):
+    def _get_html_string(self, node_list, word_cluster_index, paragraphs):
         """Generates an html string with spans for each word in order
         to signal the mapping between visualization and text
 
@@ -342,7 +340,7 @@ class CohesionAnalyzerEnglish:
         html_string = ''
 
         # Loop over every paragraph in text
-        for paragraph in self.paragraphs:
+        for paragraph in paragraphs:
             # Start string
             html_string += '<p>'
 
@@ -393,32 +391,58 @@ class CohesionAnalyzerEnglish:
         return html_string
 
 
-    def get_data_for_visualization(self):
+    def _calculate_number_relations(self, word_pairs):
+        """Calculates the number of relations"""
+
+        # Make tuples from word_pairs
+        tuples = map(lambda x: (x['source'], x['target']), word_pairs)
+
+        # Remove duplicates
+        tuples = list(set([(pair[0], pair[1])
+            for pair in tuples if pair[0] != pair[1]]))
+
+        return len(tuples)
+
+
+    def get_data_for_visualization(self, text):
         """Get all data for get_data for visualization"""
 
+        # Preprocess text
+        text_nlp, sentences, paragraphs = self._preprocess_text(text)
+
+        # Generate word pairs
+        word_pairs, subjects = self._generate_nouns(sentences)
+
         # Get clusters
-        cluster = self._get_clusters()
+        cluster = self._get_clusters(sentences, word_pairs)
 
         # Create dictionary of words and it's corresponding clusters
         word_cluster_index = self._get_word_cluster_index(cluster)
 
+        # Calculate number of Relations
+        numRelations = self._calculate_number_relations(word_pairs)
+
+        # All concepts
+        concepts = list(set([pair['source'] for pair in word_pairs] +
+                       [pair['target'] for pair in word_pairs]))
+
         # Get unique nodes
-        nodes = map(lambda x: [x['source'], x['target']], self.word_pairs)
+        nodes = map(lambda x: [x['source'], x['target']], word_pairs)
         nodes_list = list(set(list(chain(*nodes))))
         nodes_dict = [{'id': word, 'index': ind} for ind, word, in enumerate(nodes_list)]
 
         # Generate html string
-        html_string = self._get_html_string(nodes_list, word_cluster_index)
+        html_string = self._get_html_string(nodes_list, word_cluster_index, paragraphs)
 
         # return self.word_pairs
-        return {'links': self.word_pairs,
+        return {'links': word_pairs,
                 'nodes': nodes_dict,
-                'numSentences': len(self.sents),
+                'numSentences': len(sentences),
                 'numConcepts': len(nodes),
                 'clusters': cluster,
-                'numRelations': self._calculate_number_relations(),
+                'numRelations': numRelations,
                 'numCluster': len(cluster),
-                'numSentences': len(self.sents),
-                'numConcepts': len(self.concepts),
+                'numSentences': len(sentences),
+                'numConcepts': len(concepts),
                 'wordClusterIndex': word_cluster_index,
                 'html_string': html_string}

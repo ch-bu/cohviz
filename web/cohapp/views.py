@@ -34,6 +34,7 @@ def index(request):
 
     if request.method == "GET":
 
+
         return render(request, 'cohapp/index.html')
 
 

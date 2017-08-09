@@ -3,6 +3,7 @@
 import random
 import string
 import json
+import spacy
 
 from Levenshtein import distance
 
@@ -29,6 +30,12 @@ from cohapp.serializers import MeasurementSerializer
 from cohapp.serializers import SubjectSerializer
 from cohapp.serializers import GroupSerializer
 from cohapp.serializers import TextDataSerializer
+
+
+# Load language models
+# nlp = spacy.load('en_core_web_md')
+nlp = spacy.load('en')
+analyzer = CohesionAnalyzerEnglish(nlp)
 
 
 # ======================= Helper Classes =================================
@@ -469,8 +476,8 @@ class TextAnalyzer(APIView):
         else:
             # Analyze text
             # analyzer = analyzeTextCohesion(text)
-            analyzer = CohesionAnalyzerEnglish(text)
-            analyzer = analyzer.get_data_for_visualization()
+            # analyzer = CohesionAnalyzerEnglish(text)
+            results = analyzer.get_data_for_visualization(text)
 
         # Get number of coherent sentences
         # cohS = analyzer.get_coherence_sentences()
@@ -483,4 +490,4 @@ class TextAnalyzer(APIView):
         #                  'numConcepts': analyzer.get_num_concepts(),
         #                  'numClusters': analyzer.get_num_clusters(),
         #                  'lemmaDic': analyzer.lemmaDic}
-        return JsonResponse(analyzer, status=200)
+        return JsonResponse(results, status=200)
