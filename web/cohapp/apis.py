@@ -7,6 +7,8 @@ import spacy
 
 from Levenshtein import distance
 
+from langdetect import detect
+
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.http import JsonResponse
@@ -34,8 +36,8 @@ from cohapp.serializers import TextDataSerializer
 
 # Load language models
 # nlp = spacy.load('en_core_web_md')
-nlp = spacy.load('en')
-analyzer = CohesionAnalyzerEnglish(nlp)
+# nlp = spacy.load('en')
+# analyzer = CohesionAnalyzerEnglish(nlp)
 
 
 # ======================= Helper Classes =================================
@@ -467,21 +469,23 @@ class TextAnalyzer(APIView):
     def post(self, request):
 
         # Get text from post data
-        text = request.data['text'].encode('utf-8')
+        text = request.data['text']
 
         # Text is empty
         if not text.strip():
             return JsonResponse({}, status=500)
         # Text is not empty
         else:
-            # Analyze text
-            # analyzer = analyzeTextCohesion(text)
-            # analyzer = CohesionAnalyzerEnglish(text)
-            results = analyzer.get_data_for_visualization(text)
-
-        # Get number of coherent sentences
-        # cohS = analyzer.get_coherence_sentences()
-
+            text_language = detect(text)
+            # Detect language
+            if text_language == 'en':
+                # Analyze english text
+                results = analyzer.get_data_for_visualization(text)
+            elif text_language == 'de':
+                # Analyze german text
+                results = analyzeTextCohesion(text)
+            else:
+                return JsonResponse({}, status=500)
         # response_data = {'word_pairs': analyzer.word_pairs,
         #                  'numSentences': analyzer.get_num_sentences(),
         #                  'cohSentences': cohS['coh_sen'],
