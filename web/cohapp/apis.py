@@ -35,9 +35,9 @@ from cohapp.serializers import TextDataSerializer
 
 
 # Load language models
-# nlp = spacy.load('en_core_web_md')
+nlp = spacy.load('en_core_web_md')
 # nlp = spacy.load('en')
-# analyzer = CohesionAnalyzerEnglish(nlp)
+analyzer = CohesionAnalyzerEnglish(nlp)
 
 
 # ======================= Helper Classes =================================

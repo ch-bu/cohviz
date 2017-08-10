@@ -5,6 +5,7 @@ from itertools import combinations, permutations, chain, repeat
 from collections import Counter
 import re
 import spacy
+import time
 
 class CohesionAnalyzerEnglish:
 
@@ -17,10 +18,10 @@ class CohesionAnalyzerEnglish:
     def _preprocess_text(self, text):
 
         # Get paragraphs
-        paragraphs = text.decode('utf-8').split('[LINEBREAK]')
+        paragraphs = text.split('[LINEBREAK]')
 
         # Remove parenthesis in the whole text
-        text_nlp = text.decode('utf-8').replace('[LINEBREAK]', '')
+        text_nlp = text.replace('[LINEBREAK]', '')
         text_nlp = re.sub("([\(\[]).*?([\)\]])", "", text_nlp)
         text_nlp = re.sub('\n', ' ', text_nlp)
 
@@ -41,15 +42,22 @@ class CohesionAnalyzerEnglish:
         subjects = []
         word_dict = {}
 
+        import time
+        start_time = time.time()
+
+
         for index, sentence in enumerate(sentences):
             # Get noun chunks
             noun_chunks = list(sentence.noun_chunks)
 
-            # Get first subject
-            subject = [sub for sub in noun_chunks if any(sub.root.dep_ for s in ['nsubj', 'csubj', 'nsubjpass'])][0]
-            # print (subject, subject.root.dep_, subject.root.pos_)
-            # Append subject to list
-            subjects.append(subject)
+            try:
+                # Get first subject
+                subject = [sub for sub in noun_chunks if any(sub.root.dep_ for s in ['nsubj', 'csubj', 'nsubjpass'])][0]
+                # print (subject, subject.root.dep_, subject.root.pos_)
+                # Append subject to list
+                subjects.append(subject)
+            except:
+                subject = None
 
             # We only have one noun chunk
             if len(noun_chunks) == 1:
@@ -61,70 +69,72 @@ class CohesionAnalyzerEnglish:
                 word_pairs.append({'source': word_dict[noun_chunks[0].root.lemma_],
                                    'target': word_dict[noun_chunks[0].root.lemma_],
                                    'device': 'within'})
-            # The subject is a pronoun and we have only one noun phrase
-            elif subject.root.pos_ == 'PRON':
-                if len(noun_chunks) == 2:
-                    if not noun_chunks[1].root.lemma_ in word_dict:
-                        word_dict[noun_chunks[1].root.lemma_] = noun_chunks[1].orth_
-
-                    # Append
-                    word_pairs.append({'source': word_dict[noun_chunks[1].root.lemma_],
-                                       'target': word_dict[noun_chunks[1].root.lemma_],
-                                       'device': 'within'})
-                # There are multiple noun_chunks
-                elif len(noun_chunks) > 2:
-                    # Get all combinations
-                    no_sub_combinations = combinations(noun_chunks, 2)
-
-                    # There are combinations
-                    if no_sub_combinations:
-                        # Add all combinations
-                        for comb in no_sub_combinations:
-                            if comb[0].root.pos_ != 'PRON' \
-                                and comb[1].root.pos_ != 'PRON':
-                                if comb[0].root.lemma_ in word_dict:
-                                    if comb[1].root.lemma_ in word_dict:
-                                        word_pairs.append({'source': word_dict[comb[0].root.lemma_],
-                                                           'target': word_dict[comb[1].root.lemma_],
-                                                           'device': 'between'})
-
-                                    else:
-                                        word_dict[comb[1].root.lemma_] = comb[1].orth_
-                                        word_pairs.append({'source': word_dict[comb[0].root.lemma_],
-                                                           'target': comb[1].orth_,
-                                                           'device': 'between'})
-                                else:
-                                    word_dict[comb[0].root.lemma_] = comb[0].orth_
-                                    word_pairs.append({'source': comb[0].orth_,
-                                                       'target': comb[1].orth_,
-                                                       'device': 'between'})
             # We have a subject
-            elif subject and subject.root.dep_ != 'PRON':
-                # Combine subject with noun_chunks
-                for chunk in noun_chunks:
-                    # Do not combine the same chunk
-                    if chunk.orth_ != subject.orth_ \
-                        and chunk.root.pos_ != 'PRON' \
-                        and subject.root.pos_ != 'PRON':
-                        # We already stored a subject with the same root
-                        if subject.root.lemma_ in word_dict:
-                            # We alredy stored the noun chunk
-                            if chunk.root.lemma_ in word_dict:
-                                word_pairs.append({'source': word_dict[subject.root.lemma_],
-                                                   'target': word_dict[chunk.root.lemma_],
-                                                   'device': 'within'})
-                            # The noun chunk is new to us
+            elif subject:
+                # Subject not a pronoun
+                if subject.root.dep_ != 'PRON':
+                    # Combine subject with noun_chunks
+                    for chunk in noun_chunks:
+                        # Do not combine the same chunk
+                        if chunk.orth_ != subject.orth_ \
+                            and chunk.root.pos_ != 'PRON' \
+                            and subject.root.pos_ != 'PRON':
+                            # We already stored a subject with the same root
+                            if subject.root.lemma_ in word_dict:
+                                # We alredy stored the noun chunk
+                                if chunk.root.lemma_ in word_dict:
+                                    word_pairs.append({'source': word_dict[subject.root.lemma_],
+                                                       'target': word_dict[chunk.root.lemma_],
+                                                       'device': 'within'})
+                                # The noun chunk is new to us
+                                else:
+                                    word_dict[chunk.root.lemma_] = chunk.orth_
+                                    word_pairs.append({'source': word_dict[subject.root.lemma_],
+                                                       'target': chunk.orth_,
+                                                       'device': 'within'})
+                            # We haven't stored the current subject
                             else:
-                                word_dict[chunk.root.lemma_] = chunk.orth_
-                                word_pairs.append({'source': word_dict[subject.root.lemma_],
+                                word_dict[subject.root.lemma_] = subject.orth_
+                                word_pairs.append({'source': subject.orth_,
                                                    'target': chunk.orth_,
                                                    'device': 'within'})
-                        # We haven't stored the current subject
-                        else:
-                            word_dict[subject.root.lemma_] = subject.orth_
-                            word_pairs.append({'source': subject.orth_,
-                                               'target': chunk.orth_,
-                                               'device': 'within'})
+                # The subject is a pronoun and we have only one noun phrase
+                elif subject.root.pos_ == 'PRON':
+                    if len(noun_chunks) == 2:
+                        if not noun_chunks[1].root.lemma_ in word_dict:
+                            word_dict[noun_chunks[1].root.lemma_] = noun_chunks[1].orth_
+
+                        # Append
+                        word_pairs.append({'source': word_dict[noun_chunks[1].root.lemma_],
+                                           'target': word_dict[noun_chunks[1].root.lemma_],
+                                           'device': 'within'})
+                    # There are multiple noun_chunks
+                    elif len(noun_chunks) > 2:
+                        # Get all combinations
+                        no_sub_combinations = combinations(noun_chunks, 2)
+
+                        # There are combinations
+                        if no_sub_combinations:
+                            # Add all combinations
+                            for comb in no_sub_combinations:
+                                if comb[0].root.pos_ != 'PRON' \
+                                    and comb[1].root.pos_ != 'PRON':
+                                    if comb[0].root.lemma_ in word_dict:
+                                        if comb[1].root.lemma_ in word_dict:
+                                            word_pairs.append({'source': word_dict[comb[0].root.lemma_],
+                                                               'target': word_dict[comb[1].root.lemma_],
+                                                               'device': 'between'})
+
+                                        else:
+                                            word_dict[comb[1].root.lemma_] = comb[1].orth_
+                                            word_pairs.append({'source': word_dict[comb[0].root.lemma_],
+                                                               'target': comb[1].orth_,
+                                                               'device': 'between'})
+                                    else:
+                                        word_dict[comb[0].root.lemma_] = comb[0].orth_
+                                        word_pairs.append({'source': comb[0].orth_,
+                                                           'target': comb[1].orth_,
+                                                           'device': 'between'})
             # If there is no subject combine every pair
             elif not subject:
                 no_sub_combinations = combinations(noun_chunks, 2)
@@ -152,42 +162,43 @@ class CohesionAnalyzerEnglish:
                                                    'device': 'between'})
 
 
-            # Lets look at the next sentence if there is a link between the two
-            if index < (len(sentences) - 1):
-                # Get noun chunks of next sentence
-                noun_chunks_next = list(sentences[index + 1].noun_chunks)
+            # # Lets look at the next sentence if there is a link between the two
+            # if index < (len(sentences) - 1):
+            #     # Get noun chunks of next sentence
+            #     noun_chunks_next = list(sentences[index + 1].noun_chunks)
 
-                # Combine all chunks between two sentences
-                my_combinations = list(list(zip(r, p)) for (r, p) in zip(repeat(noun_chunks), permutations(noun_chunks_next)))
+            #     # Combine all chunks between two sentences
+            #     my_combinations = list(list(zip(r, p)) for (r, p) in zip(repeat(noun_chunks), permutations(noun_chunks_next)))
 
-                # Calculate similarity between pairs
-                similarity_pairs = [(pair[0], pair[1], pair[0].similarity(pair[1])) for comb in my_combinations for pair in comb]
+            #     # Calculate similarity between pairs
+            #     similarity_pairs = [(pair[0], pair[1], pair[0].similarity(pair[1])) for comb in my_combinations for pair in comb]
 
-                # We are only interested in pairs with a high similarity
-                similarity_filter = filter(lambda x: x[2] > .72, similarity_pairs)
+            #     # We are only interested in pairs with a high similarity
+            #     similarity_filter = filter(lambda x: x[2] > .72, similarity_pairs)
 
-                # We have found chunks that are similar
-                if similarity_filter:
-                    # Loop over every pair and append
-                    for pair in similarity_filter:
-                        if pair[0].orth_ != pair[1].orth_:
-                            if pair[0].root.lemma_ in word_dict:
-                                if pair[1].root.lemma_ in word_dict:
-                                    word_pairs.append({'source': word_dict[pair[0].root.lemma_],
-                                                       'target': word_dict[pair[1].root.lemma_],
-                                                       'device': 'between'})
+            #     # We have found chunks that are similar
+            #     if similarity_filter:
+            #         # Loop over every pair and append
+            #         for pair in similarity_filter:
+            #             if pair[0].orth_ != pair[1].orth_:
+            #                 if pair[0].root.lemma_ in word_dict:
+            #                     if pair[1].root.lemma_ in word_dict:
+            #                         word_pairs.append({'source': word_dict[pair[0].root.lemma_],
+            #                                            'target': word_dict[pair[1].root.lemma_],
+            #                                            'device': 'between'})
 
-                                else:
-                                    word_dict[pair[1].root.lemma_] = pair[1].orth_
-                                    word_pairs.append({'source': word_dict[pair[0].root.lemma_],
-                                                       'target': pair[1].orth_,
-                                                       'device': 'between'})
-                            else:
-                                word_dict[pair[0].root.lemma_] = pair[0].orth_
-                                word_pairs.append({'source': pair[0].orth_,
-                                                   'target': pair[1].orth_,
-                                                   'device': 'between'})
-
+            #                     else:
+            #                         word_dict[pair[1].root.lemma_] = pair[1].orth_
+            #                         word_pairs.append({'source': word_dict[pair[0].root.lemma_],
+            #                                            'target': pair[1].orth_,
+            #                                            'device': 'between'})
+            #                 else:
+            #                     word_dict[pair[0].root.lemma_] = pair[0].orth_
+            #                     word_pairs.append({'source': pair[0].orth_,
+            #                                        'target': pair[1].orth_,
+            #                                        'device': 'between'})
+        print("--- %s seconds ---" % (time.time() - start_time))
+        # word_pairs = [{'source': 'Hans', 'target': 'Haus', 'device': 'within'}]
         return word_pairs, subjects
 
 
