@@ -78,8 +78,16 @@ $p-font-size: 1.6rem;
 
 body {
   font-family: 'Open Sans', sans-serif;
-  background-color: #f6f6f6;
   @include svg-attributes();
+}
+
+.btn {
+  background-color: #FFCF52;
+  color: #000;
+}
+
+.btn:hover, .btn-large:hover {
+    backround-color: #ffe7a8;
 }
 
 // /**
@@ -171,11 +179,89 @@ h1, h2, h3, h4, h5 {
 
 // ************** Landing Page ***************************
 
-#landingpage-intro {
-  background-image: linear-gradient(to top,#58baff,#3884ff);
-  padding: 60px 0;
+#landing-page {
+  #landing {
+    min-height: 70vh;
+    background-color: #24292e;
+    z-index: 1;
+    position: relative;
+
+    .description {
+      position: absolute;
+      top: 30%;
+      left: 20%;
+      margin: 0 20px;
+    }
+
+    h1 {
+      color: #fff;
+      margin-top: 0px;
+    }
+
+    p {
+      color: #fff;
+      font-size: 2rem;
+    }
+
+  }
+
+  #explanation {
+    min-height: 40vh;
+    background-color: #FFCF52;
+    position: relative;
+    z-index: 4;
+
+    svg {
+      position: absolute;
+      top: -180px;
+      left: 55%;
+      z-index: 3;
+    }
+
+    &:before {
+      background: #FFCF52;
+      transform: skewY(3deg);
+      content: '';
+      position: absolute;
+      top: -70px;
+      left: 0;
+      width: 100%;
+      height: 160px;
+      display: block;
+      z-index: 2;
+    }
+
+    .explanation-text {
+      position: absolute;
+      top: 20%;
+      left: 10%;
+      color: #000;
+      width: 40%;
+
+      p {
+        font-size: 1.8rem;
+      }
+
+    }
+  }
+}
+
+#contact {
+  margin-top: 100px;
+  padding-top: 40px;
+  padding-bottom: 100px;
+  background-color: #24292e;
   color: #fff;
-  min-height: 80vh;
+  margin-bottom: 0;
+
+  p {
+    font-size: 1.6rem;
+  }
+
+  textarea {
+    border: 1px solid lightgrey;
+    height: 200px;
+  }
 }
 
 
@@ -370,6 +456,51 @@ h1, h2, h3, h4, h5 {
     border-radius: 5px;
     outline: 0px solid transparent;
     border-left: 2px dashed #ccc;
+
+    p {
+      font-size: $p-font-size;
+    }
+
+    p:first-child {
+      margin-top: 0;
+    }
+  }
+
+  #editor-medium-editor {
+    padding: 0;
+    margin-top: 0;
+  }
+
+  #editor-button-div {
+    position: absolute;
+    bottom: -50px;
+    left: 0;
+
+    a {
+      font-size: 1rem;
+    }
+  }
+
+  #cmap {
+    height: 80vh;
+    padding: 0;
+  }
+}
+
+#editor-landing-page {
+  @include margin-top();
+
+  position: relative;
+  // min-height: 58vh;
+  height: 90vh;
+  font-size: $p-font-size;;
+
+  #editor-textinput {
+    font-family: Georgia;
+    min-height: 58vh;
+    padding: 0 10px 0 10px;
+    border-radius: 5px;
+    outline: 0px solid transparent;
 
     p {
       font-size: $p-font-size;

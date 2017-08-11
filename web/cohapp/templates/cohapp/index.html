@@ -21,7 +21,63 @@
   </div>
 </section> -->
 
+
+<div class="row" id="landing-page">
+  <section id="landing">
+    <div class="description">
+      <h1>CohVis</h1>
+      <p>A web application that visualizes the cohesive structure of a text</p>
+    </div>
+  </section>
+
+  <section id="explanation">
+    <svg height="500" width="400">
+      <line x1="40" y1="100" x2="140" y2="300" style="stroke:#fff;stroke-width:2" />
+      <line x1="40" y1="100" x2="350" y2="50" style="stroke:#fff;stroke-width:2" />
+      <line x1="140" y1="300" x2="350" y2="50" style="stroke:#fff;stroke-width:2" />
+      <circle cx="40" cy="100" r="35" stroke="none" stroke-width="3" fill="#1f77b4" />
+      <circle cx="140" cy="300" r="35" stroke="none" stroke-width="3" fill="#ff7f0e" />
+      <circle cx="350" cy="50" r="35" stroke="none" stroke-width="3" fill="#2ca02c" />
+
+    </svg>
+
+    <div class="explanation-text">
+      <p>CohVis is a smart application that visualizes the main concept of a short piece of text in a concept map like representation. The visualization allows you to get the main ideas of a text and find potential cohesion gaps. Cohesion gaps are depicted as non-connected nodes within the concept map.</p>
+    </div>
+
+  </section>
+</div>
+
+
 <div id="landingpage" class="row"></div>
+
+<div class="row" id="contact">
+  <div class="container">
+    <div class="col s11 m5">
+        <p>If you are interested in using CohVis and have further questions, feel free to contact use. We are glad to hear from you.</p>
+      </div>
+    </div>
+
+    <div class="col s11 m3 offset-m1">
+      <form action="https://formspree.io/christian.burkhart@ezw.uni-freiburg.de" method="POST">
+        <div class="row">
+          <div class="small-12 columns">
+            <input name="name" type="text" placeholder="Your name" data-cip-id="cIPJQ342845639">
+          </div>
+          <div class="small-12 columns">
+            <input type="email" name="email" placeholder="Your e-mail" data-cip-id="cIPJQ342845640">
+          </div>
+          <div class="small-12 columns">
+            <textarea name="nachricht" rows="4" cols="10" placeholder="Your message"></textarea>
+          </div>
+          <div class="small-12 columns">
+            <button class="waves-effect waves-light btn" type="submit">Send</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 {% endblock %}
 

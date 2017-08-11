@@ -20,19 +20,19 @@ class LandingPage extends React.Component {
   render() {
 
     var button = <a onClick={this.analyzeText}
-          className="waves-effect waves-light btn" id="editor-button">Bearbeiten</a>;
+          className="waves-effect waves-light btn" id="editor-button">Analyze</a>;
 
 
     return (
-      <div className="row" id="editor">
-        <div id="editor-medium-editor" className="col s11 m4">
+      <div className="row" id="editor-landing-page">
+        <div id="editor-medium-editor" className="col s11 m4 offset-m1">
           <div id="editor-textinput" ref={(el) => { this.textInput = el; }}
             dangerouslySetInnerHTML={this.returnInnerHTML()}></div>
-          <div id="editor-button-div" className="s12 m4 col">
+          <div id="editor-button-div" className="s12 m4 offset-m1 col">
             {this.state.loading ? <Preloader /> : button}
           </div>
         </div>
-        <div id="cmap" ref={(el) => { this.cmap = el; }} className="col s11 m8">
+        <div id="cmap" ref={(el) => { this.cmap = el; }} className="col s11 m7">
           <svg  ref={(el) => { this.svg = el; }} ></svg>
         </div>
       </div>
@@ -240,7 +240,7 @@ class LandingPage extends React.Component {
     var editor = new MediumEditor(this.textInput, {
       toolbar: false,
       placeholder: {
-        // text: '',
+        text: 'Your text goes here. Push the button to see your visualization.',
         hideOnClick: true
       },
     });
