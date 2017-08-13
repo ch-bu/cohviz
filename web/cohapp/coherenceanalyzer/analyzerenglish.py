@@ -172,8 +172,10 @@ class CohesionAnalyzerEnglish:
                 noun_chunks_next = list(sentences[index + 1].noun_chunks)
 
                 # Combine all chunks between two sentences
-                my_combinations = list(list(zip(r, p)) for (r, p) in zip(repeat(noun_chunks), permutations(noun_chunks_next)))
+                # my_combinations = list(zip(r, p)) for (r, p) in zip(repeat(noun_chunks), permutations(noun_chunks_next))
+                my_combinations = list(combinations(noun_chunks + noun_chunks_next, 2))
 
+                print 'length of combinations: %i' % len(list(my_combinations))
 
                 # Calculate similarity between pairs
                 similarity_pairs = [(pair[0], pair[1], pair[0].similarity(pair[1])) for comb in my_combinations for pair in comb]
@@ -187,21 +189,24 @@ class CohesionAnalyzerEnglish:
                     for pair in similarity_filter:
                         # Do not add pairs with same orthographie
                         if pair[0].orth_ != pair[1].orth_:
-                            # Check if root already exists
-                            if pair[0].root.lemma_ in word_dict:
-                                if not pair[1].root.lemma_ in word_dict:
-                                    word_dict[pair[1].root.lemma_] = pair[1].orth_
-                            else:
-                                if not pair[1].root.lemma_ in word_dict:
-                                    word_dict[pair[1].root.lemma_] = pair[1].orth_
+                            try:
+                                # Check if root already exists
+                                if pair[0].root.lemma_ in word_dict:
+                                    if not pair[1].root.lemma_ in word_dict:
+                                        word_dict[pair[1].root.lemma_] = pair[1].orth_
+                                else:
+                                    if not pair[1].root.lemma_ in word_dict:
+                                        word_dict[pair[1].root.lemma_] = pair[1].orth_
 
-                                word_dict[pair[0].root.lemma_] = pair[0].orth_
+                                    word_dict[pair[0].root.lemma_] = pair[0].orth_
 
-                            # Append word pairs
-                            word_pairs.append(
-                              {'source': word_dict[pair[0].root.lemma_],
-                               'target': word_dict[pair[1].root.lemma_],
-                               'device': 'between'})
+                                # Append word pairs
+                                word_pairs.append(
+                                  {'source': word_dict[pair[0].root.lemma_],
+                                   'target': word_dict[pair[1].root.lemma_],
+                                   'device': 'between'})
+                            except AttributeError:
+                                pass
 
         print("--- Nouns: %s seconds ---" % (time.time() - start_time))
 
@@ -257,11 +262,19 @@ class CohesionAnalyzerEnglish:
 
                 # As long as we still find connections keep on looping
                 while found:
+
+                    print 'found at start of while loop: %s' % found
                     # Found set to false
                     found = False
 
+                    print 'length of word_pairs: %i' % len(word_pairs)
+
                     # Loop over every word pair again
                     for num_again in range(0, len(word_pairs)):
+
+                        # print 'look at (%s, %s)' % (word_pairs[num_again]['source'],
+                        #                             word_pairs[num_again]['target'])
+
                         # Word pairs do not match
                         if num_again not in index_pairs_added:
                             # Store both words of current pair in list
@@ -301,6 +314,8 @@ class CohesionAnalyzerEnglish:
                                 # every word pair again to see if we
                                 # missed a connection with the new word
                                 found = True
+
+                    print 'found at end of while loop: %s' % found
 
                 # Append current cluster to all clusters
                 clusters.append(current_cluster)
