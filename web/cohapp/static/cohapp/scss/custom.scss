@@ -181,6 +181,8 @@ h1, h2, h3, h4, h5 {
 // ************** Landing Page ***************************
 
 #landing-page {
+  margin-bottom: 0;
+
   #landing {
     min-height: 70vh;
     background-color: #24292e;
@@ -248,6 +250,16 @@ h1, h2, h3, h4, h5 {
       }
 
     }
+  }
+}
+
+#landingpage {
+  #editor-button {
+    width: 100%;
+    background-color: #1f77b4;
+    color: #fff;
+    height: 55px;
+    font-size: 1.4rem;
   }
 }
 
