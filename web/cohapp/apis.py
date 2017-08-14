@@ -35,10 +35,12 @@ from cohapp.serializers import TextDataSerializer
 
 
 # Load language models
-nlp = spacy.load('en_core_web_md')
-# nlp = spacy.load('en')
-analyzer = CohesionAnalyzerEnglish(nlp)
+nlp_english = spacy.load('en_core_web_md')
+# nlp_german = spacy.load('de_core_news_md')
 
+# Setup instance of analyzer
+analyzer_english = CohesionAnalyzerEnglish(nlp_english)
+# analyzer_german = CohesionAnalyzerEnglish(nlp_german)
 
 # ======================= Helper Classes =================================
 class JSONResponse(HttpResponse):
@@ -480,7 +482,7 @@ class TextAnalyzer(APIView):
             # Detect language
             if text_language == 'en':
                 # Analyze english text
-                results = analyzer.get_data_for_visualization(text)
+                results = analyzer_english.get_data_for_visualization(text)
             elif text_language == 'de':
                 # Analyze german text
                 results = analyzeTextCohesion(text)

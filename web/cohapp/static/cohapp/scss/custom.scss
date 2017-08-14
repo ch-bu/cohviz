@@ -579,7 +579,11 @@ h1, h2, h3, h4, h5 {
 }
 
 .highlight-experiment-status {
-  background-color: #26a69a;
+  background-color: #FFCF52;
+
+  span {
+      color: #000;
+  }
 }
 
 
