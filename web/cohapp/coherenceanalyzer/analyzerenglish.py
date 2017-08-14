@@ -177,8 +177,12 @@ class CohesionAnalyzerEnglish:
 
                 print 'length of combinations: %i' % len(list(my_combinations))
 
+                print my_combinations
+
                 # Calculate similarity between pairs
-                similarity_pairs = [(pair[0], pair[1], pair[0].similarity(pair[1])) for comb in my_combinations for pair in comb]
+                similarity_pairs = [(comb[0], comb[1], comb[0].similarity(comb[1])) for comb in my_combinations]
+
+                print similarity_pairs
 
                 # We are only interested in pairs with a high similarity
                 similarity_filter = filter(lambda x: x[2] > .76, similarity_pairs)
