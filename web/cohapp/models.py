@@ -95,11 +95,6 @@ class Subject(models.Model):
     Stores data of user
     """
 
-    # GENDER_CHOICES = (
-    #   ('M', 'Male'),
-    #   ('F', 'Female'),
-    # )
-
     user = models.OneToOneField(User)
     experiment = models.ForeignKey(
         'Experiment', verbose_name='Experiment', on_delete=models.CASCADE)
@@ -107,8 +102,6 @@ class Subject(models.Model):
     trusted = models.BooleanField(default=False)
     nr_measurements = models.PositiveSmallIntegerField(
         verbose_name='Number of Measurements', default=0)
-    # age = models.PositiveSmallIntegerField()
-    # gender = models.CharField(max_length = 1, choices = GENDER_CHOICES)
 
     def __str__(self):
         return self.user.username + " - " + self.experiment.name
