@@ -1,4 +1,5 @@
 from cohapp.models import Experiment, Measurement, Subject, Group, TextData
+from cohapp.models import CognitiveLoadRevision
 from rest_framework import serializers
 from datetime import datetime
 
@@ -34,7 +35,14 @@ class MeasurementSerializer(serializers.ModelSerializer):
         fields = ('experiment', 'publication', 'measure',
                   'nr_group', 'instruction', 'group', 'instruction_review',
                   'instruction_strategies')
-        # read_only_fields = ('experiment', '')
+
+
+class CognitiveLoadRevisionSerializer(serializers.ModelSerializer):
+
+  class Meta:
+    model = CognitiveLoadRevision
+    fields = ('experiment', 'subject', 'question1', 'question2',
+              'question3', 'question4')
 
 
 class SubjectSerializer(serializers.ModelSerializer):

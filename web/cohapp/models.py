@@ -64,6 +64,7 @@ class Group(models.Model):
     def __str__(self):
         return self.abbreviation
 
+
 class CognitiveLoadRevision(models.Model):
   """
   Stores the cognitive load measure after the revision of the text.
@@ -71,7 +72,7 @@ class CognitiveLoadRevision(models.Model):
 
   experiment = models.ForeignKey('Experiment', verbose_name='Experiment',
     on_delete=models.CASCADE)
-  subject = models.ForeignKey('Subject', verbose_name='Data_Subject_ID',
+  subject = models.ForeignKey('Subject', verbose_name='Subject',
                               on_delete=models.CASCADE)
 
   # How easy or diffi cult was it for you to revise your explanation?

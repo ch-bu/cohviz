@@ -46,6 +46,7 @@ urlpatterns = [
     url(r'^csv_text_export/(?P<experiment_password>\w+)',
         cohviews.csv_text_view, name='csv_text_export'),
 
+    # ************** APIs*********************************************
     url(r'^apis/user-specific/(?P<experiment_password>\w+)',
         apis.UserSpecificView.as_view()),
     url(r'^apis/user-specific-name/(?P<user_name>\w+)/(?P<experiment_id>[0-9]+)',
@@ -63,4 +64,6 @@ urlpatterns = [
     url(r'^apis/textanalyzer/', apis.TextAnalyzer.as_view()),
     url(r'^apis/textdata/(?P<experiment_password>\w+)',
         apis.TextDataView.as_view()),
+    url(r'^apis/cognitiveloadrevision/(?P<experiment_password>\w+)',
+        apis.CognitiveLoadRevisionView.as_view()),
 ]

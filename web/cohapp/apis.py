@@ -31,6 +31,7 @@ from cohapp.serializers import ExperimentSerializer
 from cohapp.serializers import MeasurementSerializer
 from cohapp.serializers import SubjectSerializer
 from cohapp.serializers import GroupSerializer
+from cohapp.serializers import CognitiveLoadRevisionSerializer
 from cohapp.serializers import TextDataSerializer
 
 
@@ -119,6 +120,39 @@ class MeasurementView(APIView):
 
         # Serializer is not valid
         return Response(serializer.errors, status=400)
+
+
+class CognitiveLoadRevisionView(APIView):
+    """
+    API to store the cognitive load measure after
+    the revison of a text.
+    """
+
+    authentication_classes = (CsrfExemptSessionAuthentication,
+        BasicAuthentication)
+    permission_classes = (AllowAny, )
+
+    def post(self, request, experiment_password):
+        # Try to get the experiment
+        try:
+            experiment = Experiment.objects.get(master_pw=experiment_password)
+        except Experiment.DoesNotExist:
+            return Response({'description': 'Experiment could not be found.'}, status=404)
+
+        # Try to get the user from the request
+        try:
+            user = User.objects.get(username=request.user)
+            subject = Subject.objects.get(experiment=experiment, user=user)
+        # User does not exist
+        except Subject.DoesNotExist:
+            return Response({'description': 'User could not be found.'}, status=404)
+
+        serializer = CognitiveLoadRevisionSerializer(subject)
+
+        print serializer.data
+
+        return Response(serializer.data)
+
 
 
 class SingleExperimentView(APIView):
@@ -261,7 +295,7 @@ class UserSpecificNameView(APIView):
         except Subject.DoesNotExist:
             return Response({}, status=404)
 
-        serializer = SubjectSerializer(subject)
+        serializer = SubjectSerializer(subject, many=True)
         return Response(serializer.data)
 
 
