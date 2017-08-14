@@ -4,7 +4,7 @@ from django.template.defaultfilters import slugify
 from django.conf import settings
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
-from random import randint
+# from random import randint
 
 
 class Experiment(models.Model):
@@ -63,6 +63,30 @@ class Group(models.Model):
 
     def __str__(self):
         return self.abbreviation
+
+class CognitiveLoadRevision(models.Model):
+  """
+  Stores the cognitive load measure after the revision of the text.
+  """
+
+  experiment = models.ForeignKey('Experiment', verbose_name='Experiment',
+    on_delete=models.CASCADE)
+  subject = models.ForeignKey('Subject', verbose_name='Data_Subject_ID',
+                              on_delete=models.CASCADE)
+
+  # How easy or diffi cult was it for you to revise your explanation?
+  question1 = models.PositiveSmallIntegerField()
+
+  # How easy or diffi cult was it for you to work with the feedback?
+  question2 = models.PositiveSmallIntegerField()
+
+  # How easy or difficult was it for you to distinguihs important
+  # and unimportant information of the feedback?
+  question3 = models.PositiveSmallIntegerField()
+
+  # How easy or difficult was it for you to identify cohesion deficits
+  # in the explanation?
+  question4 = models.PositiveSmallIntegerField()
 
 
 class Measurement(models.Model):
