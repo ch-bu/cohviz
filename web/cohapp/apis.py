@@ -126,6 +126,8 @@ class CognitiveLoadRevisionView(APIView):
     """
     API to store the cognitive load measure after
     the revison of a text.
+
+        POST: Stores cognitive load items from revision
     """
 
     authentication_classes = (CsrfExemptSessionAuthentication,
@@ -142,16 +144,27 @@ class CognitiveLoadRevisionView(APIView):
         # Try to get the user from the request
         try:
             user = User.objects.get(username=request.user)
-            subject = Subject.objects.get(experiment=experiment, user=user)
+            subject = Subject.objects.get(experiment=experiment, user=user.id)
         # User does not exist
         except Subject.DoesNotExist:
             return Response({'description': 'User could not be found.'}, status=404)
 
-        serializer = CognitiveLoadRevisionSerializer(subject)
+        # Get data from request
+        data = request.data
+        data['subject'] = subject.id
+        data['experiment'] = experiment.id
+        data['measurement'] = subject.nr_measurements
 
-        print serializer.data
+        # Serialize data
+        serializer = CognitiveLoadRevisionSerializer(data=data)
 
-        return Response(serializer.data)
+
+        if serializer.is_valid():
+            serializer.save()
+
+            return Response(serializer.data, status=201)
+
+        return Response(serializer.errors, status=400)
 
 
 

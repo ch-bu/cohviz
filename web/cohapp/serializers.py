@@ -41,7 +41,7 @@ class CognitiveLoadRevisionSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = CognitiveLoadRevision
-    fields = ('experiment', 'subject', 'question1', 'question2',
+    fields = ('experiment', 'subject', 'measurement', 'question1', 'question2',
               'question3', 'question4')
 
 

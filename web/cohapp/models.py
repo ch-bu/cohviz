@@ -74,6 +74,7 @@ class CognitiveLoadRevision(models.Model):
     on_delete=models.CASCADE)
   subject = models.ForeignKey('Subject', verbose_name='Subject',
                               on_delete=models.CASCADE)
+  measurement = models.PositiveSmallIntegerField()
 
   # How easy or diffi cult was it for you to revise your explanation?
   question1 = models.PositiveSmallIntegerField()

@@ -22,6 +22,7 @@ var my_urls = function urls() {
     container.groups = container.website + '/apis/groups/';
     container.textanalyzer = container.website + '/apis/textanalyzer/';
     container.textdata = container.website + '/apis/textdata/';
+    container.cognitiveloadrevision = container.webseite + 'apis/cognitiveloadrevision/';
     container.csv_text_data = container.website + '/csv_text_export/';
 
     container.single_experiment = container.website + '/experiment/';
