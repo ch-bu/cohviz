@@ -38,11 +38,17 @@ ADD . /code/
 # Run migrations
 # RUN python /code/manage.py migrate
 
+
+# install spacy - if import did not work
+pip install -U spacy
+
 # Download spacy datasets
 RUN python -m spacy download en
 
 # Download correct model
 RUN python -m spacy download en_core_web_md
+RUN python -m spacy download de_core_news_md
+
 
 # Install pygermanet stuff
 # RUN mongod --dbpath /code/cohapp/coherenceanalyzer/mongodb &
