@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 from nltk.corpus import wordnet as wn
-from itertools import combinations, permutations, chain, repeat
+from itertools import combinations, permutations, chain, repeat, product
 from collections import Counter
 import re
 import spacy
@@ -173,7 +173,8 @@ class CohesionAnalyzerEnglish:
 
                 # Combine all chunks between two sentences
                 # my_combinations = list(zip(r, p)) for (r, p) in zip(repeat(noun_chunks), permutations(noun_chunks_next))
-                my_combinations = list(combinations(noun_chunks + noun_chunks_next, 2))
+                # my_combinations = list(combinations(noun_chunks + noun_chunks_next, 2))
+                my_combinations = list(product(noun_chunks, noun_chunks_next))
 
                 print 'length of combinations: %i' % len(list(my_combinations))
 
