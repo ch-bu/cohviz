@@ -29,6 +29,11 @@ Setup mongo database:
 
 ```
 docker exec -it cohviz_web_1 /bin/bash
+
+2do: pip install spacy
+install language-models of spacy
+
+
 mongod --dbpath /cohapp/coherenceanalyzer/mongodb/ &
 python -m pygermanet.mongo_import /code/cohapp/coherenceanalyzer/GN_V90_XML/
 ```
@@ -40,7 +45,7 @@ import nltk
 nltk.download()
 ```
 
-Your application should be running on `localhost:8080`. 
+Your application should be running on `localhost:8084`. 
 
 In order to stop the application run
 
