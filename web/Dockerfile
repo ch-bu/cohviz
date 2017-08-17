@@ -40,7 +40,7 @@ ADD . /code/
 
 
 # install spacy - if import did not work
-pip install -U spacy
+RUN pip install -U spacy
 
 # Download spacy datasets
 RUN python -m spacy download en
