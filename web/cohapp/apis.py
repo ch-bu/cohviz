@@ -3,7 +3,6 @@
 import random
 import string
 import json
-import spacy
 
 from Levenshtein import distance
 
@@ -13,8 +12,6 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.http import JsonResponse
 
-from coherenceanalyzer.coherenceanalyzer import analyzeTextCohesion
-from coherenceanalyzer.analyzerenglish import CohesionAnalyzerEnglish
 
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
@@ -34,13 +31,15 @@ from cohapp.serializers import GroupSerializer
 from cohapp.serializers import CognitiveLoadRevisionSerializer
 from cohapp.serializers import TextDataSerializer
 
+from languagemodels import analyzer_english
 
 # Load language models
-nlp_english = spacy.load('en_core_web_md')
+# nlp_english = spacy.load('en_core_web_md')
+# print 'Sprachmodell geladen'
 # nlp_german = spacy.load('de_core_news_md')
 
 # Setup instance of analyzer
-analyzer_english = CohesionAnalyzerEnglish(nlp_english)
+# analyzer_english = CohesionAnalyzerEnglish(nlp_english)
 # analyzer_german = CohesionAnalyzerEnglish(nlp_german)
 
 # ======================= Helper Classes =================================
@@ -529,10 +528,13 @@ class TextAnalyzer(APIView):
             # Detect language
             if text_language == 'en':
                 # Analyze english text
+                # results = analyzeTextCohesion()
+                # results = analyzer_german(text)
                 results = analyzer_english.get_data_for_visualization(text)
             elif text_language == 'de':
                 # Analyze german text
-                results = analyzeTextCohesion(text)
+                results = analyzer_english(text)
+                # results = analyzeTextCohesion(text)
             else:
                 return JsonResponse({}, status=500)
         # response_data = {'word_pairs': analyzer.word_pairs,
