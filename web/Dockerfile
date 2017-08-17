@@ -23,7 +23,8 @@ RUN echo "deb http://repo.mongodb.org/apt/debian jessie/mongodb-org/3.4 main" | 
 RUN apt-get update -y
 RUN apt-get install vim -y
 RUN apt-get install python-enchant -y
-Run apt-get install mongodb-org -y
+RUN apt-get install -y python-pip
+RUN apt-get install mongodb-org -y
 
 # Add python package list to code dir
 ADD requirements.txt /code/
@@ -44,10 +45,11 @@ RUN pip install -U spacy
 
 # Download spacy datasets
 RUN python -m spacy download en
+RUN python -m spacy download de
 
-# Download correct model
-RUN python -m spacy download en_core_web_md
-RUN python -m spacy download de_core_news_md
+# Download correct model --- already done in the task before
+#RUN python -m spacy download en_core_web_md
+#RUN python -m spacy download de_core_news_md
 
 
 # Install pygermanet stuff
