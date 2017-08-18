@@ -35,7 +35,7 @@ Install spacy models:
 ```
 docker exec -it cohviz_web_1 /bin/bash
 pip install -U spacy
-python -m spacy download en_core_web_md
+python -m spacy download en_core_web_sm
 python -m spacy download de_core_news_md
 ```
 
