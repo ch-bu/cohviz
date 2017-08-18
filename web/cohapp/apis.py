@@ -32,7 +32,7 @@ from cohapp.serializers import CognitiveLoadRevisionSerializer
 from cohapp.serializers import TextDataSerializer
 
 # Load language models
-from languagemodels import analyzer_english
+from languagemodels import analyzer_english, analyzer_german
 
 
 # ======================= Helper Classes =================================

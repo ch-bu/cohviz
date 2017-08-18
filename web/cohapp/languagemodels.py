@@ -4,8 +4,8 @@ from coherenceanalyzer.analyzerenglish import CohesionAnalyzerEnglish
 
 
 # Load language models
-nlp_english = spacy.load('en_core_web_md')
-# nlp_german = spacy.load('de_core_news_md')
+nlp_english = spacy.load('en_core_web_sm')
+nlp_german = spacy.load('de_core_news_md')
 
 analyzer_english = CohesionAnalyzerEnglish(nlp_english)
-# analyzer_german = CohesionAnalyzerEnglish(nlp_german)
+analyzer_german = CohesionAnalyzerEnglish(nlp_german)
