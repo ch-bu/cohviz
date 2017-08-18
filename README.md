@@ -20,26 +20,29 @@ Migrate django models:
 
 ```
 docker exec -it cohviz_web_1 /bin/bash
-python manage.py makemigrations
 python manage.py migrate
-```
-
-Install spacy language models:
-
-```
-docker exec -it cohviz_web_1 /bin/bash
-python -m spacy download en_core_web_md
-python -m spacy download de_core_news_md
 ```
 
 Collectstatic files
 
 ```
 docker exec -it cohviz_web_1 /bin/bash
-npm install
-gulp sass
-gulp webpack
 python manage.py collectstatic
+```
+
+Install spacy models:
+
+```
+docker exec -it cohviz_web_1 /bin/bash
+pip install -U spacy
+python -m spacy download en_core_web_md
+python -m spacy download de_core_news_md
+```
+
+Setup django super user
+
+```
+python manage.py createsuperuser
 ```
 
 Your application should be running on `localhost:8084`. 

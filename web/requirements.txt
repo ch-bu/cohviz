@@ -13,5 +13,4 @@ python-levenshtein
 pyenchant
 more-itertools
 repoze.lru
-spacy
 langdetect

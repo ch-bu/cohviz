@@ -24,10 +24,17 @@ RUN apt-get install -y python-pip
 # Add python package list to code dir
 ADD requirements.txt /code/
 
-# Install python packages
-RUN pip install -r requirements.txt
-
 # Add content of local machine directory
 # to /code directory
 ADD . /code/
 
+# Install python packages
+RUN pip install -r requirements.txt
+
+# Install npm packages
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
+RUN apt-get install -y nodejs
+
+# Gulp files
+CMD ["gulp", "sass"]
+CMD ["gulp", "webpack"]
