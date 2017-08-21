@@ -520,9 +520,11 @@ class TextAnalyzer(APIView):
             text_language = detect(text)
             # Detect language
             if text_language == 'en':
+                print '**** Englisch *****'
                 # Analyze english text
                 results = analyzer_english.get_data_for_visualization(text)
             elif text_language == 'de':
+                print '**** German *****'
                 # Analyze german text
                 results = analyzer_german.get_data_for_visualization(text)
             else:

@@ -43,13 +43,11 @@ class CohesionAnalyzerEnglish:
         subjects = []
         word_dict = {}
 
-        start_time = time.time()
-
-
         for index, sentence in enumerate(sentences):
             # Get noun chunks
             noun_chunks = filter(lambda x: x.root.prob < -7, list(sentence.noun_chunks))
 
+            print [nc for nc in noun_chunks]
             # print [(token, token.root.prob) for token in noun_chunks]
 
             try:
@@ -176,14 +174,8 @@ class CohesionAnalyzerEnglish:
                 # my_combinations = list(combinations(noun_chunks + noun_chunks_next, 2))
                 my_combinations = list(product(noun_chunks, noun_chunks_next))
 
-                print 'length of combinations: %i' % len(list(my_combinations))
-
-                print my_combinations
-
                 # Calculate similarity between pairs
                 similarity_pairs = [(comb[0], comb[1], comb[0].similarity(comb[1])) for comb in my_combinations]
-
-                print similarity_pairs
 
                 # We are only interested in pairs with a high similarity
                 similarity_filter = filter(lambda x: x[2] > .76, similarity_pairs)
@@ -213,18 +205,12 @@ class CohesionAnalyzerEnglish:
                             except AttributeError:
                                 pass
 
-        print("--- Nouns: %s seconds ---" % (time.time() - start_time))
-
         return word_pairs, subjects
 
 
     def _get_clusters(self, sentences, word_pairs):
         """Calculates the number of computed
         clusters"""
-
-
-        start_time = time.time()
-        print '--- Start clusters ---'
 
         # If we only have one sentence return word pairs
         # as single cluster
@@ -325,8 +311,6 @@ class CohesionAnalyzerEnglish:
                 # Append current cluster to all clusters
                 clusters.append(current_cluster)
 
-        print("--- Number Clusters: %s seconds ---" % (time.time() - start_time))
-
         return clusters
 
 
@@ -334,8 +318,6 @@ class CohesionAnalyzerEnglish:
         """Generate a dictionary that
         has the words as key and the cluster number
         as value"""
-
-        start_time = time.time()
 
         # When clusters are calculated assign them to the word_pairs as
         # an additional value
@@ -354,8 +336,6 @@ class CohesionAnalyzerEnglish:
             for word in words:
                 word_cluster_index[word] = index
 
-        print("--- Number Cluster Index: %s seconds ---" % (time.time() - start_time))
-
         return word_cluster_index
 
 
@@ -370,8 +350,6 @@ class CohesionAnalyzerEnglish:
         Returns:
             String - An html formatted string
         """
-
-        start_time = time.time()
 
         # Init string to return
         html_string = ''
@@ -424,15 +402,11 @@ class CohesionAnalyzerEnglish:
             # Change to span element
             html_string = html_string.replace(node, '<span class="cluster-' + str(cluster) + '">' + node + '</span>')
 
-        print("--- Html Index: %s seconds ---" % (time.time() - start_time))
-
         return html_string
 
 
     def _calculate_number_relations(self, word_pairs):
         """Calculates the number of relations"""
-
-        start_time = time.time()
 
         # Make tuples from word_pairs
         tuples = map(lambda x: (x['source'], x['target']), word_pairs)
@@ -440,8 +414,6 @@ class CohesionAnalyzerEnglish:
         # Remove duplicates
         tuples = list(set([(pair[0], pair[1])
             for pair in tuples if pair[0] != pair[1]]))
-
-        print("--- Number Relations Index: %s seconds ---" % (time.time() - start_time))
 
         return len(tuples)
 
