@@ -580,7 +580,7 @@ def generateHTML(paragraph_split, word_lemma_mapping, word_cluster_index):
         #######################################
 
         # Split text into sentences
-        tokenized_sentences = sent_tokenize(paragraph.decode('utf-8'))
+        tokenized_sentences = sent_tokenize(paragraph)
 
         # Split words within sentences
         words_split_per_sentence = [sentence.split() for sentence in tokenized_sentences]
@@ -728,7 +728,7 @@ def analyzeTextCohesion(text):
     ############################################################################
     # Save text to file
     f = open(constants.temp_text, 'w')
-    f.write(text)
+    f.write(text.encode('utf-8'))
     f.close()
 
     # Tokenize

@@ -22,6 +22,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.authentication import BasicAuthentication
 
+from coherenceanalyzer.coherenceanalyzer import analyzeTextCohesion
+
 from cohapp import constants
 from cohapp.models import Experiment, Measurement, Group, Subject
 from cohapp.serializers import ExperimentSerializer
@@ -32,7 +34,7 @@ from cohapp.serializers import CognitiveLoadRevisionSerializer
 from cohapp.serializers import TextDataSerializer
 
 # Load language models
-from languagemodels import analyzer_english, analyzer_german
+from languagemodels import analyzer_english
 
 
 # ======================= Helper Classes =================================
@@ -526,7 +528,7 @@ class TextAnalyzer(APIView):
             elif text_language == 'de':
                 print '**** German *****'
                 # Analyze german text
-                results = analyzer_german.get_data_for_visualization(text)
+                results = analyzer = analyzeTextCohesion(text)
             else:
                 return JsonResponse({}, status=500)
 
