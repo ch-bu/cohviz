@@ -4,6 +4,7 @@ import Preloader from '../preloader.jsx';
 import Instruction from './instruction.jsx';
 import Editor from './editor.jsx';
 import Revision from './revision.jsx';
+import CognitiveLoad from './cognitive-load.jsx';
 import HeaderExperiment from './header-experiment.jsx';
 import 'whatwg-fetch';
 
@@ -24,6 +25,7 @@ class Treatment extends React.Component {
       showRevisionPrompt: false,
       showRevision: false,
       showThankYouPage: false,
+      showCognitiveLoadDraft: false,
       // State variables
       seenInstruction: false,
       seenEditor: false,
@@ -77,6 +79,7 @@ class Treatment extends React.Component {
     this.renderEditor = this.renderEditor.bind(this);
     this.renderRevisionPrompt = this.renderRevisionPrompt.bind(this);
     this.renderRevision = this.renderRevision.bind(this);
+    this.renderCognitiveLoadDraft = this.renderCognitiveLoadDraft(this);
     this.userClickedInstruction = this.userClickedInstruction.bind(this);
     this.userClickedRevisionPrompt = this.userClickedRevisionPrompt.bind(this);
     this.sendDataToServer = this.sendDataToServer.bind(this);
@@ -103,6 +106,9 @@ class Treatment extends React.Component {
                              updateDraft={this.updateDraft}
                              draftText={this.state.draftText}
                              editorVisible={this.state.showEditor} />;
+        // Render cognitive load draft
+        } else if (this.state.showCognitiveLoadDraft) {
+          template = <CognitiveLoad />;
         // Render prompt for revision
         } else if (this.state.showRevisionPrompt) {
           template = <Instruction
@@ -248,7 +254,8 @@ class Treatment extends React.Component {
 
     // Set state variables
     this.setState({showEditor: false, showInstruction: false,
-                   showRevisionPrompt: true, showRevision: false,
+                   showCognitiveLoadDraft: true,
+                   showRevisionPrompt: false, showRevision: false,
                    draftAnalyzed: null,
                    durationDraft: (new Date() - this.state.durationDraft) / 1000,
                    draftPlainText: getPlainText(this.state.draftText)}, () => {
@@ -277,6 +284,14 @@ class Treatment extends React.Component {
         self.setState({draftAnalyzed: data, seenEditor: true});
       });
     });
+  }
+
+  /**
+   * Displays the cognitive load questions
+   * after the user has written the draft
+   */
+  renderCognitiveLoadDraft() {
+
   }
 
   /**
