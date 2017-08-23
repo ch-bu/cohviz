@@ -66,4 +66,6 @@ urlpatterns = [
         apis.TextDataView.as_view()),
     url(r'^apis/cognitiveloadrevision/(?P<experiment_password>\w+)',
         apis.CognitiveLoadRevisionView.as_view()),
+    url(r'^apis/cognitiveloaddraft/(?P<experiment_password>\w+)',
+        apis.CognitiveLoadDraftView.as_view()),
 ]

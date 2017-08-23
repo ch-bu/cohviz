@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
@@ -65,6 +67,35 @@ class Group(models.Model):
         return self.abbreviation
 
 
+class CognitiveLoadDraft(models.Model):
+  """
+  Stores the cognitive load measure after the revision of the text.
+  """
+
+  experiment = models.ForeignKey('Experiment', verbose_name='Experiment',
+    on_delete=models.CASCADE)
+  subject = models.ForeignKey('Subject', verbose_name='Subject',
+                              on_delete=models.CASCADE)
+  measurement = models.PositiveSmallIntegerField()
+
+  # Wie startk hast du dich gerade beim Verfassen des Entwurfs
+  # angestrengt?
+  # 1: Sehr stark angestrengt; 9: gar nicht angestrengt
+  question1 = models.PositiveSmallIntegerField()
+
+  # Wie schwierig war es für dich den Entwurf zu verfassen?
+  # 1: Sehr schwierig, 9 gar nicht schwierig
+  question2 = models.PositiveSmallIntegerField()
+
+  # Wie überzeugend schätzt du deinen Entwurf ein?
+  # 1. Sehr überzeugend; 5 gar nicht überzeugend
+  question3 = models.PositiveSmallIntegerField()
+
+  # Wie verständlich schätzt du deinen Entwurf?
+  # 1: Sehr verständlich; 5 gar nicht verständlich
+  question4 = models.PositiveSmallIntegerField()
+
+
 class CognitiveLoadRevision(models.Model):
   """
   Stores the cognitive load measure after the revision of the text.
@@ -76,18 +107,21 @@ class CognitiveLoadRevision(models.Model):
                               on_delete=models.CASCADE)
   measurement = models.PositiveSmallIntegerField()
 
-  # How easy or diffi cult was it for you to revise your explanation?
+  # Wie startk hast du dich gerade bei der Überarbeitung des Entwurfs
+  # angestrengt?
+  # 1: Sehr stark angestrengt; 9: gar nicht angestrengt
   question1 = models.PositiveSmallIntegerField()
 
-  # How easy or diffi cult was it for you to work with the feedback?
+  # Wie schwierig war es für dich den Entwurf zu überarbeiten?
+  # 1: Sehr schwierig, 9 gar nicht schwierig
   question2 = models.PositiveSmallIntegerField()
 
-  # How easy or difficult was it for you to distinguihs important
-  # and unimportant information of the feedback?
+  # Wie überzeugend schätzt du deine überarbeitete Eroerterung ein?
+  # 1. Sehr überzeugend; 5 gar nicht überzeugend
   question3 = models.PositiveSmallIntegerField()
 
-  # How easy or difficult was it for you to identify cohesion deficits
-  # in the explanation?
+  # Wie verständlich schätzt du überarbeitete Eroertung ein?
+  # 1: Sehr verständlich; 5 gar nicht verständlich
   question4 = models.PositiveSmallIntegerField()
 
 

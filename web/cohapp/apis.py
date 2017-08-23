@@ -31,6 +31,7 @@ from cohapp.serializers import MeasurementSerializer
 from cohapp.serializers import SubjectSerializer
 from cohapp.serializers import GroupSerializer
 from cohapp.serializers import CognitiveLoadRevisionSerializer
+from cohapp.serializers import CognitiveLoadDraftSerializer
 from cohapp.serializers import TextDataSerializer
 
 # Load language models
@@ -160,6 +161,50 @@ class CognitiveLoadRevisionView(APIView):
 
         return Response(serializer.errors, status=400)
 
+
+class CognitiveLoadDraftView(APIView):
+    """
+    API to store the cognitive load measure after
+    the revison of a text.
+
+        POST: Stores cognitive load items from draft
+    """
+
+    authentication_classes = (CsrfExemptSessionAuthentication,
+        BasicAuthentication)
+    permission_classes = (AllowAny, )
+
+    def post(self, request, experiment_password):
+        # Try to get the experiment
+        try:
+            experiment = Experiment.objects.get(master_pw=experiment_password)
+        except Experiment.DoesNotExist:
+            return Response({'description': 'Experiment could not be found.'}, status=404)
+
+        # Try to get the user from the request
+        try:
+            user = User.objects.get(username=request.user)
+            subject = Subject.objects.get(experiment=experiment, user=user.id)
+        # User does not exist
+        except Subject.DoesNotExist:
+            return Response({'description': 'User could not be found.'}, status=404)
+
+        # Get data from request
+        data = request.data
+        data['subject'] = subject.id
+        data['experiment'] = experiment.id
+        data['measurement'] = subject.nr_measurements
+
+        # Serialize data
+        serializer = CognitiveLoadDraftSerializer(data=data)
+
+
+        if serializer.is_valid():
+            serializer.save()
+
+            return Response(serializer.data, status=201)
+
+        return Response(serializer.errors, status=400)
 
 
 class SingleExperimentView(APIView):
