@@ -23,6 +23,7 @@ var my_urls = function urls() {
     container.textanalyzer = container.website + '/apis/textanalyzer/';
     container.textdata = container.website + '/apis/textdata/';
     container.cognitiveloadrevision = container.webseite + 'apis/cognitiveloadrevision/';
+    container.cognitiveloaddraft = container.webseite + 'apis/cognitiveloaddraft/';
     container.csv_text_data = container.website + '/csv_text_export/';
 
     container.single_experiment = container.website + '/experiment/';
