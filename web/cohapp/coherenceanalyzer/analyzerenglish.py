@@ -39,7 +39,6 @@ class CohesionAnalyzerEnglish:
         return list of sentences with nouns"""
 
         word_pairs = []
-        lemma_to_word = {}
         visword_to_word = {}
         subjects = []
         objects = []
@@ -60,21 +59,16 @@ class CohesionAnalyzerEnglish:
 
             # Build dict with lemma
             for word in noun_chunks:
+                # word_lower = re.sub('\,', '', word.orth_.lower()).strip()
                 word_lower = word.orth_.lower()
 
-                if not word.root.lemma_ in word_dict:
+                if not word_dict.get(word.root.lemma_):
                     word_dict[word.root.lemma_] = word_lower
 
                 if visword_to_word.get(word_lower):
                     visword_to_word[word_lower].append(word.orth_)
                 else:
                     visword_to_word[word_lower] = [word.orth_]
-
-                # lemma_to_word[word.root.lemma]:
-                if lemma_to_word.get(word.root.lemma_):
-                    lemma_to_word[word.root.lemma_].append(word.orth_)
-                else:
-                    lemma_to_word[word.root.lemma_] = [word.orth_]
 
             # Get subjects
             subjects_cur = [s for s in noun_chunks
@@ -151,7 +145,7 @@ class CohesionAnalyzerEnglish:
                             except AttributeError:
                                 pass
 
-        return word_pairs, subjects, objects, lemma_to_word, visword_to_word
+        return word_pairs, subjects, objects, visword_to_word
 
 
     def _get_clusters(self, sentences, word_pairs):
@@ -389,7 +383,7 @@ class CohesionAnalyzerEnglish:
         text_nlp, sentences, paragraphs = self._preprocess_text(text)
 
         # Generate word pairs
-        word_pairs, subjects, objects, lemma_to_word, visword_to_word \
+        word_pairs, subjects, objects, visword_to_word \
             = self._generate_nouns(sentences)
 
         # Get clusters
