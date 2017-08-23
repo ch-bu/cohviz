@@ -36,3 +36,6 @@ web/cohapp/static/cohapp/**/*.map
 
 # Ignore npm debugging log
 web/npm-debug.log
+
+# Ignore language models
+languagemodels/

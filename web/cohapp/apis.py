@@ -22,6 +22,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.authentication import BasicAuthentication
 
+from coherenceanalyzer.coherenceanalyzer import analyzeTextCohesion
+
 from cohapp import constants
 from cohapp.models import Experiment, Measurement, Group, Subject
 from cohapp.serializers import ExperimentSerializer
@@ -31,16 +33,9 @@ from cohapp.serializers import GroupSerializer
 from cohapp.serializers import CognitiveLoadRevisionSerializer
 from cohapp.serializers import TextDataSerializer
 
+# Load language models
 from languagemodels import analyzer_english
 
-# Load language models
-# nlp_english = spacy.load('en_core_web_md')
-# print 'Sprachmodell geladen'
-# nlp_german = spacy.load('de_core_news_md')
-
-# Setup instance of analyzer
-# analyzer_english = CohesionAnalyzerEnglish(nlp_english)
-# analyzer_german = CohesionAnalyzerEnglish(nlp_german)
 
 # ======================= Helper Classes =================================
 class JSONResponse(HttpResponse):
@@ -527,22 +522,14 @@ class TextAnalyzer(APIView):
             text_language = detect(text)
             # Detect language
             if text_language == 'en':
+                print '**** Englisch *****'
                 # Analyze english text
-                # results = analyzeTextCohesion()
-                # results = analyzer_german(text)
                 results = analyzer_english.get_data_for_visualization(text)
             elif text_language == 'de':
+                print '**** German *****'
                 # Analyze german text
-                results = analyzer_english(text)
-                # results = analyzeTextCohesion(text)
+                results = analyzer = analyzeTextCohesion(text)
             else:
                 return JsonResponse({}, status=500)
-        # response_data = {'word_pairs': analyzer.word_pairs,
-        #                  'numSentences': analyzer.get_num_sentences(),
-        #                  'cohSentences': cohS['coh_sen'],
-        #                  'cohNotSentences': cohS['coh_not_sen'],
-        #                  'clusters': analyzer.get_whole_clusters(),
-        #                  'numConcepts': analyzer.get_num_concepts(),
-        #                  'numClusters': analyzer.get_num_clusters(),
-        #                  'lemmaDic': analyzer.lemmaDic}
+
         return JsonResponse(results, status=200)

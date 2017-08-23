@@ -12,7 +12,7 @@ services:
     volumes:
       - ./web:/code
       - ./web/static:/usr/src/app/static
-    command: /usr/local/bin/gunicorn toolapp.wsgi:application -w 2 -b :8000 --reload
+    command: /usr/local/bin/gunicorn toolapp.wsgi:application -w 1 -t 120 -b :8000 --reload
   # The web server
   nginx:
     restart: always

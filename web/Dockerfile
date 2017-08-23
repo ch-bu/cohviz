@@ -23,28 +23,23 @@ RUN echo "deb http://repo.mongodb.org/apt/debian jessie/mongodb-org/3.4 main" | 
 RUN apt-get update -y
 RUN apt-get install vim -y
 RUN apt-get install python-enchant -y
-Run apt-get install mongodb-org -y
+RUN apt-get install -y python-pip
+RUN apt-get install mongodb-org -y
 
 # Add python package list to code dir
 ADD requirements.txt /code/
-
-# Install python packages
-RUN pip install -r requirements.txt
 
 # Add content of local machine directory
 # to /code directory
 ADD . /code/
 
-# Run migrations
-# RUN python /code/manage.py migrate
+# Install python packages
+RUN pip install -r requirements.txt
 
-# Download spacy datasets
-RUN python -m spacy download en
+# Install npm packages
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
+RUN apt-get install -y nodejs
 
-# Download correct model
-RUN python -m spacy download en_core_web_md
-
-# Install pygermanet stuff
-# RUN mongod --dbpath /code/cohapp/coherenceanalyzer/mongodb &
-# RUN mongod --dbpath /code/cohapp/coherenceanalyzer/mongodb/ &
-# RUN python -m pygermanet.mongo_import /code/cohapp/coherenceanalyzer/GN_V90_XML/
+# Gulp files
+CMD ["gulp", "sass"]
+CMD ["gulp", "webpack"]

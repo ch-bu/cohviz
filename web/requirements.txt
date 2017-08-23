@@ -1,4 +1,4 @@
-Django==1.10.5
+Django==1.11.4
 gunicorn==19.3.0
 psycopg2
 django-htmlmin
@@ -13,5 +13,4 @@ python-levenshtein
 pyenchant
 more-itertools
 repoze.lru
-spacy
 langdetect

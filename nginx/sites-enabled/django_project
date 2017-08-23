@@ -1,6 +1,6 @@
 server {
 	listen 80;
-	server_name example.org;
+	server_name tool.ezw.uni-freiburg.de;
 	charset utf-8;
 	access_log /var/log/nginx/example.log;
 
