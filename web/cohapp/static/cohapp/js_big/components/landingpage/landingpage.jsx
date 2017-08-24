@@ -83,7 +83,7 @@ class LandingPage extends React.Component {
       console.log(error);
     }).then(data => {
       console.log(data);
-      self.setState({'data': data, 'loading': false, 'myText': data['html_string']}, () => {
+      self.setState({'data': data, 'loading': false}, () => {
         self.renderCMap();
       })
     });
@@ -97,7 +97,7 @@ class LandingPage extends React.Component {
    */
   renderCMap() {
     var self = this;
-
+    var voronoi;
     ///////////////
     // Render Cmap
     ///////////////
@@ -126,7 +126,9 @@ class LandingPage extends React.Component {
       .attr('width', width)
       .attr('height', height)
       .style('fill', 'red')
-      .style('opacity', 0);
+      .style('opacity', 0)
+      .on('mousemove', mouseMoveHandler)
+      .on('mouseleave', mouseLeaveHandler);
 
     // Init progress bar
     var progressBar = svg.append('line')
@@ -198,8 +200,6 @@ class LandingPage extends React.Component {
         .attr('transform', function(d) {
           return 'translate(' + d.x + ',' + d.y + ')';
         });
-        // .on('mouseover', mouseover)
-        // .on('mouseout', mouseout);
 
       // Append circle
       var circle = node.append('circle')
@@ -233,7 +233,46 @@ class LandingPage extends React.Component {
         .text(function(d) {
           return d.id;
         });
+
+
+
     });
+
+    function mouseMoveHandler() {
+      // Change text of selected element
+      svg.selectAll('text')
+        .style('font-weight', 'normal')
+        .style('font-size', '16px');
+
+      svg.selectAll('circle')
+        .style('stroke', 'none')
+        .style('stroke-width', 0);
+
+      // Get data
+      var mouse = d3.mouse(this);
+
+      // Find nearest point to mouse coordinate
+      var nearestPoint = simulation.find(mouse[0], mouse[1]);
+
+      // Select element that is hovered
+      var nodeSelected = g.select('#node-' + nearestPoint.id);
+      var nodeData = nodeSelected.data()[0];
+
+      // Change text of selected element
+      nodeSelected.select('text')
+        .style('opacity', 1)
+        .style('font-weight', 'bold')
+        .style('font-size', '20px');
+
+      nodeSelected.select('circle')
+        .style('stroke', '#000')
+        .style('stroke-width', 1);
+    }
+
+    function mouseLeaveHandler() {
+      console.log('out');
+    }
+
   }
 
 
