@@ -31,6 +31,8 @@ class Treatment extends React.Component {
       seenEditor: false,
       seenRevisionPrompt: false,
       seenRevision: false,
+      // Cognitive load
+      cognitiveLoadDraft: null,
       // Data variables
       durationDraft: null,
       durationRevision: null,
@@ -83,6 +85,7 @@ class Treatment extends React.Component {
     this.userClickedInstruction = this.userClickedInstruction.bind(this);
     this.userClickedRevisionPrompt = this.userClickedRevisionPrompt.bind(this);
     this.sendDataToServer = this.sendDataToServer.bind(this);
+    this.updateCognitiveLoadDraft = this.updateCognitiveLoadDraft.bind(this);
   }
 
   render() {
@@ -108,7 +111,7 @@ class Treatment extends React.Component {
                              editorVisible={this.state.showEditor} />;
         // Render cognitive load draft
         } else if (this.state.showCognitiveLoadDraft) {
-          template = <CognitiveLoad />;
+          template = <CognitiveLoad updateDraft={this.updateCognitiveLoadDraft} />;
         // Render prompt for revision
         } else if (this.state.showRevisionPrompt) {
           template = <Instruction
@@ -292,6 +295,15 @@ class Treatment extends React.Component {
    */
   renderCognitiveLoadDraft() {
 
+  }
+
+  /**
+   * Update Cognitive load draft items
+   */
+  updateCognitiveLoadDraft(data) {
+    this.setState({'cognitiveLoadDraft': data,
+                   'showCognitiveLoadDraft': false,
+                   'showRevisionPrompt': true});
   }
 
   /**

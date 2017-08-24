@@ -27,7 +27,9 @@ class CognitiveLoad extends React.Component {
           </div>
           <div className="col s4 m3">
             <p className="range-field">
-              <input onMouseUp={this.firstQuestionInteraction} type="range" id="question1" min="1" max="9" />
+              <input onMouseUp={this.firstQuestionInteraction}
+                ref={(el) => { this.firstQuestion = el; }}
+                type="range" id="question1" min="1" max="9" />
             </p>
           </div>
           <div className="col s4 m2">
@@ -42,7 +44,9 @@ class CognitiveLoad extends React.Component {
           </div>
           <div className="col s4 m3">
             <p className="range-field">
-              <input onMouseUp={this.secondQuestionInteraction} type="range" id="question2" min="1" max="9" />
+              <input onMouseUp={this.secondQuestionInteraction}
+                ref={(el) => { this.secondQuestion = el; }}
+                type="range" id="question2" min="1" max="9" />
             </p>
           </div>
           <div className="col s4 m2">
@@ -57,7 +61,9 @@ class CognitiveLoad extends React.Component {
           </div>
           <div className="col s4 m3">
             <p className="range-field">
-              <input onMouseUp={this.thirdQuestionInteraction} type="range" id="question3" min="1" max="5" />
+              <input onMouseUp={this.thirdQuestionInteraction}
+                ref={(el) => { this.thirdQuestion = el; }}
+                type="range" id="question3" min="1" max="5" />
             </p>
           </div>
           <div className="col s4 m2">
@@ -72,7 +78,9 @@ class CognitiveLoad extends React.Component {
           </div>
           <div className="col s4 m3">
             <p className="range-field">
-              <input onMouseUp={this.fourthQuestionInteraction} type="range" id="question4" min="1" max="5" />
+              <input onMouseUp={this.fourthQuestionInteraction}
+                ref={(el) => { this.fourthQuestion = el; }}
+                type="range" id="question4" min="1" max="5" />
             </p>
           </div>
           <div className="col s4 m2">
@@ -97,6 +105,15 @@ class CognitiveLoad extends React.Component {
 
   fourthQuestionInteraction() {
     this.setState({finishedFourthQuestion: true});
+
+    // Data of all questions
+    var data = {'firstQuestion': this.firstQuestion.value,
+                'secondQuestion': this.secondQuestion.value,
+                'thirdQuestion': this.thirdQuestion.value,
+                'fourthQuestion': this.fourthQuestion.value};
+
+    // Update draft in parent
+    this.props.updateDraft(data);
   }
 };
 
