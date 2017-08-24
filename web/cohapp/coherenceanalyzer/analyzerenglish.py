@@ -58,7 +58,7 @@ class CohesionAnalyzerEnglish:
             noun_chunks = filter(lambda x: x.root.prob < -7,
                 list(sentence.noun_chunks))
 
-            nouns = [noun for noun in sentence if noun.pos_ in ['NOUN', 'PROP']]
+            nouns = [noun for noun in sentence if noun.pos_ in ['NOUN', 'PROPN']]
 
             # Build dict with lemma
             for word in nouns:
@@ -121,7 +121,7 @@ class CohesionAnalyzerEnglish:
                 ################################################
 
                 # Get noun chunks of next sentence
-                nouns_next = [noun for noun in sentences[index + 1] if noun.pos_ in ['NOUN', 'PROP']]
+                nouns_next = [noun for noun in sentences[index + 1] if noun.pos_ in ['NOUN', 'PROPN']]
 
                 # Combine all chunks between two sentences
                 my_combinations = list(product(nouns, nouns_next))
