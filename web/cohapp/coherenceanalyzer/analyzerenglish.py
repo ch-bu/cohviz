@@ -441,7 +441,7 @@ class CohesionAnalyzerEnglish:
 
         # return self.word_pairs
         return {'links': word_pairs,
-                'lemmaWord': lemma_to_word,
+                'lemmaWordRelations': lemma_to_word,
                 'nodes': nodes_dict,
                 'numSentences': len(sentences),
                 'numConcepts': len(nodes),

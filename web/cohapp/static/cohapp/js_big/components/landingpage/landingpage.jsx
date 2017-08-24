@@ -15,6 +15,7 @@ class LandingPage extends React.Component {
     // Bind this to methods
     this.analyzeText = this.analyzeText.bind(this);
     this.renderCMap = this.renderCMap.bind(this);
+    this.highlighWordInText = this.highlighWordInText.bind(this);
   }
 
   render() {
@@ -267,14 +268,41 @@ class LandingPage extends React.Component {
       nodeSelected.select('circle')
         .style('stroke', '#000')
         .style('stroke-width', 1);
+
+      self.highlighWordInText(nodeData.id);
     }
 
     function mouseLeaveHandler() {
-      console.log('out');
+      // Get inner html
+      var innerHTML = self.textInput.innerHTML;
+
+      // Remove all spans from text
+      innerHTML =  innerHTML.replace(/<\/?span[^>]*>/g,"");
+
+      // Update state
+      self.setState({'myText': innerHTML});
     }
 
   }
 
+  highlighWordInText(nodeData) {
+    // Get inner html
+    var innerHTML = this.textInput.innerHTML;
+
+    // Remove all spans from text
+    innerHTML =  innerHTML.replace(/<\/?span[^>]*>/g,"");
+
+    // Get corresponding orthograpic text of node
+    var relations = this.state.data.lemmaWordRelations[nodeData];
+
+    // Replace word with span
+    for (var i = 0; i < relations.length; i++) {
+      var re = new RegExp(relations[i], 'g');
+      innerHTML = innerHTML.replace(re, '<span class="cluster-' + this.state.data.wordClusterIndex[nodeData] + '">' + relations[i] + '</span>');
+    }
+
+    this.setState({'myText': innerHTML});
+  }
 
   componentDidMount() {
     // Enable editor
