@@ -4,7 +4,8 @@ import Preloader from '../preloader.jsx';
 import Instruction from './instruction.jsx';
 import Editor from './editor.jsx';
 import Revision from './revision.jsx';
-import CognitiveLoad from './cognitive-load.jsx';
+import CognitiveLoadDraft from './cognitive-load-draft.jsx';
+import CognitiveLoadRevision from './cognitive-load-revision.jsx';
 import HeaderExperiment from './header-experiment.jsx';
 import 'whatwg-fetch';
 
@@ -26,6 +27,7 @@ class Treatment extends React.Component {
       showRevision: false,
       showThankYouPage: false,
       showCognitiveLoadDraft: false,
+      showCognitiveLoadRevision: false,
       // State variables
       seenInstruction: false,
       seenEditor: false,
@@ -33,6 +35,7 @@ class Treatment extends React.Component {
       seenRevision: false,
       // Cognitive load
       cognitiveLoadDraft: null,
+      cognitiveLoadRevision: null,
       // Data variables
       durationDraft: null,
       durationRevision: null,
@@ -81,11 +84,11 @@ class Treatment extends React.Component {
     this.renderEditor = this.renderEditor.bind(this);
     this.renderRevisionPrompt = this.renderRevisionPrompt.bind(this);
     this.renderRevision = this.renderRevision.bind(this);
-    this.renderCognitiveLoadDraft = this.renderCognitiveLoadDraft(this);
     this.userClickedInstruction = this.userClickedInstruction.bind(this);
     this.userClickedRevisionPrompt = this.userClickedRevisionPrompt.bind(this);
     this.sendDataToServer = this.sendDataToServer.bind(this);
     this.updateCognitiveLoadDraft = this.updateCognitiveLoadDraft.bind(this);
+    this.updateCognitiveLoadRevision = this.updateCognitiveLoadRevision.bind(this);
   }
 
   render() {
@@ -111,7 +114,7 @@ class Treatment extends React.Component {
                              editorVisible={this.state.showEditor} />;
         // Render cognitive load draft
         } else if (this.state.showCognitiveLoadDraft) {
-          template = <CognitiveLoad updateDraft={this.updateCognitiveLoadDraft} />;
+          template = <CognitiveLoadDraft updateDraft={this.updateCognitiveLoadDraft} />;
         // Render prompt for revision
         } else if (this.state.showRevisionPrompt) {
           template = <Instruction
@@ -128,9 +131,9 @@ class Treatment extends React.Component {
                                editorVisible={this.state.showRevision}
                                revisionText={this.state.revisionText}
                                analyzeRevision={this.analyzeRevision} />;
-        // Show thankyoupage
-        } else if (this.state.showThankYouPage) {
-
+        // Render cognitive load revision
+        } else if (this.state.showCognitiveLoadRevision) {
+          template = <CognitiveLoadRevision updateRevision={this.updateCognitiveLoadRevision} />;
         }
       }
     }
@@ -290,20 +293,25 @@ class Treatment extends React.Component {
   }
 
   /**
-   * Displays the cognitive load questions
-   * after the user has written the draft
-   */
-  renderCognitiveLoadDraft() {
-
-  }
-
-  /**
    * Update Cognitive load draft items
    */
   updateCognitiveLoadDraft(data) {
     this.setState({'cognitiveLoadDraft': data,
                    'showCognitiveLoadDraft': false,
                    'showRevisionPrompt': true});
+  }
+
+  /**
+   * Update Cognitive load draft items
+   */
+  updateCognitiveLoadRevision(data) {
+    var self = this;
+
+    // Update state and send data to server
+    this.setState({cognitiveLoadRevision: data,
+                   showCognitiveLoadRevision: false}, () => {
+                    self.sendDataToServer();
+                   });
   }
 
   /**
@@ -335,9 +343,7 @@ class Treatment extends React.Component {
         self.setState({'revisionAnalyzed': data,
                 showEditor: false, showInstruction: false,
                 showRevisionPrompt: false, showRevision: false,
-                showThankYouPage: true}, () => {
-                  self.sendDataToServer();
-        });
+                showCognitiveLoadRevision: true});
       });
     });
   }

@@ -1,4 +1,4 @@
-class CognitiveLoad extends React.Component {
+class CognitiveLoadDraft extends React.Component {
   constructor(props) {
     super(props);
 
@@ -118,4 +118,4 @@ class CognitiveLoad extends React.Component {
 };
 
 
-export default CognitiveLoad;
+export default CognitiveLoadDraft;
