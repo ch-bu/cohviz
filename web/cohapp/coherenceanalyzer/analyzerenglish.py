@@ -45,12 +45,15 @@ class CohesionAnalyzerEnglish:
         objects = []
         word_dict = {}
 
-        def append_to_word_pairs(zero, one, device):
+        def append_to_word_pairs(zero, one, device,
+                                 sentence_source, sentence_target):
             """A little helper function to avoid redundancy"""
             word_pairs.append(
               {'source': zero.lemma_,
                'target': one.lemma_,
-               'device': device})
+               'device': device,
+               'sentence_source': sentence_source,
+               'sentence_target': sentence_target})
 
         # Loop over every sentence
         for index, sentence in enumerate(sentences):
@@ -91,27 +94,32 @@ class CohesionAnalyzerEnglish:
                 # Add all word pairs
                 for pair in list(product(subjects_cur, objects_cur)):
                     # Append
-                    append_to_word_pairs(pair[0], pair[1], 'within')
+                    append_to_word_pairs(pair[0], pair[1], 'within',
+                        index + 1, index + 1)
             # We only have only subject
             elif len(subjects_cur) == 1 and len(objects_cur) == 0:
                 # Append
-                append_to_word_pairs(subjects_cur[0], subjects_cur[0], 'within')
+                append_to_word_pairs(subjects_cur[0], subjects_cur[0], 'within',
+                    index + 1, index + 1)
             # We have only one object
             elif len(subjects_cur) == 0 and len(objects_cur) == 1:
                 # Append
-                append_to_word_pairs(objects_cur[0], objects_cur[0], 'within')
+                append_to_word_pairs(objects_cur[0], objects_cur[0], 'within',
+                    index + 1, index + 1)
             # We have multiple subjects
             elif len(subjects_cur) > 0 and len(objects_cur) == 0:
                 # Combine word pairs
                 for pair in list(combinations(subjects_cur, 2)):
                     # Append
-                     append_to_word_pairs(pair[0], pair[1], 'within')
+                     append_to_word_pairs(pair[0], pair[1], 'within',
+                        index + 1, index + 1)
             # We have multiple objects
             elif len(subjects_cur) == 0 and len(objects_cur) > 0:
                 # Combine word pairs
                 for pair in list(combinations(objects_cur, 2)):
                     # Append
-                     append_to_word_pairs(pair[0], pair[1], 'within')
+                     append_to_word_pairs(pair[0], pair[1], 'within',
+                        index + 1, index + 1)
 
 
             # Lets look at the next sentence if there is a link between the two
@@ -139,7 +147,8 @@ class CohesionAnalyzerEnglish:
                     for pair in similarity_filter:
                         # Do not add pairs with same orthographie
                         if pair[0].lemma_ != pair[1].lemma_:
-                            append_to_word_pairs(pair[0], pair[1], 'between')
+                            append_to_word_pairs(pair[0], pair[1], 'between',
+                                index + 1, index + 2)
 
                 #####################################################
                 ## Get hypernyms and hyponyms
@@ -175,7 +184,9 @@ class CohesionAnalyzerEnglish:
                             word_pairs.append(
                               {'source': noun,
                                'target': shared_element,
-                               'device': 'between'})
+                               'device': 'between',
+                               'sentence_source': index + 1,
+                               'sentence_target': index + 2})
 
         # Make set of lemma to word
         return word_pairs, subjects, objects, lemma_to_word, visword_to_word
@@ -407,6 +418,63 @@ class CohesionAnalyzerEnglish:
         return len(tuples)
 
 
+    def calc_local_cohesion(self, word_pairs, sentences):
+        """Calculates local cohesion
+        by a probability score between 0 and 1.
+        1 indicates a fully local coherent text.
+
+        Args:
+            word_pairs (dict) - All word pairs of text
+            sentences (Array) - List of all sentences
+
+        Return:
+            Float - Local cohesion of text
+        """
+
+        # Get all connections also within sentences
+        connections = list(set(map(lambda x: (x['sentence_source'],
+            x['sentence_target']), word_pairs)))
+
+        # Loop over every sentence
+        # We need to count the sentences that overlap by argument
+        # overlap
+        for val, sentence in enumerate(sentences):
+            # Do not loop over last sentence
+            if val != (len(sentences) - 1):
+
+                lemmas_current_sentence = [word.lemma_ for word in sentence
+                        if word.pos_ in ['NOUN', 'PROPN']]
+
+                lemmas_next_sentence = [word.lemma_ for word in sentences[val + 1]
+                        if word.pos_ in ['NOUN', 'PROPN']]
+
+                if bool(set(lemmas_current_sentence) & set(lemmas_next_sentence)):
+                    connections.append((val, val + 1))
+
+        # Get all connections between sentences
+        connections_between = list(set(filter(lambda x: x[0] != x[1], connections)))
+
+        # If we only have one sentence there is no point in calculating
+        # local cohesion. Check if zero division error occurs
+        try:
+            # Return local cohesion
+            local_cohesion = float(len(connections_between)) / (len(sentences) - 1)
+        except ZeroDivisionError:
+            return {'local_cohesion': None,
+                    'cohSentences': None,
+                    'cohNotSentences': None}
+
+        # Number of coherent sentences
+        num_coh_sentences = len(connections_between)
+
+        # Number of non-coherent sentences
+        num_non_coh_sentences = (len(sentences) - 1) - num_coh_sentences
+
+        return {'local_cohesion': local_cohesion,
+                'cohSentences': num_coh_sentences,
+                'cohNotSentences': num_non_coh_sentences}
+
+
     def get_data_for_visualization(self, text):
         """Get all data for get_data for visualization"""
 
@@ -426,6 +494,9 @@ class CohesionAnalyzerEnglish:
         # Calculate number of Relations
         numRelations = self._calculate_number_relations(word_pairs)
 
+        # Calculate local cohesion
+        local_cohesion = self.calc_local_cohesion(word_pairs, sentences)
+
         # All concepts
         concepts = list(set([pair['source'] for pair in word_pairs] +
                        [pair['target'] for pair in word_pairs]))
@@ -441,14 +512,16 @@ class CohesionAnalyzerEnglish:
 
         # return self.word_pairs
         return {'links': word_pairs,
-                'lemmaWordRelations': lemma_to_word,
                 'nodes': nodes_dict,
                 'numSentences': len(sentences),
-                'numConcepts': len(nodes),
                 'clusters': cluster,
                 'numRelations': numRelations,
                 'numCluster': len(cluster),
+                'local cohesion': local_cohesion['local_cohesion'],
+                'cohSentences': local_cohesion['cohSentences'],
+                'cohNotSentences': local_cohesion['cohNotSentences'],
+                'lemmaWordRelations': lemma_to_word,
+                'wordClusterIndex': word_cluster_index,
                 'numSentences': len(sentences),
                 'numConcepts': len(concepts),
-                'wordClusterIndex': word_cluster_index,
                 'html_string': html_string}
