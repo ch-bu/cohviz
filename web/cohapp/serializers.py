@@ -1,5 +1,5 @@
 from cohapp.models import Experiment, Measurement, Subject, Group, TextData
-from cohapp.models import CognitiveLoadRevision, CognitiveLoadDraft
+from cohapp.models import CognitiveLoadRevision
 from rest_framework import serializers
 from datetime import datetime
 
@@ -25,7 +25,9 @@ class TextDataSerializer(serializers.ModelSerializer):
                  'post_num_non_coherent_sentences', 'pre_num_concepts',
                  'post_num_concepts', 'pre_page_duration',
                  'post_page_duration', 'measurement', 'experiment', 'subject',
-                 'group', 'levenshtein_distance')
+                 'group', 'levenshtein_distance',
+                 'cld_draft_question1', 'cld_draft_question2',
+                 'cld_draft_question3', 'cld_draft_question4')
 
 
 class MeasurementSerializer(serializers.ModelSerializer):
@@ -41,14 +43,6 @@ class CognitiveLoadRevisionSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = CognitiveLoadRevision
-    fields = ('experiment', 'subject', 'measurement', 'question1', 'question2',
-              'question3', 'question4')
-
-
-class CognitiveLoadDraftSerializer(serializers.ModelSerializer):
-
-  class Meta:
-    model = CognitiveLoadDraft
     fields = ('experiment', 'subject', 'measurement', 'question1', 'question2',
               'question3', 'question4')
 

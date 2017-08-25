@@ -371,7 +371,6 @@ class Treatment extends React.Component {
    */
   sendDataToServer() {
     // Save data for draft
-    //
     let dataToSend = {
         // Draft
         'pre_text': this.state.draftPlainText,
@@ -382,6 +381,10 @@ class Treatment extends React.Component {
         'pre_num_non_coherent_sentences': this.state.draftAnalyzed.cohNotSentences,
         'pre_num_concepts': this.state.draftAnalyzed.numConcepts,
         'pre_local_cohesion': this.state.draftAnalyzed['local cohesion'],
+        'cld_draft_question1': this.state.cognitiveLoadDraft['firstQuestion'],
+        'cld_draft_question2': this.state.cognitiveLoadDraft['secondQuestion'],
+        'cld_draft_question3': this.state.cognitiveLoadDraft['thirdQuestion'],
+        'cld_draft_question4': this.state.cognitiveLoadDraft['fourthQuestion'],
         // Revision
         'post_text': this.state.revisionPlainText,
         'post_page_duration': this.state.durationRevision,

@@ -31,7 +31,6 @@ from cohapp.serializers import MeasurementSerializer
 from cohapp.serializers import SubjectSerializer
 from cohapp.serializers import GroupSerializer
 from cohapp.serializers import CognitiveLoadRevisionSerializer
-from cohapp.serializers import CognitiveLoadDraftSerializer
 from cohapp.serializers import TextDataSerializer
 
 # Load language models

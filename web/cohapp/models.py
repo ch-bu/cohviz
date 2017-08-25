@@ -6,7 +6,6 @@ from django.template.defaultfilters import slugify
 from django.conf import settings
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
-# from random import randint
 
 
 class Experiment(models.Model):
@@ -65,35 +64,6 @@ class Group(models.Model):
 
     def __str__(self):
         return self.abbreviation
-
-
-class CognitiveLoadDraft(models.Model):
-  """
-  Stores the cognitive load measure after the revision of the text.
-  """
-
-  experiment = models.ForeignKey('Experiment', verbose_name='Experiment',
-    on_delete=models.CASCADE)
-  subject = models.ForeignKey('Subject', verbose_name='Subject',
-                              on_delete=models.CASCADE)
-  measurement = models.PositiveSmallIntegerField()
-
-  # Wie startk hast du dich gerade beim Verfassen des Entwurfs
-  # angestrengt?
-  # 1: Sehr stark angestrengt; 9: gar nicht angestrengt
-  question1 = models.PositiveSmallIntegerField()
-
-  # Wie schwierig war es für dich den Entwurf zu verfassen?
-  # 1: Sehr schwierig, 9 gar nicht schwierig
-  question2 = models.PositiveSmallIntegerField()
-
-  # Wie überzeugend schätzt du deinen Entwurf ein?
-  # 1. Sehr überzeugend; 5 gar nicht überzeugend
-  question3 = models.PositiveSmallIntegerField()
-
-  # Wie verständlich schätzt du deinen Entwurf?
-  # 1: Sehr verständlich; 5 gar nicht verständlich
-  question4 = models.PositiveSmallIntegerField()
 
 
 class CognitiveLoadRevision(models.Model):
@@ -263,6 +233,23 @@ class TextData(models.Model):
     post_page_duration = models.FloatField()
 
     levenshtein_distance = models.PositiveSmallIntegerField()
+
+    # Wie startk hast du dich gerade bei der Überarbeitung des Entwurfs
+    # angestrengt?
+    # 1: Sehr stark angestrengt; 9: gar nicht angestrengt
+    cld_draft_question1 = models.PositiveSmallIntegerField(default=0)
+
+    # Wie schwierig war es für dich den Entwurf zu überarbeiten?
+    # 1: Sehr schwierig, 9 gar nicht schwierig
+    cld_draft_question2 = models.PositiveSmallIntegerField(default=0)
+
+    # Wie überzeugend schätzt du deine überarbeitete Eroerterung ein?
+    # 1. Sehr überzeugend; 5 gar nicht überzeugend
+    cld_draft_question3 = models.PositiveSmallIntegerField(default=0)
+
+    # Wie verständlich schätzt du überarbeitete Eroertung ein?
+    # 1: Sehr verständlich; 5 gar nicht verständlich
+    cld_draft_question4 = models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
         return (self.experiment.name + " " +
