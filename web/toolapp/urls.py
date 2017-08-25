@@ -63,9 +63,5 @@ urlpatterns = [
     url(r'^apis/groups/', apis.GroupView.as_view(), name='group_api'),
     url(r'^apis/textanalyzer/', apis.TextAnalyzer.as_view()),
     url(r'^apis/textdata/(?P<experiment_password>\w+)',
-        apis.TextDataView.as_view()),
-    url(r'^apis/cognitiveloadrevision/(?P<experiment_password>\w+)',
-        apis.CognitiveLoadRevisionView.as_view()),
-    url(r'^apis/cognitiveloaddraft/(?P<experiment_password>\w+)',
-        apis.CognitiveLoadDraftView.as_view()),
+        apis.TextDataView.as_view())
 ]

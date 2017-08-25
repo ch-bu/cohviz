@@ -1,7 +1,5 @@
 from django.contrib import admin
 from .models import Experiment, Group, Measurement, Subject, TextData
-from .models import CognitiveLoadRevision
-
 
 @admin.register(Experiment)
 class ExperimentAdmin(admin.ModelAdmin):
@@ -36,10 +34,8 @@ class TextDataAdmin(admin.ModelAdmin):
                        'post_num_non_coherent_sentences',
                        'pre_num_concepts', 'post_num_concepts',
                        'pre_page_duration', 'post_page_duration',
-                       'levenshtein_distance')
-
-
-@admin.register(CognitiveLoadRevision)
-class CognitiveLoadRevisionAdmin(admin.ModelAdmin):
-  readonly_fields = ('subject', 'experiment', 'question1', 'question2',
-                     'question3', 'question4', 'measurement')
+                       'levenshtein_distance',
+                       'cld_draft_question1', 'cld_draft_question2',
+                       'cld_draft_question3', 'cld_draft_question4',
+                       'cld_revision_question1', 'cld_revision_question2',
+                       'cld_revision_question3', 'cld_revision_question4')

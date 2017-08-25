@@ -391,6 +391,10 @@ class Treatment extends React.Component {
         'cld_draft_question2': this.state.cognitiveLoadDraft['secondQuestion'],
         'cld_draft_question3': this.state.cognitiveLoadDraft['thirdQuestion'],
         'cld_draft_question4': this.state.cognitiveLoadDraft['fourthQuestion'],
+        'cld_revision_question1': this.state.cognitiveLoadRevision['firstQuestion'],
+        'cld_revision_question2': this.state.cognitiveLoadRevision['secondQuestion'],
+        'cld_revision_question3': this.state.cognitiveLoadRevision['thirdQuestion'],
+        'cld_revision_question4': this.state.cognitiveLoadRevision['fourthQuestion'],
         // Revision
         'post_text': this.state.revisionPlainText,
         'post_page_duration': this.state.durationRevision,
