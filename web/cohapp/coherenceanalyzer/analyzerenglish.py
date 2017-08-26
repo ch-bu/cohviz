@@ -379,19 +379,29 @@ class CohesionAnalyzerEnglish:
                     html_string = html_string + '&#8660; ' if cluster_changed else html_string
                 # Append last sentence
                 else:
+                    # Get text of last sentence
                     sentence = sent.text
+
+                    # Get cluster numbers of all words
+                    indexes_last_sentence = [word_cluster_index[node]
+                        for node in node_list if tokenized_sentences[index].text.find(visword_to_word[node][0]) != -1]
+
+                    # Get the most common cluster
+                    most_common_cluster_last_sentence = Counter(indexes_last_sentence).most_common(1)
+
+                    # Extract the number of the most common cluster
+                    cluster_last_sentence = most_common_cluster_last_sentence[0][0]
 
                     # Loop over every word we have
                     for node in node_list:
                         # The word is in the current cluster
-                        if word_cluster_index[node] == cluster_next:
-
+                        if word_cluster_index[node] == cluster_last_sentence:
                             # Loop over every possible word for word in visualization
                             for real_word in list(set(visword_to_word[node.lower()])):
                                 # Change to span element
                                 sentence = sentence.replace(real_word,
                                     '<span class="cluster-' +
-                                    str(cluster_next) + '">' +
+                                    str(cluster_last_sentence) + '">' +
                                     real_word + '</span>')
 
                     html_string += sentence
