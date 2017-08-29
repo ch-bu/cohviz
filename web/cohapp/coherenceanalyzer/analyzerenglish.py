@@ -40,6 +40,7 @@ class CohesionAnalyzerEnglish:
 
         word_pairs = []
         lemma_to_word = {}
+        word_to_lemma = {}
         visword_to_word = {}
         subjects = []
         objects = []
@@ -78,6 +79,10 @@ class CohesionAnalyzerEnglish:
                         lemma_to_word[word.lemma_].append(word.orth_)
                 else:
                     lemma_to_word[word.lemma_] = [word.orth_]
+
+                # Save word to lemmas
+                if not word_to_lemma.get(word.orth_):
+                    word_to_lemma[word.orth_] = word.lemma_
 
             # Get subjects
             subjects_cur = list(set([s for s in nouns
@@ -189,7 +194,8 @@ class CohesionAnalyzerEnglish:
                                'sentence_target': index + 2})
 
         # Make set of lemma to word
-        return word_pairs, subjects, objects, lemma_to_word, visword_to_word
+        return word_pairs, subjects, objects, lemma_to_word, \
+            visword_to_word, word_to_lemma
 
 
     def _get_clusters(self, sentences, word_pairs):
@@ -313,7 +319,8 @@ class CohesionAnalyzerEnglish:
         return word_cluster_index
 
 
-    def _get_html_string(self, node_list, word_cluster_index, paragraphs, visword_to_word):
+    def _get_html_string(self, node_list, word_cluster_index, paragraphs, visword_to_word,
+            word_to_lemma):
         """Generates an html string with spans for each word in order
         to signal the mapping between visualization and text
 
@@ -324,6 +331,9 @@ class CohesionAnalyzerEnglish:
         Returns:
             String - An html formatted string
         """
+
+        # print visword_to_word
+        # print word_cluster_index
 
         # Init string to return
         html_string = ''
@@ -342,8 +352,8 @@ class CohesionAnalyzerEnglish:
                 # Do not look at the last sentence
                 if index != (len(tokenized_sentences) - 1):
                     # Get cluster of current sentence
-                    indexes_cur_sentence = [word_cluster_index[node] for node in node_list if sent.text.find(visword_to_word[node][0]) != -1]
-                    indexes_next_sentence = [word_cluster_index[node] for node in node_list if tokenized_sentences[index + 1].text.find(visword_to_word[node][0]) != -1]
+                    indexes_cur_sentence = [word_cluster_index[word_to_lemma[orth]] for node in node_list for orth in visword_to_word[node] if sent.text.find(orth) != -1]
+                    indexes_next_sentence = [word_cluster_index[word_to_lemma[orth]] for node in node_list for orth in visword_to_word[node] if tokenized_sentences[index + 1].text.find(orth) != -1]
 
                     # Get most common cluster of current sentence
                     most_common_cluster_cur = Counter(indexes_cur_sentence).most_common(1)
@@ -383,13 +393,16 @@ class CohesionAnalyzerEnglish:
                     sentence = sent.text
 
                     # Get cluster numbers of all words
-                    indexes_last_sentence = [word_cluster_index[node]
-                        for node in node_list if tokenized_sentences[index].text.find(visword_to_word[node][0]) != -1]
+                    indexes_last_sentence = [word_cluster_index[word_to_lemma[orth]] \
+                        for node in node_list for orth in visword_to_word[node] if sent.text.find(orth) != -1]
 
+                    # print indexes_last_sentence
                     # Get the most common cluster
                     most_common_cluster_last_sentence = Counter(indexes_last_sentence).most_common(1)
 
                     # Extract the number of the most common cluster
+                    # print sentence
+                    # print most_common_cluster_last_sentence
                     cluster_last_sentence = most_common_cluster_last_sentence[0][0]
 
                     # Loop over every word we have
@@ -492,8 +505,8 @@ class CohesionAnalyzerEnglish:
         text_nlp, sentences, paragraphs = self._preprocess_text(text)
 
         # Generate word pairs
-        word_pairs, subjects, objects, lemma_to_word, visword_to_word \
-            = self._generate_nouns(sentences)
+        word_pairs, subjects, objects, lemma_to_word, visword_to_word, \
+            word_to_lemma = self._generate_nouns(sentences)
 
         # Get clusters
         cluster = self._get_clusters(sentences, word_pairs)
@@ -518,7 +531,7 @@ class CohesionAnalyzerEnglish:
 
         # Generate html string
         html_string = self._get_html_string(nodes_list, word_cluster_index,
-            paragraphs, visword_to_word)
+            paragraphs, visword_to_word, word_to_lemma)
 
         # return self.word_pairs
         return {'links': word_pairs,
