@@ -2,7 +2,7 @@
 
 A dockerized web app that visualizes the cohesive structure of a text.
 
-# How to run locally
+## How to run locally
 
 Clone the repository to your machine. You should have [Docker](https://docs.docker.com/engine/installation/) and [Docker Compose](https://docs.docker.com/compose/install/) installed. Make sure that you have ownership of all files:
 
@@ -71,3 +71,8 @@ In order to stop the application run
 ```
 docker-compose stop
 ```
+
+
+## License
+
+This project is licensed under the MIT License - see the [license.txt](license.txt) file for details
