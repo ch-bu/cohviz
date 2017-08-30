@@ -464,7 +464,6 @@ class CohesionAnalyzerEnglish:
         for val, sentence in enumerate(sentences):
             # Do not loop over last sentence
             if val != (len(sentences) - 1):
-
                 lemmas_current_sentence = [word.lemma_ for word in sentence
                         if word.pos_ in ['NOUN', 'PROPN']]
 
@@ -472,7 +471,7 @@ class CohesionAnalyzerEnglish:
                         if word.pos_ in ['NOUN', 'PROPN']]
 
                 if bool(set(lemmas_current_sentence) & set(lemmas_next_sentence)):
-                    connections.append((val, val + 1))
+                    connections.append((val + 1, val + 2))
 
         # Get all connections between sentences
         connections_between = list(set(filter(lambda x: x[0] != x[1], connections)))
