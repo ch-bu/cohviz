@@ -3,6 +3,7 @@ import Integrated from './treatments/integrated.jsx';
 import ControlGroup from './treatments/control-group.jsx';
 import CMap from './treatments/cmap.jsx';
 import Segmented from './treatments/segmented.jsx';
+import Massed from './treatments/massed.jsx';
 
 class Revision extends React.Component {
   constructor(props) {
@@ -56,6 +57,18 @@ class Revision extends React.Component {
                                  analyzeRevision={this.props.analyzeRevision}
                                  measurement={this.props.measurementDetails}
                                  updateEffortMiddle={this.props.updateEffortMiddle} />;
+        break;
+      case 'control segmented-massed':
+      case 'massed':
+        measurement = <Massed draftText={this.props.draftText}
+                              updateRevision={this.props.updateRevision}
+                              draftAnalyzed={this.props.draftAnalyzed}
+                              revisionText={this.props.revisionText}
+                              editorVisible={this.props.editorVisible}
+                              analyzeRevision={this.props.analyzeRevision}
+                              measurement={this.props.measurementDetails}
+                              updateEffortMiddle={this.props.updateEffortMiddle}
+                              measurement={this.props.measurement} />;
         break;
       default:
         <Preloader />;

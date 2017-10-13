@@ -1,6 +1,6 @@
 import Preloader from '../../preloader.jsx';
 
-class ControlGroup extends React.Component {
+class ControlGroupStatic extends React.Component {
   constructor(props) {
     super(props);
 
@@ -48,6 +48,7 @@ class ControlGroup extends React.Component {
     // Enable editor
     var editor = new MediumEditor(this.textInput, {
       toolbar: false,
+      disableEditing: true,
       placeholder: {
         // text: '',
         hideOnClick: true
@@ -69,4 +70,4 @@ class ControlGroup extends React.Component {
   }
 };
 
-export default ControlGroup;
+export default ControlGroupStatic;
