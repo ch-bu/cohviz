@@ -1,6 +1,7 @@
 import Preloader from '../../preloader.jsx';
 import Instruction from '../instruction.jsx';
 import StaticCmap from './static-cmap.jsx';
+import ControlGroup from './control-group.jsx';
 
 class Segmented extends React.Component {
   constructor(props) {
@@ -10,19 +11,23 @@ class Segmented extends React.Component {
     this.updateRevision = this.updateRevision.bind(this);
     this.returnInnerHTML = this.returnInnerHTML.bind(this);
     this.renderVideo = this.renderVideo.bind(this);
+    this.renderRevision = this.renderRevision.bind(this);
+    this.renderFeedbackAgain = this.renderFeedbackAgain.bind(this);
 
     // Set state
     this.state = {
       showFeedback: true,
       showVideo: false,
+      showFeedbackAgain: false,
       showRevision: false
     };
   }
 
   render() {
-
+    // Set content variable
     let content = null;
 
+    // Render according to state
     if (this.state.showFeedback) {
       content = <StaticCmap
                   draftText={this.props.draftText}
@@ -30,9 +35,26 @@ class Segmented extends React.Component {
                   revisionText={this.props.revisionText}
                   editorVisible={this.props.editorVisible}
                   nextRender={this.renderVideo} />;
-    } else {
-      console.log('showVideo');
-      content = <p>Video yeah</p>;
+    } else if (this.state.showFeedbackAgain) {
+      content = <StaticCmap
+                  draftText={this.props.draftText}
+                  draftAnalyzed={this.props.draftAnalyzed}
+                  revisionText={this.props.revisionText}
+                  editorVisible={this.props.editorVisible}
+                  nextRender={this.renderRevision} />;
+    // Instructional Video on global cohesion
+    } else if (this.state.showVideo) {
+      content = <Instruction
+              instructionText={this.props.measurement.instruction_second}
+              renderNextState={this.renderFeedbackAgain}
+              seenInstruction={true}
+              draftAnalyzed={true}/>;
+    // Revise text
+    } else if (this.state.showRevision) {
+      content = <ControlGroup updateRevision={this.props.updateRevision}
+                              revisionText={this.props.draftText}
+                              editorVisible={this.props.editorVisible}
+                              analyzeRevision={this.props.analyzeRevision} />;
     }
 
     return (
@@ -49,11 +71,30 @@ class Segmented extends React.Component {
     // Update state after user clicks revision
     this.setState({
       showVideo: true,
+      showFeedbackAgain: false,
       showFeedback: false,
       showRevision: false
     });
+  }
 
-    console.log('I clicked');
+  renderFeedbackAgain() {
+    // Update state after user clicks revision
+    this.setState({
+      showVideo: false,
+      showFeedbackAgain: true,
+      showFeedback: false,
+      showRevision: false
+    });
+  }
+
+  renderRevision() {
+    // Allow user to update text
+    this.setState({
+      showVideo: false,
+      showFeedbackAgain: false,
+      showFeedback: false,
+      showRevision: true
+    })
   }
 
   /**

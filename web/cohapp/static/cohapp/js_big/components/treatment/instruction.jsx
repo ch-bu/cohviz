@@ -9,7 +9,7 @@ class Instruction extends React.Component {
 
   render() {
 
-    let button = <a id="instruction-read" className="waves-effect waves-light btn" onClick={this.props.renderNextState}>Ich habe die Instruktion gelesen</a>;
+    let button = <a id="instruction-read" className="waves-effect waves-light btn" onClick={this.props.renderNextState}>Weiter</a>;
 
     if (this.props.seenInstruction) {
       if (this.props.draftAnalyzed == null) {

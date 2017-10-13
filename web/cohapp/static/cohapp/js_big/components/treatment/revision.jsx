@@ -49,11 +49,12 @@ class Revision extends React.Component {
         break;
       case 'segmented':
         measurement = <Segmented draftText={this.props.draftText}
-                                    updateRevision={this.props.updateRevision}
-                                    draftAnalyzed={this.props.draftAnalyzed}
-                                    revisionText={this.props.revisionText}
-                                    editorVisible={this.props.editorVisible}
-                                    analyzeRevision={this.props.analyzeRevision} />;
+                                 updateRevision={this.props.updateRevision}
+                                 draftAnalyzed={this.props.draftAnalyzed}
+                                 revisionText={this.props.revisionText}
+                                 editorVisible={this.props.editorVisible}
+                                 analyzeRevision={this.props.analyzeRevision}
+                                 measurement={this.props.measurementDetails} />;
         break;
       default:
         <Preloader />;
