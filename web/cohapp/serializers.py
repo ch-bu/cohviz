@@ -36,7 +36,7 @@ class MeasurementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Measurement
         fields = ('experiment', 'publication', 'measure',
-                  'nr_group', 'group', 'instruction_first',
+                  'nr_group', 'group', 'instruction', 'instruction_first',
                   'instruction_second')
 
 
