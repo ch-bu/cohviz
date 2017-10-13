@@ -36,6 +36,10 @@ class Treatment extends React.Component {
       // Cognitive load
       cognitiveLoadDraft: null,
       cognitiveLoadRevision: null,
+      cognitiveLoadMiddle: {'firstQuestion': 0,
+                'secondQuestion': 0,
+                'thirdQuestion': 0,
+                'fourthQuestion': 0},
       // Data variables
       durationDraft: null,
       durationRevision: null,
@@ -388,6 +392,7 @@ class Treatment extends React.Component {
         'pre_num_non_coherent_sentences': this.state.draftAnalyzed.cohNotSentences,
         'pre_num_concepts': this.state.draftAnalyzed.numConcepts,
         'pre_local_cohesion': this.state.draftAnalyzed['local cohesion'],
+        // Mental effort ratings
         'cld_draft_question1': this.state.cognitiveLoadDraft['firstQuestion'],
         'cld_draft_question2': this.state.cognitiveLoadDraft['secondQuestion'],
         'cld_draft_question3': this.state.cognitiveLoadDraft['thirdQuestion'],
@@ -396,6 +401,10 @@ class Treatment extends React.Component {
         'cld_revision_question2': this.state.cognitiveLoadRevision['secondQuestion'],
         'cld_revision_question3': this.state.cognitiveLoadRevision['thirdQuestion'],
         'cld_revision_question4': this.state.cognitiveLoadRevision['fourthQuestion'],
+        'cld_middle_question1': this.state.cognitiveLoadMiddle['firstQuestion'],
+        'cld_middle_question2': this.state.cognitiveLoadMiddle['secondQuestion'],
+        'cld_middle_question3': this.state.cognitiveLoadMiddle['thirdQuestion'],
+        'cld_middle_question4': this.state.cognitiveLoadMiddle['fourthQuestion'],
         // Revision
         'post_text': this.state.revisionPlainText,
         'post_page_duration': this.state.durationRevision,

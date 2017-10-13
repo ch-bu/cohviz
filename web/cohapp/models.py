@@ -224,6 +224,23 @@ class TextData(models.Model):
     # Wie startk hast du dich gerade bei der Überarbeitung des Entwurfs
     # angestrengt?
     # 1: Sehr stark angestrengt; 9: gar nicht angestrengt
+    cld_middle_question1 = models.PositiveSmallIntegerField(blank=True)
+
+    # Wie schwierig war es für dich den Entwurf zu überarbeiten?
+    # 1: Sehr schwierig, 9 gar nicht schwierig
+    cld_middle_question2 = models.PositiveSmallIntegerField(blank=True)
+
+    # Wie überzeugend schätzt du deine überarbeitete Eroerterung ein?
+    # 1. Sehr überzeugend; 5 gar nicht überzeugend
+    cld_middle_question3 = models.PositiveSmallIntegerField(blank=True)
+
+    # Wie verständlich schätzt du überarbeitete Eroertung ein?
+    # 1: Sehr verständlich; 5 gar nicht verständlich
+    cld_middle_question4 = models.PositiveSmallIntegerField(blank=True)
+
+    # Wie startk hast du dich gerade bei der Überarbeitung des Entwurfs
+    # angestrengt?
+    # 1: Sehr stark angestrengt; 9: gar nicht angestrengt
     cld_revision_question1 = models.PositiveSmallIntegerField(default=0)
 
     # Wie schwierig war es für dich den Entwurf zu überarbeiten?
