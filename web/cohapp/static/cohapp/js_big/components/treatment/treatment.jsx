@@ -118,7 +118,7 @@ class Treatment extends React.Component {
         // Render prompt for revision
         } else if (this.state.showRevisionPrompt) {
           template = <Instruction
-              instructionText={this.state.measurement.instruction_review}
+              instructionText={this.state.measurement.instruction_first}
               renderNextState={this.userClickedRevisionPrompt}
               seenInstruction={this.state.seenInstruction}
               draftAnalyzed={this.state.draftAnalyzed} />;
