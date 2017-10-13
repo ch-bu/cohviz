@@ -12,7 +12,7 @@ app.NewExperimentView = Backbone.View.extend({
 
 		// Get groups
 		this.groupsModel = new app.GroupsModel();
-		
+
 		// Get data from groups model
 		this.groupsModel.fetch({
 			success: function(response) {
@@ -105,7 +105,7 @@ app.NewExperimentView = Backbone.View.extend({
 			this.measurementModel.set({
 				experiment: "", publication: date,
 				measure: self.measurements[group], nr_group: Number(group),
-				instruction: "", group: treatment});
+				instruction_first: "", group: treatment});
 		}
 	},
 
@@ -173,7 +173,6 @@ app.NewExperimentView = Backbone.View.extend({
 
 		// Loop over every model in collection
 		this.measurementCollection.each(function(model) {
-			
 			// Recreate url for measurementmodel
 			// The url in the model is not complete
 			// we have to include the master password

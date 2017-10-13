@@ -36,8 +36,8 @@ class MeasurementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Measurement
         fields = ('experiment', 'publication', 'measure',
-                  'nr_group', 'instruction', 'group', 'instruction_review',
-                  'instruction_strategies')
+                  'nr_group', 'group', 'instruction_first',
+                  'instruction_second')
 
 
 class SubjectSerializer(serializers.ModelSerializer):
@@ -71,7 +71,7 @@ class SubjectSerializer(serializers.ModelSerializer):
                 measure=obj.nr_measurements + 1)
             # next = Group.objects.get(id=next_measure.group.id)
 
-            return next_measure.instruction
+            return next_measure.instruction_first
 
         except Measurement.DoesNotExist:
             return "Abgeschlossen"
@@ -82,7 +82,7 @@ class SubjectSerializer(serializers.ModelSerializer):
                 experiment=obj.experiment, nr_group=obj.group,
                 measure=obj.nr_measurements + 1)
 
-            return next_measure.instruction_review
+            return next_measure.instruction_second
 
         except Measurement.DoesNotExist:
             return "Abgeschlossen"
