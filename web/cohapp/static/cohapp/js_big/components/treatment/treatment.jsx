@@ -76,7 +76,9 @@ class Treatment extends React.Component {
       return response.json();
     }).then(function(data) {
       self.setState({measurement: data[0],
-                     showInstruction: true});
+                     showInstruction: true}, () => {
+                      console.log(self.state.measurement);
+                     });
     });
 
     // Bind this to methods

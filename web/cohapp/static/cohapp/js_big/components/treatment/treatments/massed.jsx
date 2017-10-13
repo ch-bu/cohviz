@@ -31,12 +31,12 @@ class Segmented extends React.Component {
 
     // Render according to state
     if (this.state.showFeedback) {
-      if (this.props.measurement == 'massed') {
+      if (this.props.measurement == 'control-segmented-massed') {
       content = <ControlGroupStatic updateRevision={this.props.updateRevision}
                               revisionText={this.props.draftText}
                               editorVisible={this.props.editorVisible}
                               analyzeRevision={this.renderMentalEffort} />;
-      } else if (this.props.measurement == 'control segmented-massed') {
+      } else if (this.props.measurement == 'massed') {
         content = <StaticCmap
                     draftText={this.props.draftText}
                     draftAnalyzed={this.props.draftAnalyzed}

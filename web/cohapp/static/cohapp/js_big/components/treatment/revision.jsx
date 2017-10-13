@@ -58,7 +58,7 @@ class Revision extends React.Component {
                                  measurement={this.props.measurementDetails}
                                  updateEffortMiddle={this.props.updateEffortMiddle} />;
         break;
-      case 'control segmented-massed':
+      case 'control-segmented-massed':
       case 'massed':
         measurement = <Massed draftText={this.props.draftText}
                               updateRevision={this.props.updateRevision}
