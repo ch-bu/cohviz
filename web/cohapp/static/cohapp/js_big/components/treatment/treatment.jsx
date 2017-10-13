@@ -93,6 +93,7 @@ class Treatment extends React.Component {
     this.sendDataToServer = this.sendDataToServer.bind(this);
     this.updateCognitiveLoadDraft = this.updateCognitiveLoadDraft.bind(this);
     this.updateCognitiveLoadRevision = this.updateCognitiveLoadRevision.bind(this);
+    this.updateCognitiveLoadMiddle = this.updateCognitiveLoadMiddle.bind(this);
   }
 
   render() {
@@ -135,7 +136,8 @@ class Treatment extends React.Component {
                                editorVisible={this.state.showRevision}
                                revisionText={this.state.revisionText}
                                analyzeRevision={this.analyzeRevision}
-                               measurementDetails={this.state.measurement}/>;
+                               measurementDetails={this.state.measurement}
+                               updateEffortMiddle={this.updateCognitiveLoadMiddle} />;
         // Render cognitive load revision
         } else if (this.state.showCognitiveLoadRevision) {
           template = <CognitiveLoadRevision updateRevision={this.updateCognitiveLoadRevision} />;
@@ -304,6 +306,13 @@ class Treatment extends React.Component {
     this.setState({'cognitiveLoadDraft': data,
                    'showCognitiveLoadDraft': false,
                    'showRevisionPrompt': true});
+  }
+
+  /**
+   * Update Cognitive load middle items
+   */
+  updateCognitiveLoadMiddle(data) {
+    this.setState({'cognitiveLoadMiddle': data});
   }
 
   /**

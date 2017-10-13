@@ -2,6 +2,7 @@ import Preloader from '../../preloader.jsx';
 import Instruction from '../instruction.jsx';
 import StaticCmap from './static-cmap.jsx';
 import ControlGroup from './control-group.jsx';
+import CognitiveLoadMiddle from '../cognitive-load-middle.jsx';
 
 class Segmented extends React.Component {
   constructor(props) {
@@ -13,12 +14,14 @@ class Segmented extends React.Component {
     this.renderVideo = this.renderVideo.bind(this);
     this.renderRevision = this.renderRevision.bind(this);
     this.renderFeedbackAgain = this.renderFeedbackAgain.bind(this);
+    this.renderMentalEffort = this.renderMentalEffort.bind(this);
 
     // Set state
     this.state = {
       showFeedback: true,
       showVideo: false,
       showFeedbackAgain: false,
+      showMentalEffort: false,
       showRevision: false
     };
   }
@@ -41,7 +44,9 @@ class Segmented extends React.Component {
                   draftAnalyzed={this.props.draftAnalyzed}
                   revisionText={this.props.revisionText}
                   editorVisible={this.props.editorVisible}
-                  nextRender={this.renderRevision} />;
+                  nextRender={this.renderMentalEffort} />;
+    } else if (this.state.showMentalEffort) {
+      content = <CognitiveLoadMiddle updateDraft={this.renderRevision} />;
     // Instructional Video on global cohesion
     } else if (this.state.showVideo) {
       content = <Instruction
@@ -73,6 +78,7 @@ class Segmented extends React.Component {
       showVideo: true,
       showFeedbackAgain: false,
       showFeedback: false,
+      showMentalEffort: false,
       showRevision: false
     });
   }
@@ -83,16 +89,32 @@ class Segmented extends React.Component {
       showVideo: false,
       showFeedbackAgain: true,
       showFeedback: false,
+      showMentalEffort: false,
       showRevision: false
     });
   }
 
-  renderRevision() {
+  renderMentalEffort() {
     // Allow user to update text
     this.setState({
       showVideo: false,
       showFeedbackAgain: false,
       showFeedback: false,
+      showMentalEffort: true,
+      showRevision: false
+    })
+  }
+
+  renderRevision(data) {
+    // Update mental effort data
+    this.props.updateEffortMiddle(data);
+
+    // Allow user to update text
+    this.setState({
+      showVideo: false,
+      showFeedbackAgain: false,
+      showFeedback: false,
+      showMentalEffort: false,
       showRevision: true
     })
   }

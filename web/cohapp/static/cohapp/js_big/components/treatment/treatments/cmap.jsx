@@ -78,6 +78,11 @@ class CMap extends React.Component {
       .attr('width', width)
       .attr('height', height);
 
+    // Call zoom
+    svg.call(d3.zoom()
+      .scaleExtent([1 / 2, 1.5])
+      .on('zoom', zoomed));
+
     // Add wrapper for svg
     var g = svg.append('g')
       .attr('width', width)
@@ -120,6 +125,11 @@ class CMap extends React.Component {
       .force('x', d3.forceX())
       .force('y', d3.forceY())
       .stop();
+
+    function zoomed() {
+      g.attr('transform', d3.event.transform);
+      rect.attr('transform', d3.event.transform);
+    }
 
     // Add timeout to process data
     d3.timeout(function() {

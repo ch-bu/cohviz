@@ -54,7 +54,8 @@ class Revision extends React.Component {
                                  revisionText={this.props.revisionText}
                                  editorVisible={this.props.editorVisible}
                                  analyzeRevision={this.props.analyzeRevision}
-                                 measurement={this.props.measurementDetails} />;
+                                 measurement={this.props.measurementDetails}
+                                 updateEffortMiddle={this.props.updateEffortMiddle} />;
         break;
       default:
         <Preloader />;
