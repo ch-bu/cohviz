@@ -401,6 +401,7 @@ def csv_text_view(request, experiment_password):
                      'cld_question4'])
 
     for inst in text_data:
+        # Draft
         writer.writerow([inst.subject.user,
                          inst.subject.group,
                          inst.group.name,
@@ -419,7 +420,26 @@ def csv_text_view(request, experiment_password):
                          inst.cld_draft_question2,
                          inst.cld_draft_question3,
                          inst.cld_draft_question4])
-
+        # Mental effort data between draft and revision
+        writer.writerow([inst.subject.user,
+                         inst.subject.group,
+                         inst.group.name,
+                         inst.measurement.measure,
+                         None,
+                         'mental effort',
+                         None,
+                         None,
+                         None,
+                         None,
+                         None,
+                         None,
+                         None,
+                         None,
+                         inst.cld_middle_question1,
+                         inst.cld_middle_question2,
+                         inst.cld_middle_question3,
+                         inst.cld_middle_question4])
+        # Revision
         writer.writerow([inst.subject.user,
                          inst.subject.group,
                          inst.group.name,
