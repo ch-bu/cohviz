@@ -60,7 +60,6 @@ class Group(models.Model):
     name = models.CharField(max_length=100)
     abbreviation = models.CharField(max_length=50)
     description = models.TextField()
-    template = models.CharField(max_length=100)
 
     def __str__(self):
         return self.abbreviation
