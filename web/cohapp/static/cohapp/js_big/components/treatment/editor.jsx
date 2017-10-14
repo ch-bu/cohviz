@@ -18,11 +18,11 @@ class Editor extends React.Component {
 
     return (
       <div className="row" id="editor">
-       <div id="editor-medium-editor" className="col s11 m8 offset-m2 l6 offset-l3">
+       <div id="editor-medium-editor" className="col s11 m10 offset-m1 l6 offset-l2">
           <div id="editor-textinput" ref={(el) => { this.textInput = el; }}
               dangerouslySetInnerHTML={this.returnInnerHTML()}
               onKeyUp={this.updateDraft} ></div>
-          <div id="editor-button-div" className="s12 m8 offset-m2 l6 offset-l3 col">
+          <div id="editor-button-div" className="col s12 m10 offset-m1 l6 offset-l2">
             {this.state.displayButton ? button : <Preloader />}
           </div>
         </div>

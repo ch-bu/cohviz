@@ -83,12 +83,12 @@ body {
 }
 
 .btn {
-  background-color: #FFCF52;
-  color: #000;
+  // background-color: #FFCF52;
+  // color: #000;
 }
 
 .btn:hover, .btn-large:hover {
-    backround-color: #ffe7a8;
+    // backround-color: #ffe7a8;
 }
 
 .strong-p {
@@ -445,7 +445,7 @@ h1, h2, h3, h4, h5 {
   @include margin-top();
 
   #instruction-text {
-    border-left: 2px dashed #ccc;
+    // border-left: 2px dashed #ccc;
   }
 
 
@@ -477,7 +477,7 @@ h1, h2, h3, h4, h5 {
     padding: 0 10px 0 10px;
     border-radius: 5px;
     outline: 0px solid transparent;
-    border-left: 2px dashed #ccc;
+    // border-left: 2px dashed #ccc;
 
     p {
       font-size: $p-font-size;
@@ -495,7 +495,7 @@ h1, h2, h3, h4, h5 {
 
   #editor-button-div {
     position: absolute;
-    bottom: -50px;
+    bottom: -30px;
     left: 0;
 
     a {
@@ -584,7 +584,7 @@ h1, h2, h3, h4, h5 {
 }
 
 .highlight-experiment-status {
-  background-color: #FFCF52;
+  background-color: #2bbbad;
 
   span {
       color: #000;

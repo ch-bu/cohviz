@@ -19,10 +19,10 @@ class Instruction extends React.Component {
 
     return (
       <div className="row" id="instruction">
-        <div className="s12 m10 offset-m1 l6 offset-l3 col" id="instruction-text">
+        <div className="s12 m10 offset-m1 l6 offset-l2 col" id="instruction-text">
           <p dangerouslySetInnerHTML={this.addInstruction()}></p>
         </div>
-        <div className="s12 m8 offset-m2 l6 offset-l3 col">
+        <div className="s12 m8 offset-m2 l6 offset-l2 col">
           {button}
         </div>
       </div>
