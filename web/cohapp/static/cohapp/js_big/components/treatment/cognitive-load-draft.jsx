@@ -14,6 +14,7 @@ class CognitiveLoadDraft extends React.Component {
     this.secondQuestionInteraction = this.secondQuestionInteraction.bind(this);
     this.thirdQuestionInteraction = this.thirdQuestionInteraction.bind(this);
     this.fourthQuestionInteraction = this.fourthQuestionInteraction.bind(this);
+    this.buttonInteraction = this.buttonInteraction.bind(this);
   }
 
   render() {
@@ -87,6 +88,10 @@ class CognitiveLoadDraft extends React.Component {
             <p>gar nicht verständlich</p>
           </div>
         </div> : ''}
+        {this.state.finishedFourthQuestion ?
+        <div className="s12 m8 offset-m2 l6 offset-l2 col">
+          <a id="instruction-read" className="waves-effect waves-light btn" onClick={this.buttonInteraction}>Weiter</a>
+        </div> : ''}
       </div>
     )
   }
@@ -105,7 +110,9 @@ class CognitiveLoadDraft extends React.Component {
 
   fourthQuestionInteraction() {
     this.setState({finishedFourthQuestion: true});
+  }
 
+  buttonInteraction() {
     // Data of all questions
     var data = {'firstQuestion': this.firstQuestion.value,
                 'secondQuestion': this.secondQuestion.value,
