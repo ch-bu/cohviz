@@ -49,7 +49,8 @@ class SubjectSerializer(serializers.ModelSerializer):
     # #serializermethodfield
     last_login = serializers.SerializerMethodField()
     instruction = serializers.SerializerMethodField()
-    instructionreview = serializers.SerializerMethodField()
+    instruction_first = serializers.SerializerMethodField()
+    instruction_second = serializers.SerializerMethodField()
     next_measure = serializers.SerializerMethodField()
 
     def get_last_login(self, obj):
@@ -73,12 +74,23 @@ class SubjectSerializer(serializers.ModelSerializer):
                 measure=obj.nr_measurements + 1)
             # next = Group.objects.get(id=next_measure.group.id)
 
+            return next_measure.instruction
+
+        except Measurement.DoesNotExist:
+            return "Abgeschlossen"
+
+    def get_instruction_first(self, obj):
+        try:
+            next_measure = Measurement.objects.get(
+                experiment=obj.experiment, nr_group=obj.group,
+                measure=obj.nr_measurements + 1)
+
             return next_measure.instruction_first
 
         except Measurement.DoesNotExist:
             return "Abgeschlossen"
 
-    def get_instructionreview(self, obj):
+    def get_instruction_second(self, obj):
         try:
             next_measure = Measurement.objects.get(
                 experiment=obj.experiment, nr_group=obj.group,
@@ -104,10 +116,12 @@ class SubjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subject
         fields = ('user', 'experiment', 'group', 'trusted', 'last_login',
-                  'nr_measurements', 'instruction', 'instructionreview',
+                  'nr_measurements', 'instruction', 'instruction_first',
+                  'instruction_second',
                   'next_measure')
         read_only_fields = ('user', 'group', 'trusted', 'last_login',
-                            'instruction', 'instructionreview', 'next_measure')
+                            'instruction', 'instruction_first',
+                            'instruction_second', 'next_measure')
 
 
 class GroupSerializer(serializers.ModelSerializer):

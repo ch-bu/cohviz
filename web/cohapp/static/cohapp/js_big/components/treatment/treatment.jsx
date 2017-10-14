@@ -65,7 +65,9 @@ class Treatment extends React.Component {
     }).then(function(response) {
       return response.json();
     }).then(function(data) {
-      self.setState({user: data});
+      self.setState({user: data}, () => {
+        console.log(self.state.user);
+      });
     });
 
     // Fetch measurement data
@@ -111,7 +113,7 @@ class Treatment extends React.Component {
         if (this.state.showInstruction) {
           // Render instruction for current measurement
           template = <Instruction
-              instructionText={this.state.measurement.instruction}
+              instructionText={this.state.user.instruction}
               renderNextState={this.userClickedInstruction} />;
         // Render editor
         } else if (this.state.showEditor) {
@@ -125,7 +127,7 @@ class Treatment extends React.Component {
         // Render prompt for revision
         } else if (this.state.showRevisionPrompt) {
           template = <Instruction
-              instructionText={this.state.measurement.instruction_first}
+              instructionText={this.state.user.instruction_first}
               renderNextState={this.userClickedRevisionPrompt}
               seenInstruction={this.state.seenInstruction}
               draftAnalyzed={this.state.draftAnalyzed} />;
@@ -138,7 +140,7 @@ class Treatment extends React.Component {
                                editorVisible={this.state.showRevision}
                                revisionText={this.state.revisionText}
                                analyzeRevision={this.analyzeRevision}
-                               measurementDetails={this.state.measurement}
+                               measurementDetails={this.state.user}
                                updateEffortMiddle={this.updateCognitiveLoadMiddle} />;
         // Render cognitive load revision
         } else if (this.state.showCognitiveLoadRevision) {
