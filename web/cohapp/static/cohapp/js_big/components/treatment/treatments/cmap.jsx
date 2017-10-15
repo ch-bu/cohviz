@@ -5,6 +5,8 @@ class CMap extends React.Component {
     super(props);
 
     console.log(this.props);
+    console.log(this.props.draftText);
+    console.log(this.props.revisionText);
 
     // Bind this to methods
     this.updateRevision = this.updateRevision.bind(this);
@@ -20,7 +22,7 @@ class CMap extends React.Component {
               onKeyUp={this.updateRevision} ></div>
           <div id="editor-button-div" className="s12 m4 offset-m1 col">
             <a onClick={this.props.analyzeRevision}
-               className="waves-effect waves-light btn" id="editor-button">Analysiere meinen Text</a>
+               className="waves-effect waves-light btn" id="editor-button">Weiter</a>
           </div>
         </div>
         <div id="cmap" ref={(el) => { this.cmap = el; }} className="col s11 m7">
@@ -35,7 +37,11 @@ class CMap extends React.Component {
    * @return {dict} html
    */
   returnInnerHTML() {
-    return {__html: this.props.revisionText}
+    if (this.props.measurement == 'cmap') {
+      return {__html: this.props.draftText}
+    } else if (this.props.measurement == 'cmap-integrated') {
+      return {__html: this.props.revisionText}
+    }
   }
 
   // We need to store the revision in a state variable

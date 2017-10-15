@@ -32,21 +32,15 @@ class Revision extends React.Component {
                                     editorVisible={this.props.editorVisible}
                                     analyzeRevision={this.props.analyzeRevision} />;
         break;
+      case 'cmap-integrated':
       case 'cmap':
         measurement = <CMap draftText={this.props.draftText}
                             updateRevision={this.props.updateRevision}
                             draftAnalyzed={this.props.draftAnalyzed}
                             revisionText={this.props.revisionText}
                             editorVisible={this.props.editorVisible}
-                            analyzeRevision={this.props.analyzeRevision} />;
-        break;
-      case 'cmap-integrated':
-        measurement = <CMap draftText={this.props.draftText}
-                            updateRevision={this.props.updateRevision}
-                            draftAnalyzed={this.props.draftAnalyzed}
-                            revisionText={this.props.revisionText}
-                            editorVisible={this.props.editorVisible}
-                            analyzeRevision={this.props.analyzeRevision} />;
+                            analyzeRevision={this.props.analyzeRevision}
+                            measurement={this.props.measurement} />;
         break;
       case 'segmented':
         measurement = <Segmented draftText={this.props.draftText}
