@@ -28,7 +28,6 @@ class Revision extends React.Component {
       case 'control-group':
         measurement = <ControlGroup draftText={this.props.draftText}
                                     updateRevision={this.props.updateRevision}
-                                    revisionText={this.props.revisionText}
                                     editorVisible={this.props.editorVisible}
                                     analyzeRevision={this.props.analyzeRevision} />;
         break;

@@ -30,7 +30,7 @@ class ControlGroup extends React.Component {
    * @return {dict} html
    */
   returnInnerHTML() {
-    return {__html: this.props.revisionText}
+    return {__html: this.props.draftText}
   }
 
   // We need to store the revision in a state variable
