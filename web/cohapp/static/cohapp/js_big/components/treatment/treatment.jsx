@@ -90,7 +90,7 @@ class Treatment extends React.Component {
     this.renderRevision = this.renderRevision.bind(this);
     this.userClickedInstruction = this.userClickedInstruction.bind(this);
     this.userClickedRevisionPrompt = this.userClickedRevisionPrompt.bind(this);
-    this.sendDataToServer = this.sendDataToServer.bind(this);
+    // this.sendDataToServer = this.sendDataToServer.bind(this);
     this.updateCognitiveLoadDraft = this.updateCognitiveLoadDraft.bind(this);
     this.updateCognitiveLoadRevision = this.updateCognitiveLoadRevision.bind(this);
     this.updateCognitiveLoadMiddle = this.updateCognitiveLoadMiddle.bind(this);
@@ -287,7 +287,7 @@ class Treatment extends React.Component {
         console.log(error);
       }).then((data) => {
         // Set state of revisionText according to measurement
-        if (self.state.user.next_measure == 'control group' || self.state.user.next_measure == 'Cmap') {
+        if (self.state.user.next_measure == 'control-group' || self.state.user.next_measure == 'cmap') {
           self.setState({revisionText: self.state.draftText});
         } else {
           self.setState({revisionText: data['html_string']});
@@ -322,9 +322,7 @@ class Treatment extends React.Component {
 
     // Update state and send data to server
     this.setState({cognitiveLoadRevision: data,
-                   showCognitiveLoadRevision: false}, () => {
-                    self.sendDataToServer();
-                   });
+                   showCognitiveLoadRevision: false});
   }
 
   /**
@@ -333,10 +331,13 @@ class Treatment extends React.Component {
   analyzeRevision() {
     var self = this;
 
+    // Show revision questionnaire
+    self.setState({showEditor: false, showInstruction: false,
+            showRevisionPrompt: false, showRevision: false,
+            showCognitiveLoadRevision: true});
+
     // Set state variables
-    this.setState({showEditor: false, showInstruction: false,
-                   showRevisionPrompt: false, showRevision: false,
-                   durationRevision: (new Date() - this.state.durationRevision) / 1000,
+    this.setState({durationRevision: (new Date() - this.state.durationRevision) / 1000,
                    revisionPlainText: getPlainText(this.state.revisionText)}, () => {
       // Analyze Text from server
       fetch(this.urls.textanalyzer + this.experiment_id, {
@@ -353,10 +354,7 @@ class Treatment extends React.Component {
       }).catch((error) => {
         console.log(error);
       }).then((data) => {
-        self.setState({'revisionAnalyzed': data,
-                showEditor: false, showInstruction: false,
-                showRevisionPrompt: false, showRevision: false,
-                showCognitiveLoadRevision: true});
+        self.setState({'revisionAnalyzed': data});
       });
     });
   }
@@ -385,61 +383,62 @@ class Treatment extends React.Component {
     }
   }
 
-  /**
-   * Send data to server
-   */
-  sendDataToServer() {
-    // Save data for draft
-    let dataToSend = {
-        // Draft
-        'pre_text': this.state.draftPlainText,
-        'pre_page_duration': this.state.durationDraft,
-        'pre_num_sentences': this.state.draftAnalyzed.numSentences,
-        'pre_num_clusters': this.state.draftAnalyzed.numCluster,
-        'pre_num_coherent_sentences': this.state.draftAnalyzed.cohSentences,
-        'pre_num_non_coherent_sentences': this.state.draftAnalyzed.cohNotSentences,
-        'pre_num_concepts': this.state.draftAnalyzed.numConcepts,
-        'pre_local_cohesion': this.state.draftAnalyzed['local cohesion'],
-        // Mental effort ratings
-        'cld_draft_question1': this.state.cognitiveLoadDraft['firstQuestion'],
-        'cld_draft_question2': this.state.cognitiveLoadDraft['secondQuestion'],
-        'cld_draft_question3': this.state.cognitiveLoadDraft['thirdQuestion'],
-        'cld_draft_question4': this.state.cognitiveLoadDraft['fourthQuestion'],
-        'cld_revision_question1': this.state.cognitiveLoadRevision['firstQuestion'],
-        'cld_revision_question2': this.state.cognitiveLoadRevision['secondQuestion'],
-        'cld_revision_question3': this.state.cognitiveLoadRevision['thirdQuestion'],
-        'cld_revision_question4': this.state.cognitiveLoadRevision['fourthQuestion'],
-        'cld_middle_question1': this.state.cognitiveLoadMiddle['firstQuestion'],
-        'cld_middle_question2': this.state.cognitiveLoadMiddle['secondQuestion'],
-        'cld_middle_question3': this.state.cognitiveLoadMiddle['thirdQuestion'],
-        'cld_middle_question4': this.state.cognitiveLoadMiddle['fourthQuestion'],
-        // Revision
-        'post_text': this.state.revisionPlainText,
-        'post_page_duration': this.state.durationRevision,
-        'post_num_sentences': this.state.revisionAnalyzed.numSentences,
-        'post_num_clusters': this.state.revisionAnalyzed.numCluster,
-        'post_num_coherent_sentences': this.state.revisionAnalyzed.cohSentences,
-        'post_num_non_coherent_sentences': this.state.revisionAnalyzed.cohNotSentences,
-        'post_num_concepts': this.state.revisionAnalyzed.numConcepts,
-        'post_local_cohesion': this.state.revisionAnalyzed['local cohesion']
-    };
+  componentDidUpdate(prevProps, prevState) {
 
-    // Analyze Text from server
-    fetch(this.urls.textdata + this.experiment_id, {
-      method: 'POST',
-      credentials: 'same-origin',
-      body: JSON.stringify(dataToSend),
-      headers: new Headers({
-        'Content-Type': 'application/json'
-      })
-    }).then((response) => {
-      return response.json();
-    }).catch((error) => {
-      console.log(error);
-    }).then((data) => {
-      location.reload();
-    });
+    if (prevProps.revisionAnalyzed !== this.state.revisionAnalyzed &&
+        this.state.cognitiveLoadRevision != null) {
+      // Send data to server after cognitive load
+      // revision data has been stored
+      let dataToSend = {
+          // Draft
+          'pre_text': this.state.draftPlainText,
+          'pre_page_duration': this.state.durationDraft,
+          'pre_num_sentences': this.state.draftAnalyzed.numSentences,
+          'pre_num_clusters': this.state.draftAnalyzed.numCluster,
+          'pre_num_coherent_sentences': this.state.draftAnalyzed.cohSentences,
+          'pre_num_non_coherent_sentences': this.state.draftAnalyzed.cohNotSentences,
+          'pre_num_concepts': this.state.draftAnalyzed.numConcepts,
+          'pre_local_cohesion': this.state.draftAnalyzed['local cohesion'],
+          // Mental effort ratings
+          'cld_draft_question1': this.state.cognitiveLoadDraft['firstQuestion'],
+          'cld_draft_question2': this.state.cognitiveLoadDraft['secondQuestion'],
+          'cld_draft_question3': this.state.cognitiveLoadDraft['thirdQuestion'],
+          'cld_draft_question4': this.state.cognitiveLoadDraft['fourthQuestion'],
+          'cld_revision_question1': this.state.cognitiveLoadRevision['firstQuestion'],
+          'cld_revision_question2': this.state.cognitiveLoadRevision['secondQuestion'],
+          'cld_revision_question3': this.state.cognitiveLoadRevision['thirdQuestion'],
+          'cld_revision_question4': this.state.cognitiveLoadRevision['fourthQuestion'],
+          'cld_middle_question1': this.state.cognitiveLoadMiddle['firstQuestion'],
+          'cld_middle_question2': this.state.cognitiveLoadMiddle['secondQuestion'],
+          'cld_middle_question3': this.state.cognitiveLoadMiddle['thirdQuestion'],
+          'cld_middle_question4': this.state.cognitiveLoadMiddle['fourthQuestion'],
+          // Revision
+          'post_text': this.state.revisionPlainText,
+          'post_page_duration': this.state.durationRevision,
+          'post_num_sentences': this.state.revisionAnalyzed.numSentences,
+          'post_num_clusters': this.state.revisionAnalyzed.numCluster,
+          'post_num_coherent_sentences': this.state.revisionAnalyzed.cohSentences,
+          'post_num_non_coherent_sentences': this.state.revisionAnalyzed.cohNotSentences,
+          'post_num_concepts': this.state.revisionAnalyzed.numConcepts,
+          'post_local_cohesion': this.state.revisionAnalyzed['local cohesion']
+      };
 
+      // Analyze Text from server
+      fetch(this.urls.textdata + this.experiment_id, {
+        method: 'POST',
+        credentials: 'same-origin',
+        body: JSON.stringify(dataToSend),
+        headers: new Headers({
+          'Content-Type': 'application/json'
+        })
+      }).then((response) => {
+        return response.json();
+      }).catch((error) => {
+        console.log(error);
+      }).then((data) => {
+        location.reload();
+      });
+    }
   }
 }
 

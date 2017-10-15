@@ -57,7 +57,7 @@ class Segmented extends React.Component {
     // Revise text
     } else if (this.state.showRevision) {
       content = <ControlGroup updateRevision={this.props.updateRevision}
-                              revisionText={this.props.draftText}
+                              draftText={this.props.draftText}
                               editorVisible={this.props.editorVisible}
                               analyzeRevision={this.props.analyzeRevision} />;
     }

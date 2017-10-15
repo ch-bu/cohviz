@@ -5,7 +5,7 @@ import ControlGroup from './control-group.jsx';
 import ControlGroupStatic from './control-group-static.jsx';
 import CognitiveLoadMiddle from '../cognitive-load-middle.jsx';
 
-class Segmented extends React.Component {
+class Massed extends React.Component {
   constructor(props) {
     super(props);
 
@@ -49,7 +49,7 @@ class Segmented extends React.Component {
     // Revise text
     } else if (this.state.showRevision) {
       content = <ControlGroup updateRevision={this.props.updateRevision}
-                              revisionText={this.props.draftText}
+                              draftText={this.props.draftText}
                               editorVisible={this.props.editorVisible}
                               analyzeRevision={this.props.analyzeRevision} />;
     }
@@ -119,4 +119,4 @@ class Segmented extends React.Component {
   }
 };
 
-export default Segmented;
+export default Massed;
