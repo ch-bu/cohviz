@@ -14,15 +14,15 @@ class Editor extends React.Component {
   render() {
     // Store button and loading Ring in variables
     var button = <a className="waves-effect waves-light btn" id="editor-button"
-                   onClick={this.analyzeText}>Analyziere meinen Text</a>;
+                   onClick={this.analyzeText}>Weiter</a>;
 
     return (
       <div className="row" id="editor">
-       <div id="editor-medium-editor" className="col s11 m10 offset-m1 l6 offset-l2">
+       <div id="editor-medium-editor" className="col s11 m10 offset-m1 l8 offset-l2">
           <div id="editor-textinput" ref={(el) => { this.textInput = el; }}
               dangerouslySetInnerHTML={this.returnInnerHTML()}
               onKeyUp={this.updateDraft} ></div>
-          <div id="editor-button-div" className="col s12 m10 offset-m1 l6 offset-l2">
+          <div id="editor-button-div" className="col s12 m10 offset-m1 l8 offset-l2">
             {this.state.displayButton ? button : <Preloader />}
           </div>
         </div>

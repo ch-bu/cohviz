@@ -26,7 +26,7 @@ $form-padding: $global-padding;
 // Setting the form border radius
 $form-radius: $global-radius;
 
-$p-font-size: 1.6rem;
+$p-font-size: 1.5rem;
 
 
 // ******************* Mixins ***********************************
@@ -95,78 +95,6 @@ body {
   font-weight: bold;
   font-size: 1.4rem;
 }
-
-// /**
-//  * Medium Editor for Landing page
-//  */
-// #editor-medium-editor {
-
-//   min-height: 50vh;
-
-//   #editor-textinput {
-//     margin-top: 0.6em;
-//     outline: 0px solid transparent;
-//     font-size: 1.6rem;
-
-//     p {
-//       font-size: 1.4rem;
-//     }
-
-//     @media only screen and (max-width: 44em){
-//       p {
-//         font-size: 1.4rem;
-//       }
-//     }
-//   }
-// }
-
-// /**
-//  * Medium Editor full with
-//  */
-// #editor-full-wrapper {
-
-//   .col {
-//     padding-right: 1px;
-//   }
-
-//   #editor-full-medium-editor {
-//     padding: 0 5px;
-//     height: 70vh;
-//     outline: 0px solid transparent;
-//     overflow: auto;
-//     border: 1px solid #ededed;
-
-//     span {
-//       &.highlight-related {
-//         // color: #26a69a;
-//         color: #000;
-//         font-weight: bold;
-//       }
-//     }
-//   }
-
-//   #editor-full-buttons {
-//     height: 5vh;
-//     text-align: center;
-//   }
-
-//   #editor-full-graph {
-
-//     path {
-//       fill: none;
-//       stroke: red;
-//     }
-
-//     height: 80vh;
-//     display: flex;
-//     flex-direction: row;
-//     flex-wrap: wrap;
-//     padding-left: 0;
-//     // overflow-y: scroll;
-//     padding-right: 0;
-//   }
-// }
-
 
 
 /**
@@ -565,7 +493,7 @@ h1, h2, h3, h4, h5 {
     display: flex;
     flex-direction: row;
     margin: 0;
-    height: 100px;
+    height: 80px;
     position: relative;
 
     li {
@@ -577,7 +505,7 @@ h1, h2, h3, h4, h5 {
       width: 25%;
       color: #fff;
       height: 100%;
-      padding-top: 30px;
+      padding-top: 20px;
       text-align: center;
     }
   }

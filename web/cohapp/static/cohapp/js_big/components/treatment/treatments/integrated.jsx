@@ -12,13 +12,13 @@ class MeasureIntegrated extends React.Component {
   render() {
     return (
       <div className="row" id="editor">
-       <div id="editor-medium-editor" className="col s11 m8 offset-m2 l6 offset-l3">
+       <div id="editor-medium-editor" className="col s11 m5">
           <div id="editor-textinput" ref={(el) => { this.textInput = el; }}
               dangerouslySetInnerHTML={this.returnInnerHTML()}
               onKeyUp={this.updateRevision} ></div>
-          <div id="editor-button-div" className="s12 m8 offset-m2 l6 offset-l3 col">
+          <div id="editor-button-div" className="col s12 s11 m5">
             <a onClick={this.props.analyzeRevision}
-               className="waves-effect waves-light btn" id="editor-button">Analysiere meinen Text</a>
+               className="waves-effect waves-light btn" id="editor-button">Weiter</a>
           </div>
         </div>
       </div>
