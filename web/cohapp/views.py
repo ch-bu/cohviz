@@ -33,9 +33,7 @@ def index(request):
     """
 
     if request.method == "GET":
-
-
-        return render(request, 'cohapp/index.html')
+        return render(request, 'cohapp/index.html', status=200)
 
 
 @login_required(login_url='/login/')

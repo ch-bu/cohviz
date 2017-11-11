@@ -118,7 +118,7 @@ h1, h2, h3, h4, h5 {
 
   #landing {
     min-height: 70vh;
-    background-color: #24292e;
+    background-color: #333;
     z-index: 1;
     position: relative;
 
@@ -483,6 +483,15 @@ h1, h2, h3, h4, h5 {
 }
 
 
+.load-question {
+  margin-bottom: 40px;
+
+  p {
+    margin-bottom: 2px;
+  }
+}
+
+
 // Header instruction
 #header-experiment {
 
@@ -518,7 +527,6 @@ h1, h2, h3, h4, h5 {
       color: #000;
   }
 }
-
 
 // Clusters
 @mixin cluster($color) {
@@ -575,4 +583,8 @@ h1, h2, h3, h4, h5 {
 .cluster-9 {
   @include cluster(#17becf);
   // @include cluster();
+}
+
+.node-mouseover {
+  color: #000;
 }

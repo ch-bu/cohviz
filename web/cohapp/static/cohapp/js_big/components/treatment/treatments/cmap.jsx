@@ -7,6 +7,7 @@ class CMap extends React.Component {
     // Bind this to methods
     this.updateRevision = this.updateRevision.bind(this);
     this.returnInnerHTML = this.returnInnerHTML.bind(this);
+    this.highlighWordInText = this.highlighWordInText.bind(this);
   }
 
   render() {
@@ -97,8 +98,13 @@ class CMap extends React.Component {
       .attr('height', height)
       .style('fill', 'red')
       .style('opacity', 0);
-      // .on('mousemove', mouseMoveHandler);
-      // .on('mouseleave', mouseLeaveHandler);
+
+    // Add mouseover if correct treatment
+    if (this.props.measurement == 'cmap-integrated') {
+      rect
+        .on('mousemove', mouseMoveHandler)
+        .on('mouseleave', mouseLeaveHandler);
+    }
 
     // Init progress bar
     var progressBar = svg.append('line')
@@ -201,46 +207,73 @@ class CMap extends React.Component {
         });
     });
 
-    // function mouseMoveHandler() {
-    //   // Change text of selected element
-    //   svg.selectAll('text')
-    //     .style('font-weight', 'normal')
-    //     .style('font-size', '16px');
+    function mouseMoveHandler() {
+      // Change text of selected element
+      svg.selectAll('text')
+        .style('font-weight', 'normal')
+        .style('font-size', '16px');
 
-    //   svg.selectAll('circle')
-    //     .style('stroke', 'none')
-    //     .style('stroke-width', 0);
+      svg.selectAll('circle')
+        .style('stroke', 'none')
+        .style('stroke-width', 0);
 
-    //   // Get data
-    //   var mouse = d3.mouse(this);
+      // Get data
+      var mouse = d3.mouse(this);
 
-    //   // Find nearest point to mouse coordinate
-    //   var nearestPoint = simulation.find(mouse[0], mouse[1]);
+      // Find nearest point to mouse coordinate
+      var nearestPoint = simulation.find(mouse[0], mouse[1]);
 
-    //   // Select element that is hovered
-    //   var nodeSelected = g.select('#node-' + nearestPoint.id);
-    //   var nodeData = nodeSelected.data()[0];
+      // Select element that is hovered
+      var nodeSelected = g.select('#node-' + nearestPoint.id);
+      var nodeData = nodeSelected.data()[0];
 
-    //   // Change text of selected element
-    //   nodeSelected.select('text')
-    //     .style('opacity', 1)
-    //     .style('font-weight', 'bold')
-    //     .style('font-size', '20px');
+      // Change text of selected element
+      nodeSelected.select('text')
+        .style('opacity', 1)
+        .style('font-weight', 'bold')
+        .style('font-size', '20px');
 
-    //   nodeSelected.select('circle')
-    //     .style('stroke', '#000')
-    //     .style('stroke-width', 1);
+      nodeSelected.select('circle')
+        .style('stroke', '#000')
+        .style('stroke-width', 1);
 
-    //   /////////////////////////////
-    //   // Highlight words in text //
-    //   /////////////////////////////
+      self.highlighWordInText(nodeData.id);
+    }
 
-    //   // We need to get the text of the selected word in order
-    //   // to highlight them
-    //   var wordSelected = nearestPoint.id;
+    function mouseLeaveHandler() {
+      // Get inner html
+      var innerHTML = self.textInput.innerHTML;
 
-    //   console.log(wordSelected);
-    // }
+      // Remove all spans from text
+      innerHTML =  innerHTML.replace(/<\/?span class="node-mouseover"[^>]*>/g,"");
+
+      // Update text
+      self.textInput.innerHTML = self.props.revisionText;
+    }
+  }
+
+
+  highlighWordInText(nodeData) {
+    var self = this;
+
+    // Get inner html
+    var innerHTML = this.textInput.innerHTML;
+
+    // Remove all spans from text
+    innerHTML = innerHTML.replace(/<\/?span class="node-mouseover"[^>]*>/g,"");
+
+    // Get corresponding orthograpic text of node
+    var relations = self.props.draftAnalyzed.lemmaWordRelations[nodeData];
+
+    // Replace word with span
+    for (var i = 0; i < relations.length; i++) {
+      var re = new RegExp(relations[i], 'g');
+      innerHTML = innerHTML.replace(re,
+        '<span class="node-mouseover">' + relations[i] + '</span>');
+    }
+
+    this.textInput.innerHTML = innerHTML;
+    // this.setState({'textInput': innerHTML});
   }
 
   /**
