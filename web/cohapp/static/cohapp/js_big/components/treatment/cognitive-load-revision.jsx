@@ -42,7 +42,7 @@ class CognitiveLoadRevision extends React.Component {
           </div>
         </div>
         <div className="container row">
-          <p className="strong-p">Wie überzeugend schätzt du deine überarbeitete Erörterung ein?</p>
+          <p className="strong-p">Wie überzeugend schätzt du deinen überarbeiteten Entwurf ein?</p>
           <div className="col s4 m2">
             <p>sehr überzeugend</p>
           </div>
@@ -58,7 +58,7 @@ class CognitiveLoadRevision extends React.Component {
           </div>
         </div>
         <div className="container row">
-          <p className="strong-p">Wie verständlich schätzt du deine überarbeitete Erörterung ein?</p>
+          <p className="strong-p">Wie verständlich schätzt du deinen überarbeiteten Entwurf ein?</p>
           <div className="col s4 m2">
             <p>sehr verständlich</p>
           </div>
