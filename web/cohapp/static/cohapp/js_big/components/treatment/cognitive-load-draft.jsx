@@ -71,7 +71,7 @@ class CognitiveLoadDraft extends React.Component {
             <p>gar nicht verständlich</p>
           </div>
         </div>
-        <div className="s12 m8 l6 col">
+        <div className="s12 m8 col">
           <a id="instruction-read" className="waves-effect waves-light btn" onClick={this.buttonInteraction}>Weiter</a>
         </div>
       </div>
