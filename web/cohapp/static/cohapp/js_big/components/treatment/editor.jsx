@@ -56,7 +56,7 @@ class Editor extends React.Component {
     var editor = new MediumEditor(this.textInput, {
       toolbar: false,
       placeholder: {
-        text: 'Bitte füge deinen Text hier ein ...',
+        text: 'Schreiben Sie bitte hier Ihre Erklärung ...',
         hideOnClick: true
       },
     });
