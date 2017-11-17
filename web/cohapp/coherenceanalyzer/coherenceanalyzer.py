@@ -630,7 +630,7 @@ def generateHTML(paragraph_split, word_lemma_mapping, word_cluster_index):
                 # The word does not occur in the word lemma dicitonary
                 # It should not be assigned a class for highlighting
                 except KeyError:
-                    paragraph_string += '<span>' + word + '</span>'
+                    paragraph_string += word
 
                 # Append carrier if it exists
                 paragraph_string += carrier if carrier else ''
@@ -648,6 +648,10 @@ def generateHTML(paragraph_split, word_lemma_mapping, word_cluster_index):
                 cluster_next = []
 
                 for word in words_next_sentence:
+                    # Check if word ends with a special character
+                    if word.endswith(':') or word.endswith(',') or word.endswith(';'):
+                        word = re.sub(r'[:,;]', '', word)
+
                     # Catch errors
                     try:
                         lemma = word_lemma_mapping['word_lemma'][word][0]
