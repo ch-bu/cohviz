@@ -283,6 +283,15 @@ class LandingPage extends React.Component {
     }
 
     function mouseLeaveHandler() {
+      // Change text of selected element
+      svg.selectAll('text')
+        .style('font-weight', 'normal')
+        .style('font-size', '16px');
+
+      svg.selectAll('circle')
+        .style('stroke', 'none')
+        .style('stroke-width', 0);
+
       // Get inner html
       var innerHTML = self.textInput.innerHTML;
 
