@@ -4,9 +4,12 @@ class CMap extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      myText: this.props.draftText
+    };
+
     // Bind this to methods
     this.updateRevision = this.updateRevision.bind(this);
-    this.returnInnerHTML = this.returnInnerHTML.bind(this);
     this.highlighWordInText = this.highlighWordInText.bind(this);
   }
 
@@ -34,11 +37,7 @@ class CMap extends React.Component {
    * @return {dict} html
    */
   returnInnerHTML() {
-    if (this.props.measurement == 'cmap') {
-      return {__html: this.props.draftText}
-    } else if (this.props.measurement == 'cmap-integrated') {
-      return {__html: this.props.revisionText}
-    }
+    return {__html: this.props.draftText}
   }
 
   // We need to store the revision in a state variable
@@ -254,9 +253,9 @@ class CMap extends React.Component {
       var innerHTML = self.textInput.innerHTML;
 
       // Remove all spans from text
-      innerHTML =  innerHTML.replace(/<\/?span class="node-mouseover"[^>]*>/g,"");
+      innerHTML = innerHTML.replace(/<\/?span[^>]*>/g,"");
 
-      // Update text
+      // Update state
       self.textInput.innerHTML = self.props.revisionText;
     }
   }
@@ -269,7 +268,7 @@ class CMap extends React.Component {
     var innerHTML = this.textInput.innerHTML;
 
     // Remove all spans from text
-    innerHTML = innerHTML.replace(/<\/?span class="node-mouseover"[^>]*>/g,"");
+    innerHTML =  innerHTML.replace(/<\/?span[^>]*>/g,"");
 
     // Get corresponding orthograpic text of node
     var relations = self.props.draftAnalyzed.lemmaWordRelations[nodeData];
@@ -277,12 +276,11 @@ class CMap extends React.Component {
     // Replace word with span
     for (var i = 0; i < relations.length; i++) {
       var re = new RegExp(relations[i], 'g');
-      innerHTML = innerHTML.replace(re,
-        '<span class="node-mouseover">' + relations[i] + '</span>');
+      innerHTML = innerHTML.replace(re, '<span class="cluster-' +
+        self.props.draftAnalyzed.wordClusterIndex[nodeData] + '">' + relations[i] + '</span>');
     }
 
-    this.textInput.innerHTML = innerHTML;
-    // this.setState({'textInput': innerHTML});
+    self.textInput.innerHTML = innerHTML;
   }
 
   /**
