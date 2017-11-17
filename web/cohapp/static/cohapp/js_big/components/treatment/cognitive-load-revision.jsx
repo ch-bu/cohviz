@@ -2,7 +2,7 @@ class CognitiveLoadRevision extends React.Component {
   constructor(props) {
     super(props);
 
-    this.buttonInteraction = this.buttonInteraction.bind(this)
+    this.buttonInteraction = this.buttonInteraction.bind(this);
   }
 
   render() {
@@ -77,22 +77,6 @@ class CognitiveLoadRevision extends React.Component {
         </div>
       </div>
     )
-  }
-
-  firstQuestionInteraction() {
-    this.setState({finishedFirstQuestion: true});
-  }
-
-  secondQuestionInteraction() {
-    this.setState({finishedSecondQuestion: true});
-  }
-
-  thirdQuestionInteraction() {
-    this.setState({finishedThirdQuestion: true});
-  }
-
-  fourthQuestionInteraction() {
-    this.setState({finishedFourthQuestion: true});
   }
 
   buttonInteraction() {
