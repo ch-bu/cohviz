@@ -673,7 +673,7 @@ def generateHTML(paragraph_split, word_lemma_mapping, word_cluster_index):
                 # will directly align to the current sentence
                 paragraph_string = paragraph_string[:-1]
                 paragraph_string += end_of_line_character
-                paragraph_string += '&#8660; ' if cluster_changed else ''
+                paragraph_string += ' <span style="color: red;font-weight:bold">&parsl;</span>' if cluster_changed else ''
                 paragraph_string += ' '
 
         # End paragraph
