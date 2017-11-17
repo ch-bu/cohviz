@@ -256,7 +256,7 @@ class CMap extends React.Component {
       innerHTML = innerHTML.replace(/<\/?span[^>]*>/g,"");
 
       // Update state
-      self.textInput.innerHTML = self.props.revisionText;
+      self.textInput.innerHTML = self.props.draftText;
     }
   }
 
