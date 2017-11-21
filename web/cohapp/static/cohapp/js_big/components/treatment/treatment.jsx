@@ -136,7 +136,8 @@ class Treatment extends React.Component {
                                revisionText={this.state.revisionText}
                                analyzeRevision={this.analyzeRevision}
                                measurementDetails={this.state.user}
-                               updateEffortMiddle={this.updateCognitiveLoadMiddle} />;
+                               updateEffortMiddle={this.updateCognitiveLoadMiddle}
+                               instruction={this.state.user.instruction_second} />;
         // Render cognitive load revision
         } else if (this.state.showCognitiveLoadRevision) {
           template = <CognitiveLoadRevision updateRevision={this.updateCognitiveLoadRevision} />;

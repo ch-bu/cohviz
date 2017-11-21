@@ -11,15 +11,19 @@ class ControlGroup extends React.Component {
 
   render() {
     return (
-      <div className="row" id="editor">
-       <div id="editor-medium-editor" className="col s11 m5">
-          <div id="editor-textinput" ref={(el) => { this.textInput = el; }}
-              dangerouslySetInnerHTML={this.returnInnerHTML()}
-              onKeyUp={this.updateRevision} ></div>
-          <div id="editor-button-div" className="col s11 m5">
-            <a onClick={this.props.analyzeRevision}
-               className="waves-effect waves-light btn" id="editor-button">Weiter</a>
+      <div id="editor-new">
+          <div className="text" ref={(el) => { this.textInput = el; }}
+              dangerouslySetInnerHTML={this.returnInnerHTML(this.props.draftText)}
+              onKeyUp={this.updateRevision}>
           </div>
+
+        <div className="button">
+          <a onClick={this.props.analyzeRevision}
+             className="waves-effect waves-light btn" id="editor-button">Weiter</a>
+        </div>
+
+        <div className="instruction"
+          dangerouslySetInnerHTML={this.returnInnerHTML(this.props.instruction)}>
         </div>
       </div>
     )
@@ -29,8 +33,8 @@ class ControlGroup extends React.Component {
    * Return dangerous html to editor
    * @return {dict} html
    */
-  returnInnerHTML() {
-    return {__html: this.props.draftText}
+  returnInnerHTML(text) {
+    return {__html: text}
   }
 
   // We need to store the revision in a state variable

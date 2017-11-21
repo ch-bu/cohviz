@@ -23,13 +23,15 @@ class Revision extends React.Component {
                                          updateRevision={this.props.updateRevision}
                                          editorVisible={this.props.editorVisible}
                                          revisionText={this.props.revisionText}
-                                         analyzeRevision={this.props.analyzeRevision} />;
+                                         analyzeRevision={this.props.analyzeRevision}
+                                         instruction={this.props.instruction} />;
         break;
       case 'control-group':
         measurement = <ControlGroup draftText={this.props.draftText}
                                     updateRevision={this.props.updateRevision}
                                     editorVisible={this.props.editorVisible}
-                                    analyzeRevision={this.props.analyzeRevision} />;
+                                    analyzeRevision={this.props.analyzeRevision}
+                                    instruction={this.props.instruction}  />;
         break;
       case 'cmap-integrated':
       case 'cmap':
@@ -39,7 +41,8 @@ class Revision extends React.Component {
                             revisionText={this.props.revisionText}
                             editorVisible={this.props.editorVisible}
                             analyzeRevision={this.props.analyzeRevision}
-                            measurement={this.props.measurement} />;
+                            measurement={this.props.measurement}
+                            instruction={this.props.instruction} />;
         break;
       case 'segmented':
         measurement = <Segmented draftText={this.props.draftText}
@@ -49,7 +52,8 @@ class Revision extends React.Component {
                                  editorVisible={this.props.editorVisible}
                                  analyzeRevision={this.props.analyzeRevision}
                                  measurement={this.props.measurementDetails}
-                                 updateEffortMiddle={this.props.updateEffortMiddle} />;
+                                 updateEffortMiddle={this.props.updateEffortMiddle}
+                                 instruction={this.props.instruction} />;
         break;
       case 'control-segmented-massed':
       case 'massed':
@@ -61,7 +65,8 @@ class Revision extends React.Component {
                               analyzeRevision={this.props.analyzeRevision}
                               measurement={this.props.measurementDetails}
                               updateEffortMiddle={this.props.updateEffortMiddle}
-                              measurement={this.props.measurement} />;
+                              measurement={this.props.measurement}
+                              instruction={this.props.instruction} />;
         break;
       default:
         <Preloader />;

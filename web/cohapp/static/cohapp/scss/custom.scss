@@ -446,6 +446,47 @@ h1, h2, h3, h4, h5 {
   }
 }
 
+#editor-new {
+  display: grid;
+  grid-template-rows: auto auto auto;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-areas: ".   instruction instruction ."
+                       "text  text      cmap cmap"
+                       "button  button    cmap cmap";
+
+  .instruction {
+    grid-area: instruction;
+
+    p {
+      font-size: 1.1rem;
+    }
+  }
+
+  .text {
+    grid-area: text;
+    padding-left: 20px;
+    outline: 0px solid transparent;
+
+    p {
+      font-size: 1.2rem;
+    }
+  }
+
+  .button {
+    grid-area: button;
+    padding-left: 20px;
+
+    a {
+      position: relative;
+      bottom: 0;
+    }
+  }
+
+  .cmap {
+    grid-area: cmap;
+  }
+}
+
 #editor-landing-page {
   @include margin-top();
 

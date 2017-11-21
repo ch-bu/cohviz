@@ -7,19 +7,24 @@ class MeasureIntegrated extends React.Component {
     // Bind this to methods
     this.updateRevision = this.updateRevision.bind(this);
     this.returnInnerHTML = this.returnInnerHTML.bind(this);
+    // this.returnInstruction = this.returnInstruction.bind(this);
   }
 
   render() {
     return (
-      <div className="row" id="editor">
-       <div id="editor-medium-editor" className="col s11 m5">
-          <div id="editor-textinput" ref={(el) => { this.textInput = el; }}
-              dangerouslySetInnerHTML={this.returnInnerHTML()}
-              onKeyUp={this.updateRevision} ></div>
-          <div id="editor-button-div" className="col s12 s11 m5">
-            <a onClick={this.props.analyzeRevision}
-               className="waves-effect waves-light btn" id="editor-button">Weiter</a>
+      <div id="editor-new">
+          <div className="text" ref={(el) => { this.textInput = el; }}
+              dangerouslySetInnerHTML={this.returnInnerHTML(this.props.revisionText)}
+              onKeyUp={this.updateRevision}>
           </div>
+
+        <div className="button">
+          <a onClick={this.props.analyzeRevision}
+             className="waves-effect waves-light btn" id="editor-button">Weiter</a>
+        </div>
+
+        <div className="instruction"
+          dangerouslySetInnerHTML={this.returnInnerHTML(this.props.instruction)}>
         </div>
       </div>
     )
@@ -29,9 +34,16 @@ class MeasureIntegrated extends React.Component {
    * Return dangerous html to editor
    * @return {dict} html
    */
-  returnInnerHTML() {
-    return {__html: this.props.revisionText}
+  returnInnerHTML(text) {
+    return {__html: text}
   }
+
+  /**
+   * Return instruction but dangerous
+   */
+  // returnInstruction() {
+  //   return {__html: this.props.instruction}
+  // }
 
   // We need to store the revision in a state variable
   // in order to process it afterwards. Otherwise we will
