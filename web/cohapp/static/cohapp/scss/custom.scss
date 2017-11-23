@@ -448,17 +448,23 @@ h1, h2, h3, h4, h5 {
 
 #editor-new {
   display: grid;
-  grid-template-rows: auto auto auto;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-areas: ".   instruction instruction ."
-                       "text  text      cmap cmap"
-                       "button  button    cmap cmap";
+  grid-template-rows: 20vh 60vh 10vh;
+  grid-template-columns: 40% 60%;
+  grid-column-gap: 25px;
+  grid-row-gap: 15px;
+  grid-template-areas: "text   instruction"
+                       "text   cmap"
+                       "button  cmap";
 
   .instruction {
     grid-area: instruction;
+    overflow-y: scroll;
+    overflow-x: hidden;
+
 
     p {
       font-size: 1.1rem;
+      color: #808080;
     }
   }
 
@@ -484,6 +490,7 @@ h1, h2, h3, h4, h5 {
 
   .cmap {
     grid-area: cmap;
+    min-height: 80vh;
   }
 }
 
@@ -546,7 +553,8 @@ h1, h2, h3, h4, h5 {
 #header-experiment {
 
   ul {
-    background-color: #24292e;
+    background-color: #fff;
+    border-bottom: 1px solid grey;
     align-items: center;
     justify-content: space-around;
     display: flex;
@@ -556,13 +564,13 @@ h1, h2, h3, h4, h5 {
     position: relative;
 
     li {
-      // background-color: rgb(36, 41, 46);
+      color: #000;
+      border-right: 1px solid grey;
       font-size: 1.3rem;
       font-weight: 100;
       cursor: pointer;
       display: inline-block;
       width: 25%;
-      color: #fff;
       height: 100%;
       padding-top: 20px;
       text-align: center;
