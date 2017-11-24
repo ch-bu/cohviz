@@ -434,6 +434,8 @@ class Treatment extends React.Component {
           // Accuracy statements
           'accuracy_draft_local': this.state.accuracyDraftLocal,
           'accuracy_draft_global': this.state.accuracyDraftGlobal,
+          'accuracy_revision_local': this.state.cognitiveLoadRevision['accuracyRevisionLocal'],
+          'accuracy_revision_global': this.state.cognitiveLoadRevision['accuracyRevisionGlobal'],
           // Mental effort ratings
           'cld_draft_question1': this.state.cognitiveLoadDraft['firstQuestion'],
           'cld_draft_question2': this.state.cognitiveLoadDraft['secondQuestion'],
