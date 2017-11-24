@@ -204,6 +204,10 @@ class TextData(models.Model):
 
     levenshtein_distance = models.PositiveSmallIntegerField()
 
+    # Accuracy statements
+    accuracy_draft_local = models.PositiveSmallIntegerField(default=0)
+    accuracy_draft_global = models.PositiveSmallIntegerField(default=0)
+
     # Wie startk hast du dich gerade bei der Überarbeitung des Entwurfs
     # angestrengt?
     # 1: Sehr stark angestrengt; 9: gar nicht angestrengt

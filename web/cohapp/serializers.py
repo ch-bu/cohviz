@@ -25,6 +25,7 @@ class TextDataSerializer(serializers.ModelSerializer):
                  'post_num_concepts', 'pre_page_duration',
                  'post_page_duration', 'measurement', 'experiment', 'subject',
                  'group', 'levenshtein_distance',
+                 'accuracy_draft_local', 'accuracy_draft_global',
                  'cld_draft_question1', 'cld_draft_question2',
                  'cld_draft_question3', 'cld_draft_question4',
                  'cld_middle_question1', 'cld_middle_question2',

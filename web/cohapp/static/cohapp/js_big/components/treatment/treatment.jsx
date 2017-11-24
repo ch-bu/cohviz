@@ -7,6 +7,7 @@ import Revision from './revision.jsx';
 import CognitiveLoadDraft from './cognitive-load-draft.jsx';
 import CognitiveLoadRevision from './cognitive-load-revision.jsx';
 import HeaderExperiment from './header-experiment.jsx';
+import AccuracyDraft from './accuracy-draft.jsx';
 import 'whatwg-fetch';
 
 class Treatment extends React.Component {
@@ -24,6 +25,7 @@ class Treatment extends React.Component {
       showEditor: false,
       showInstruction: false,
       showRevisionPrompt: false,
+      showAccuracyDraft: false,
       showRevision: false,
       showThankYouPage: false,
       showCognitiveLoadDraft: false,
@@ -40,6 +42,9 @@ class Treatment extends React.Component {
                 'secondQuestion': 0,
                 'thirdQuestion': 0,
                 'fourthQuestion': 0},
+      // Accuracy Statements
+      accuracyDraft: null,
+      accuracyRevision: null,
       // Data variables
       durationDraft: null,
       durationRevision: null,
@@ -94,6 +99,7 @@ class Treatment extends React.Component {
     this.updateCognitiveLoadDraft = this.updateCognitiveLoadDraft.bind(this);
     this.updateCognitiveLoadRevision = this.updateCognitiveLoadRevision.bind(this);
     this.updateCognitiveLoadMiddle = this.updateCognitiveLoadMiddle.bind(this);
+    this.updateAccuracyDraft = this.updateAccuracyDraft.bind(this);
   }
 
   render() {
@@ -126,6 +132,9 @@ class Treatment extends React.Component {
               renderNextState={this.userClickedRevisionPrompt}
               seenInstruction={this.state.seenInstruction}
               draftAnalyzed={this.state.draftAnalyzed} />;
+        // Render accuracy statements
+        } else if (this.state.showAccuracyDraft) {
+          template = <AccuracyDraft updateAccuracyDraft={this.updateAccuracyDraft} />
         // Render editor to revise draft
         } else if (this.state.showRevision) {
           template = <Revision measurement={this.state.user.next_measure}
@@ -211,6 +220,17 @@ class Treatment extends React.Component {
   }
 
   /**
+   * Render accuacy statement for the draft
+   */
+  renderAccuracyDraft() {
+    if (this.state.seenInstruction && this.state.seenEditor &&
+        this.state.seenRevisionPrompt) {
+      this.setState({showEditor: false, showInstruction: false,
+                     showRevisionPrompt: false, showAccuracyDraft: true});
+    }
+  }
+
+  /**
    * Render revision
    * @return {undefined}
    */
@@ -253,7 +273,7 @@ class Treatment extends React.Component {
     this.setState({seenRevisionPrompt: true,
                    // Set time for revision
                    durationRevision: new Date()}, () => {
-      this.renderRevision();
+      this.renderAccuracyDraft();
     })
   }
 
@@ -303,9 +323,9 @@ class Treatment extends React.Component {
    * Update Cognitive load draft items
    */
   updateCognitiveLoadDraft(data) {
-    this.setState({'cognitiveLoadDraft': data,
-                   'showCognitiveLoadDraft': false,
-                   'showRevisionPrompt': true});
+    this.setState({cognitiveLoadDraft: data,
+                   showCognitiveLoadDraft: false,
+                   showRevisionPrompt: true});
   }
 
   /**
@@ -324,6 +344,17 @@ class Treatment extends React.Component {
     // Update state and send data to server
     this.setState({cognitiveLoadRevision: data,
                    showCognitiveLoadRevision: false});
+  }
+
+  /**
+   * Update the data for the accuracy draft
+   */
+  updateAccuracyDraft(data) {
+    // Update state and send data to server
+    this.setState({accuracyDraftLocal: data['accuracyLocal'],
+                   accuracyDraftGlobal: data['accuracyGlobal'],
+                   showAccuracyDraft: false,
+                   showRevision: true});
   }
 
   /**
@@ -400,6 +431,9 @@ class Treatment extends React.Component {
           'pre_num_non_coherent_sentences': this.state.draftAnalyzed.cohNotSentences,
           'pre_num_concepts': this.state.draftAnalyzed.numConcepts,
           'pre_local_cohesion': this.state.draftAnalyzed['local cohesion'],
+          // Accuracy statements
+          'accuracy_draft_local': this.state.accuracyDraftLocal,
+          'accuracy_draft_global': this.state.accuracyDraftGlobal,
           // Mental effort ratings
           'cld_draft_question1': this.state.cognitiveLoadDraft['firstQuestion'],
           'cld_draft_question2': this.state.cognitiveLoadDraft['secondQuestion'],
