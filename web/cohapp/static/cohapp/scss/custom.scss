@@ -448,13 +448,15 @@ h1, h2, h3, h4, h5 {
 
 #editor-new {
   display: grid;
-  grid-template-rows: 20vh 60vh 10vh;
+  grid-template-rows: 5vh 15vh 5vh 58vh 5vh;
   grid-template-columns: 40% 60%;
-  grid-column-gap: 25px;
-  grid-row-gap: 15px;
-  grid-template-areas: "text   instruction"
-                       "text   cmap"
-                       "button  cmap";
+  grid-column-gap: 15px;
+  grid-row-gap: 5px;
+  grid-template-areas: "text-heading key-questions"
+                       "text         instruction"
+                       "text         cmap-heading"
+                       "text         cmap"
+                       "button       cmap";
 
   .instruction {
     grid-area: instruction;
@@ -468,13 +470,47 @@ h1, h2, h3, h4, h5 {
     }
   }
 
+  .text-heading {
+    grid-area: text-heading;
+    align-self: end;
+    padding-left: 20px;
+
+    h2 {
+      margin: 0;
+      font-size: 2rem;
+
+    }
+  }
+
+  .cmap-heading {
+    grid-area: cmap-heading;
+    align-self: end;
+
+    h2 {
+      margin: 0;
+      font-size: 2rem;
+    }
+  }
+
+  .key-questions {
+    grid-area: key-questions;
+    align-self: end;
+
+    h2 {
+      margin: 0;
+      font-size: 2rem;
+    }
+  }
+
   .text {
     grid-area: text;
     padding-left: 20px;
     outline: 0px solid transparent;
+    overflow-y: scroll;
 
     p {
       font-size: 1.2rem;
+      padding-right: 20px;
     }
   }
 
@@ -490,7 +526,13 @@ h1, h2, h3, h4, h5 {
 
   .cmap {
     grid-area: cmap;
-    min-height: 80vh;
+    border: 1px dashed grey;
+    width: 98%;
+
+    svg {
+      height: 100%;
+      width: 100%;
+    }
   }
 }
 

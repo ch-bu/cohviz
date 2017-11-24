@@ -21,6 +21,18 @@ class CMap extends React.Component {
               onKeyUp={this.updateRevision} >
         </div>
 
+        <div className="text-heading">
+          <h2>Ihr Text</h2>
+        </div>
+
+        <div className="key-questions">
+          <h2>Leitfragen</h2>
+        </div>
+
+        <div className="cmap-heading">
+          <h2>Feedback</h2>
+        </div>
+
         <div className="button">
           <a onClick={this.props.analyzeRevision}
              className="waves-effect waves-light btn" id="editor-button">Weiter</a>
@@ -82,9 +94,7 @@ class CMap extends React.Component {
     var height = this.cmap.offsetHeight;
 
     // Init svg attributes
-    var svg = d3.select(this.svg)
-      .attr('width', width)
-      .attr('height', height);
+    var svg = d3.select(this.svg);
 
     // Call zoom
     svg.call(d3.zoom()
