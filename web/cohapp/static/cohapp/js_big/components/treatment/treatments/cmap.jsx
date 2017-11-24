@@ -62,6 +62,7 @@ class CMap extends React.Component {
   // in order to process it afterwards. Otherwise we will
   // lose the changes when the component is mounted again
   updateRevision() {
+    // Update state of parent component
     this.props.updateRevision(this.textInput.innerHTML);
   }
 
@@ -272,7 +273,8 @@ class CMap extends React.Component {
       innerHTML = innerHTML.replace(/<\/?span[^>]*>/g,"");
 
       // Update state
-      self.textInput.innerHTML = self.props.draftText;
+      // self.textInput.innerHTML = self.props.draftText;
+      self.textInput.innerHTML = innerHTML;
     }
   }
 
