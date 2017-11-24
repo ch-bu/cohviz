@@ -21,6 +21,7 @@ var getPlainText = function(htmlText) {
 
     paragraphText = paragraphText.replace(/&#8660/g, '');
     paragraphText = paragraphText.replace(/⇔/g, '');
+    paragraphText = paragraphText.replace(/ ?⫽/g, '');
 
     // Remove double LINEBREAKS without content
     paragraphText = paragraphText.replace('[LINEBREAK] [LINEBREAK]', '[LINEBREAK]');
