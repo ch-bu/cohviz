@@ -12,7 +12,7 @@ class CognitiveLoadRevision extends React.Component {
         <div className="container row">
           <p className="strong-p">Wie stark hast du dich bei der Überarbeitung des Entwurfs angestrengt?</p>
           <div className="col s4 m2">
-            <p>sehr stark angestrengt</p>
+            <p>gar nicht angestrengt</p>
           </div>
           <div className="col s4 m3">
             <p className="range-field">
@@ -22,7 +22,7 @@ class CognitiveLoadRevision extends React.Component {
             </p>
           </div>
           <div className="col s4 m2">
-            <p>gar nicht angestrengt</p>
+            <p>sehr stark angestrengt</p>
           </div>
         </div>
         <div className="container row">
@@ -44,7 +44,7 @@ class CognitiveLoadRevision extends React.Component {
         <div className="container row">
           <p className="strong-p">Wie überzeugend schätzt du deinen überarbeiteten Entwurf ein?</p>
           <div className="col s4 m2">
-            <p>sehr überzeugend</p>
+            <p>gar nicht überzeugend</p>
           </div>
           <div className="col s4 m3">
             <p className="range-field">
@@ -54,13 +54,13 @@ class CognitiveLoadRevision extends React.Component {
             </p>
           </div>
           <div className="col s4 m2">
-            <p>gar nicht überzeugend</p>
+            <p>sehr überzeugend</p>
           </div>
         </div>
         <div className="container row">
           <p className="strong-p">Wie verständlich schätzt du deinen überarbeiteten Entwurf ein?</p>
           <div className="col s4 m2">
-            <p>sehr verständlich</p>
+            <p>gar nicht verständlich</p>
           </div>
           <div className="col s4 m3">
             <p className="range-field">
@@ -69,7 +69,7 @@ class CognitiveLoadRevision extends React.Component {
             </p>
           </div>
           <div className="col s4 m2">
-            <p>gar nicht verständlich</p>
+            <p>sehr verständlich</p>
           </div>
         </div>
         <div className="container row">

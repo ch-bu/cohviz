@@ -12,7 +12,7 @@ class CognitiveLoadMiddle extends React.Component {
         <div className="container row">
           <p className="strong-p">Wie stark hast du dich beim Verfassen des Entwurfs angestrengt?</p>
           <div className="col s4 m2">
-            <p>sehr stark angestrengt</p>
+            <p>gar nicht angestrengt</p>
           </div>
           <div className="col s4 m3">
             <p className="range-field">
@@ -22,13 +22,13 @@ class CognitiveLoadMiddle extends React.Component {
             </p>
           </div>
           <div className="col s4 m2">
-            <p>gar nicht angestrengt</p>
+            <p>sehr stark angestrengt</p>
           </div>
         </div>
         <div className="container row">
           <p className="strong-p">Wie schwierig war es für dich, den Entwurf zu verfassen?</p>
           <div className="col s4 m2">
-            <p>sehr schwierig</p>
+            <p>gar nicht schwierig</p>
           </div>
           <div className="col s4 m3">
             <p className="range-field">
@@ -38,13 +38,13 @@ class CognitiveLoadMiddle extends React.Component {
             </p>
           </div>
           <div className="col s4 m2">
-            <p>gar nicht schwierig</p>
+            <p>sehr schwierig</p>
           </div>
         </div>
         <div className="container row">
           <p className="strong-p">Wie überzeugend schätzt du deinen Entwurf ein?</p>
           <div className="col s4 m2">
-            <p>sehr überzeugend</p>
+            <p>gar nicht überzeugend</p>
           </div>
           <div className="col s4 m3">
             <p className="range-field">
@@ -54,13 +54,13 @@ class CognitiveLoadMiddle extends React.Component {
             </p>
           </div>
           <div className="col s4 m2">
-            <p>gar nicht überzeugend</p>
+            <p>sehr überzeugend</p>
           </div>
         </div>
         <div className="container row">
           <p className="strong-p">Wie verständlich schätzt du deinen Entwurf?</p>
           <div className="col s4 m2">
-            <p>sehr verständlich</p>
+            <p>gar nicht verständlich</p>
           </div>
           <div className="col s4 m3">
             <p className="range-field">
@@ -70,7 +70,7 @@ class CognitiveLoadMiddle extends React.Component {
             </p>
           </div>
           <div className="col s4 m2">
-            <p>gar nicht verständlich</p>
+            <p>sehr verständlich</p>
           </div>
         </div>
         <div className="container row">
