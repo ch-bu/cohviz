@@ -18,6 +18,14 @@ class MeasureIntegrated extends React.Component {
               onKeyUp={this.updateRevision}>
           </div>
 
+        <div className="text-heading">
+          <h2>Ihr Text</h2>
+        </div>
+
+        <div className="key-questions">
+          <h2>Leitfragen</h2>
+        </div>
+
         <div className="button">
           <a onClick={this.props.analyzeRevision}
              className="waves-effect waves-light btn" id="editor-button">Weiter</a>
