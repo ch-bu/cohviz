@@ -468,6 +468,17 @@ h1, h2, h3, h4, h5 {
       font-size: 1.1rem;
       color: #808080;
     }
+
+    ul {
+      padding: 0 0 0 40px;
+
+      li {
+        list-style-type: square;
+        color: #808080;
+      }
+    }
+
+
   }
 
   .text-heading {
