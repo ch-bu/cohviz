@@ -40,7 +40,6 @@ class Treatment extends React.Component {
       cognitiveLoadRevision: null,
       cognitiveLoadMiddle: {'firstQuestion': 0,
                 'secondQuestion': 0,
-                'thirdQuestion': 0,
                 'fourthQuestion': 0},
       // Accuracy Statements
       accuracyDraft: null,
@@ -439,15 +438,12 @@ class Treatment extends React.Component {
           // Mental effort ratings
           'cld_draft_question1': this.state.cognitiveLoadDraft['firstQuestion'],
           'cld_draft_question2': this.state.cognitiveLoadDraft['secondQuestion'],
-          'cld_draft_question3': this.state.cognitiveLoadDraft['thirdQuestion'],
           'cld_draft_question4': this.state.cognitiveLoadDraft['fourthQuestion'],
           'cld_revision_question1': this.state.cognitiveLoadRevision['firstQuestion'],
           'cld_revision_question2': this.state.cognitiveLoadRevision['secondQuestion'],
-          'cld_revision_question3': this.state.cognitiveLoadRevision['thirdQuestion'],
           'cld_revision_question4': this.state.cognitiveLoadRevision['fourthQuestion'],
           'cld_middle_question1': this.state.cognitiveLoadMiddle['firstQuestion'],
           'cld_middle_question2': this.state.cognitiveLoadMiddle['secondQuestion'],
-          'cld_middle_question3': this.state.cognitiveLoadMiddle['thirdQuestion'],
           'cld_middle_question4': this.state.cognitiveLoadMiddle['fourthQuestion'],
           // Revision
           'post_text': this.state.revisionPlainText,

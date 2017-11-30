@@ -220,10 +220,6 @@ class TextData(models.Model):
     # 1: Sehr schwierig, 9 gar nicht schwierig
     cld_draft_question2 = models.PositiveSmallIntegerField(default=0)
 
-    # Wie überzeugend schätzt du deine überarbeitete Eroerterung ein?
-    # 1. Sehr überzeugend; 5 gar nicht überzeugend
-    cld_draft_question3 = models.PositiveSmallIntegerField(default=0)
-
     # Wie verständlich schätzt du überarbeitete Eroertung ein?
     # 1: Sehr verständlich; 5 gar nicht verständlich
     cld_draft_question4 = models.PositiveSmallIntegerField(default=0)
@@ -237,10 +233,6 @@ class TextData(models.Model):
     # 1: Sehr schwierig, 9 gar nicht schwierig
     cld_middle_question2 = models.PositiveSmallIntegerField(blank=True)
 
-    # Wie überzeugend schätzt du deine überarbeitete Eroerterung ein?
-    # 1. Sehr überzeugend; 5 gar nicht überzeugend
-    cld_middle_question3 = models.PositiveSmallIntegerField(blank=True)
-
     # Wie verständlich schätzt du überarbeitete Eroertung ein?
     # 1: Sehr verständlich; 5 gar nicht verständlich
     cld_middle_question4 = models.PositiveSmallIntegerField(blank=True)
@@ -253,10 +245,6 @@ class TextData(models.Model):
     # Wie schwierig war es für dich den Entwurf zu überarbeiten?
     # 1: Sehr schwierig, 9 gar nicht schwierig
     cld_revision_question2 = models.PositiveSmallIntegerField(default=0)
-
-    # Wie überzeugend schätzt du deine überarbeitete Eroerterung ein?
-    # 1. Sehr überzeugend; 5 gar nicht überzeugend
-    cld_revision_question3 = models.PositiveSmallIntegerField(default=0)
 
     # Wie verständlich schätzt du überarbeitete Eroertung ein?
     # 1: Sehr verständlich; 5 gar nicht verständlich

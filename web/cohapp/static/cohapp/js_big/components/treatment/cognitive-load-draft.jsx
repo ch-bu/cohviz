@@ -42,21 +42,6 @@ class CognitiveLoadDraft extends React.Component {
           </div>
         </div>
         <div className="row load-question">
-          <p className="strong-p">Wie überzeugend schätzt du deinen Entwurf ein?</p>
-          <div className="col s4 m2">
-            <p>gar nicht überzeugend</p>
-          </div>
-          <div className="col s4 m3">
-            <p className="range-field">
-              <input ref={(el) => { this.thirdQuestion = el; }}
-                type="range" id="question3" min="1" max="5" />
-            </p>
-          </div>
-          <div className="col s4 m2">
-            <p>sehr überzeugend</p>
-          </div>
-        </div>
-        <div className="row load-question">
           <p className="strong-p">Wie hoch schätzt du die Verständlichkeit deiner Erklärung ein?</p>
           <div className="col s4 m2">
             <p>0% (gar nicht verständlich)</p>
@@ -82,7 +67,6 @@ class CognitiveLoadDraft extends React.Component {
     // Data of all questions
     var data = {'firstQuestion': this.firstQuestion.value,
                 'secondQuestion': this.secondQuestion.value,
-                'thirdQuestion': this.thirdQuestion.value,
                 'fourthQuestion': this.fourthQuestion.value};
 
     // Update draft in parent

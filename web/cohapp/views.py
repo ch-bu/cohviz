@@ -397,7 +397,6 @@ def csv_text_view(request, experiment_password):
                      'accuracyGlobal',
                      'cld_question1',
                      'cld_question2',
-                     'cld_question3',
                      'cld_question4'])
 
     for inst in text_data:
@@ -420,7 +419,6 @@ def csv_text_view(request, experiment_password):
                          inst.accuracy_draft_global,
                          inst.cld_draft_question1,
                          inst.cld_draft_question2,
-                         inst.cld_draft_question3,
                          inst.cld_draft_question4])
         # Mental effort data between draft and revision
         writer.writerow([inst.subject.user,
@@ -441,7 +439,6 @@ def csv_text_view(request, experiment_password):
                          None,
                          inst.cld_middle_question1,
                          inst.cld_middle_question2,
-                         inst.cld_middle_question3,
                          inst.cld_middle_question4])
         # Revision
         writer.writerow([inst.subject.user,
@@ -462,7 +459,6 @@ def csv_text_view(request, experiment_password):
                          inst.accuracy_revision_global,
                          inst.cld_revision_question1,
                          inst.cld_revision_question2,
-                         inst.cld_revision_question3,
                          inst.cld_revision_question4])
 
     return response
