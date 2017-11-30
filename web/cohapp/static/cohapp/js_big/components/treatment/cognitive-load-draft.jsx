@@ -57,18 +57,18 @@ class CognitiveLoadDraft extends React.Component {
           </div>
         </div>
         <div className="row load-question">
-          <p className="strong-p">Wie verständlich schätzt du deinen Entwurf?</p>
+          <p className="strong-p">Wie hoch schätzt du die Verständlichkeit deines Entwurfs ein?</p>
           <div className="col s4 m2">
-            <p>gar nicht verständlich</p>
+            <p>0% (gar nicht verständlich)</p>
           </div>
           <div className="col s4 m3">
             <p className="range-field">
               <input ref={(el) => { this.fourthQuestion = el; }}
-                type="range" id="question4" min="1" max="5" />
+                type="range" id="question4" min="0" max="100" />
             </p>
           </div>
           <div className="col s4 m2">
-            <p>sehr verständlich</p>
+            <p>100% (vollkommen verständlich)</p>
           </div>
         </div>
         <div className="container row">

@@ -10,7 +10,7 @@ class AccuracyDraft extends React.Component {
     return (
       <div className="cognitiveload container">
         <div className="row load-question">
-          <p className="strong-p">Wie ausgeprägt ist die lokale Kohäsion in deiner Erklärung?</p>
+          <p className="strong-p">Wie hoch schätzt du die lokale Kohäsion deiner jetzigen Erklärung ein?</p>
           <div className="col s4 m2">
             <p>0% (gar nicht lokal kohäsiv)</p>
           </div>
@@ -27,18 +27,18 @@ class AccuracyDraft extends React.Component {
           </div>
         </div>
         <div className="row load-question">
-          <p className="strong-p">Wie ausgeprägt ist die globale Kohäsion in deiner Erklärung?</p>
+          <p className="strong-p">Wie hoch schätzt du die globale Kohäsion deiner jetzigen Erklärung ein?</p>
           <div className="col s4 m2">
-            <p>gar nicht global kohäsiv</p>
+            <p>0% (gar nicht global kohäsiv)</p>
           </div>
           <div className="col s4 m3">
             <p className="range-field">
               <input ref={(el) => { this.secondQuestion = el; }}
-                type="range" id="question2" min="0" max="4" />
+                type="range" id="question2" min="0" max="100" />
             </p>
           </div>
           <div className="col s4 m2">
-            <p>vollkommen global kohäsiv</p>
+            <p>100% (vollkommen global kohäsiv)</p>
           </div>
         </div>
         <div className="container row">

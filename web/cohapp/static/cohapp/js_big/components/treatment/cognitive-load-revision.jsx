@@ -10,7 +10,7 @@ class CognitiveLoadRevision extends React.Component {
     return (
       <div className="cognitiveload">
         <div className="container row">
-          <p className="strong-p">Wie stark hast du dich bei der Überarbeitung des Entwurfs angestrengt?</p>
+          <p className="strong-p">Wie stark hast du dich bei der Überarbeitung deiner Erkärung angestrengt?</p>
           <div className="col s4 m2">
             <p>gar nicht angestrengt</p>
           </div>
@@ -26,7 +26,7 @@ class CognitiveLoadRevision extends React.Component {
           </div>
         </div>
         <div className="container row">
-          <p className="strong-p">Wie schwierig war es für dich, den Entwurf zu überarbeiten?</p>
+          <p className="strong-p">Wie schwierig war es für dich, deine Erklärung zu überarbeiten?</p>
           <div className="col s4 m2">
             <p>sehr schwierig</p>
           </div>
@@ -42,38 +42,22 @@ class CognitiveLoadRevision extends React.Component {
           </div>
         </div>
         <div className="container row">
-          <p className="strong-p">Wie überzeugend schätzt du deinen überarbeiteten Entwurf ein?</p>
+          <p className="strong-p">Wie hoch schätzt du die Verständlichkeit deiner überarbeiteten Erklärung ein?</p>
           <div className="col s4 m2">
-            <p>gar nicht überzeugend</p>
-          </div>
-          <div className="col s4 m3">
-            <p className="range-field">
-              <input
-                ref={(el) => { this.thirdQuestion = el; }}
-                type="range" id="question3" min="1" max="5" />
-            </p>
-          </div>
-          <div className="col s4 m2">
-            <p>sehr überzeugend</p>
-          </div>
-        </div>
-        <div className="container row">
-          <p className="strong-p">Wie verständlich schätzt du deinen überarbeiteten Entwurf ein?</p>
-          <div className="col s4 m2">
-            <p>gar nicht verständlich</p>
+            <p>0% (gar nicht verständlich)</p>
           </div>
           <div className="col s4 m3">
             <p className="range-field">
               <input ref={(el) => { this.fourthQuestion = el; }}
-                type="range" id="question4" min="1" max="5" />
+                type="range" id="question4" min="0" max="100" />
             </p>
           </div>
           <div className="col s4 m2">
-            <p>sehr verständlich</p>
+            <p>100% (sehr verständlich)</p>
           </div>
         </div>
         <div className="container row">
-          <p className="strong-p">Wie ausgeprägt ist die lokale Kohäsion in deiner Erklärung?</p>
+          <p className="strong-p">Wie hoch schätzt du die lokale Kohäsion deiner überarbeiteten Erklärung ein?</p>
           <div className="col s4 m2">
             <p>0% (gar nicht lokal kohäsiv)</p>
           </div>
@@ -90,14 +74,14 @@ class CognitiveLoadRevision extends React.Component {
           </div>
         </div>
         <div className="container row">
-          <p className="strong-p">Wie ausgeprägt ist die globale Kohäsion in deiner Erklärung?</p>
+          <p className="strong-p">Wie hoch schätzt du die globale Kohäsion deiner überarbeiteten Erklärung ein?</p>
           <div className="col s4 m2">
             <p>gar nicht global kohäsiv</p>
           </div>
           <div className="col s4 m3">
             <p className="range-field">
               <input ref={(el) => { this.accuracyRevisionGlobal = el; }}
-                type="range" id="question2" min="0" max="4" />
+                type="range" id="question2" min="0" max="100" />
             </p>
           </div>
           <div className="col s4 m2">
@@ -115,7 +99,6 @@ class CognitiveLoadRevision extends React.Component {
     // Data of all questions
     var data = {'firstQuestion': this.firstQuestion.value,
                 'secondQuestion': this.secondQuestion.value,
-                'thirdQuestion': this.thirdQuestion.value,
                 'fourthQuestion': this.fourthQuestion.value,
                 'accuracyRevisionLocal': this.accuracyRevisionLocal.value,
                 'accuracyRevisionGlobal': this.accuracyRevisionGlobal.value};
