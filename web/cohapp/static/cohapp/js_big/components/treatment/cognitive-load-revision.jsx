@@ -2,15 +2,33 @@ class CognitiveLoadRevision extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      firstQuestionClicked: false,
+      secondQuestionClicked: false,
+      fourthQuestionClicked: false,
+      accuracyRevisionLocalClicked: false,
+      accuracyRevisionGlobalClicked: false
+    };
+
     this.buttonInteraction = this.buttonInteraction.bind(this);
   }
 
   render() {
 
+    // Only render button after every item has been clicked
+    var button = '';
+    if (this.state.firstQuestionClicked && this.state.secondQuestionClicked &&
+        this.state.fourthQuestionClicked && this.state.accuracyRevisionLocalClicked &&
+        this.state.accuracyRevisionGlobalClicked) {
+      button = <div className="container row">
+          <a id="instruction-read" className="waves-effect waves-light btn" onClick={this.buttonInteraction}>Weiter</a>
+        </div>;
+    }
+
     return (
       <div className="cognitiveload">
         <div className="container row">
-          <p className="strong-p">Wie stark hast du dich bei der Überarbeitung deiner Erkärung angestrengt?</p>
+          <p className="strong-p">Wie stark hast du dich bei der Überarbeitung deiner Erklärung angestrengt?</p>
           <div className="col s4 m2">
             <p>gar nicht angestrengt</p>
           </div>
@@ -18,7 +36,8 @@ class CognitiveLoadRevision extends React.Component {
             <p className="range-field">
               <input
                 ref={(el) => { this.firstQuestion = el; }}
-                type="range" id="question1" min="1" max="9" />
+                type="range" id="question1" min="1" max="9"
+                onMouseDown={() => this.setState({firstQuestionClicked: true})} />
             </p>
           </div>
           <div className="col s4 m2">
@@ -34,7 +53,8 @@ class CognitiveLoadRevision extends React.Component {
             <p className="range-field">
               <input
                 ref={(el) => { this.secondQuestion = el; }}
-                type="range" id="question2" min="1" max="9" />
+                type="range" id="question2" min="1" max="9"
+                onMouseDown={() => this.setState({secondQuestionClicked: true})} />
             </p>
           </div>
           <div className="col s4 m2">
@@ -49,7 +69,8 @@ class CognitiveLoadRevision extends React.Component {
           <div className="col s4 m3">
             <p className="range-field">
               <input ref={(el) => { this.fourthQuestion = el; }}
-                type="range" id="question4" min="0" max="100" />
+                type="range" id="question4" min="0" max="100"
+                onMouseDown={() => this.setState({fourthQuestionClicked: true})} />
             </p>
           </div>
           <div className="col s4 m2">
@@ -65,7 +86,8 @@ class CognitiveLoadRevision extends React.Component {
             <form action="#">
             <p className="range-field">
               <input ref={(el) => { this.accuracyRevisionLocal = el; }}
-                type="range" id="question1" min="0" max="100" />
+                type="range" id="accuracyLocal" min="0" max="100"
+                onMouseDown={() => this.setState({accuracyRevisionLocalClicked: true})} />
             </p>
             </form>
           </div>
@@ -81,16 +103,15 @@ class CognitiveLoadRevision extends React.Component {
           <div className="col s4 m3">
             <p className="range-field">
               <input ref={(el) => { this.accuracyRevisionGlobal = el; }}
-                type="range" id="question2" min="0" max="100" />
+                type="range" id="accuracyGlobal" min="0" max="100"
+                onMouseDown={() => this.setState({accuracyRevisionGlobalClicked: true})} />
             </p>
           </div>
           <div className="col s4 m2">
             <p>vollkommen global kohäsiv</p>
           </div>
         </div>
-        <div className="container row">
-          <a id="instruction-read" className="waves-effect waves-light btn" onClick={this.buttonInteraction}>Weiter</a>
-        </div>
+        {button}
       </div>
     )
   }

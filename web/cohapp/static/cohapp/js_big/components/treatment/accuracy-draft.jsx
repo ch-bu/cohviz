@@ -2,10 +2,26 @@ class AccuracyDraft extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      accuracyLocalClicked: false,
+      accuracyGlobalClicked: false,
+      cognitiveloadClicked: false
+    };
+
     this.buttonInteraction = this.buttonInteraction.bind(this);
   }
 
   render() {
+    // Only render button if all questions have been clicked
+    var button = '';
+    if (this.state.accuracyLocalClicked && this.state.accuracyGlobalClicked &&
+        this.state.cognitiveloadClicked) {
+        button = <div className="container row">
+                  <a id="instruction-read" className="waves-effect waves-light btn"
+                  onClick={this.buttonInteraction}>Weiter</a>
+                </div>;
+    }
+
     return (
       <div className="cognitiveload container">
         <div className="row load-question">
@@ -16,7 +32,8 @@ class AccuracyDraft extends React.Component {
           <div className="col s4 m3">
             <p className="range-field">
               <input ref={(el) => { this.fourthQuestion = el; }}
-                type="range" id="question4" min="0" max="100" />
+                type="range" id="question4" min="0" max="100"
+                onMouseDown={() => this.setState({cognitiveloadClicked: true})} />
             </p>
           </div>
           <div className="col s4 m2">
@@ -32,7 +49,8 @@ class AccuracyDraft extends React.Component {
             <form action="#">
             <p className="range-field">
               <input ref={(el) => { this.firstQuestion = el; }}
-                type="range" id="question1" min="0" max="100" />
+                type="range" id="question1" min="0" max="100"
+                onMouseDown={() => this.setState({accuracyLocalClicked: true})} />
             </p>
             </form>
           </div>
@@ -48,16 +66,15 @@ class AccuracyDraft extends React.Component {
           <div className="col s4 m3">
             <p className="range-field">
               <input ref={(el) => { this.secondQuestion = el; }}
-                type="range" id="question2" min="0" max="100" />
+                type="range" id="question2" min="0" max="100"
+                onMouseDown={() => this.setState({accuracyGlobalClicked: true})} />
             </p>
           </div>
           <div className="col s4 m2">
             <p>100% (vollkommen global kohäsiv)</p>
           </div>
         </div>
-        <div className="container row">
-          <a id="instruction-read" className="waves-effect waves-light btn" onClick={this.buttonInteraction}>Weiter</a>
-        </div>
+        {button}
       </div>
     )
   }
