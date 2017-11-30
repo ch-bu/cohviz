@@ -352,6 +352,7 @@ class Treatment extends React.Component {
     // Update state and send data to server
     this.setState({accuracyDraftLocal: data['accuracyLocal'],
                    accuracyDraftGlobal: data['accuracyGlobal'],
+                   cognitiveloadUnderstandabilityDraft: data['cognitiveloadUnderstandabilityDraft'],
                    showAccuracyDraft: false,
                    showRevision: true});
   }
@@ -438,7 +439,7 @@ class Treatment extends React.Component {
           // Mental effort ratings
           'cld_draft_question1': this.state.cognitiveLoadDraft['firstQuestion'],
           'cld_draft_question2': this.state.cognitiveLoadDraft['secondQuestion'],
-          'cld_draft_question4': this.state.cognitiveLoadDraft['fourthQuestion'],
+          'cld_draft_question4': this.state.cognitiveloadUnderstandabilityDraft,
           'cld_revision_question1': this.state.cognitiveLoadRevision['firstQuestion'],
           'cld_revision_question2': this.state.cognitiveLoadRevision['secondQuestion'],
           'cld_revision_question4': this.state.cognitiveLoadRevision['fourthQuestion'],

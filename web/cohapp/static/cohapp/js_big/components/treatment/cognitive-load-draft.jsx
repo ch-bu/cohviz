@@ -6,7 +6,6 @@ class CognitiveLoadDraft extends React.Component {
   }
 
   render() {
-
     return (
       <div className="cognitiveload container">
         <div className="row load-question">
@@ -41,21 +40,6 @@ class CognitiveLoadDraft extends React.Component {
             <p>gar nicht schwierig</p>
           </div>
         </div>
-        <div className="row load-question">
-          <p className="strong-p">Wie hoch schätzt du die Verständlichkeit deiner Erklärung ein?</p>
-          <div className="col s4 m2">
-            <p>0% (gar nicht verständlich)</p>
-          </div>
-          <div className="col s4 m3">
-            <p className="range-field">
-              <input ref={(el) => { this.fourthQuestion = el; }}
-                type="range" id="question4" min="0" max="100" />
-            </p>
-          </div>
-          <div className="col s4 m2">
-            <p>100% (vollkommen verständlich)</p>
-          </div>
-        </div>
         <div className="container row">
           <a id="instruction-read" className="waves-effect waves-light btn" onClick={this.buttonInteraction}>Weiter</a>
         </div>
@@ -66,8 +50,7 @@ class CognitiveLoadDraft extends React.Component {
   buttonInteraction() {
     // Data of all questions
     var data = {'firstQuestion': this.firstQuestion.value,
-                'secondQuestion': this.secondQuestion.value,
-                'fourthQuestion': this.fourthQuestion.value};
+                'secondQuestion': this.secondQuestion.value};
 
     // Update draft in parent
     this.props.updateDraft(data);
