@@ -25,19 +25,20 @@ class LandingPage extends React.Component {
 
 
     return (
-      <div>
-        <div id="visualization-button">
+      <div id="application">
+        <div className="button">
           {this.state.loading ? <Preloader /> : button}
         </div>
-        <div className="row" id="editor-landing-page">
-          <div id="editor-medium-editor" className="col s11 m4 offset-m1">
+        <div className="editor-wrapper" id="editor">
+          <div id="editor-medium-editor">
             <div id="editor-textinput" ref={(el) => { this.textInput = el; }}
               dangerouslySetInnerHTML={this.returnInnerHTML()}></div>
           </div>
-          <div id="cmap" ref={(el) => { this.cmap = el; }} className="col s11 m7">
-            <svg  ref={(el) => { this.svg = el; }} ></svg>
-          </div>
         </div>
+        <div className="concept-map" ref={(el) => { this.cmap = el; }}>
+          <svg  ref={(el) => { this.svg = el; }} ></svg>
+        </div>
+        <div className="variables"></div>
       </div>
     )
   }
@@ -339,5 +340,5 @@ class LandingPage extends React.Component {
 
 ReactDOM.render(
   <LandingPage />,
-  document.getElementById('landingpage')
+  document.getElementById('landing-page')
 );
