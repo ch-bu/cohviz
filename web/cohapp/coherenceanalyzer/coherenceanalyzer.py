@@ -883,32 +883,32 @@ def analyzeTextCohesion(text):
 
 
     # Get hypernym hyponym pairs
-    # hyponym_hyper_pairs = []
+    hyponym_hyper_pairs = []
 
     # Get coreference resolutions
-    # coreferences = []
+    coreferences = []
 
     # Get compounds
-    # compounds = []
+    compounds = []
 
     # Get stem relations
-    # stem_relations = []
+    stem_relations = []
 
     # Get hypernym hyponym pairs
-    hyponym_hyper_pairs = getHypoHyperPairs(sentences, gn)
+    # hyponym_hyper_pairs = getHypoHyperPairs(sentences, gn)
 
     # Get coreference resolutions
-    coreferences = get_coreferences(sentences, gn)
+    # coreferences = get_coreferences(sentences, gn)
 
     # Get compounds
-    compounds = get_compounds(sentences)
+    # compounds = get_compounds(sentences)
 
     # Get stem relations
-    stem_relations = get_stem_relations(sentences, gn)
+    # stem_relations = get_stem_relations(sentences, gn)
 
     # Merge all word pairs
-    word_pairs = word_pairs + hyponym_hyper_pairs + coreferences + compounds + \
-        stem_relations
+    # word_pairs = word_pairs + hyponym_hyper_pairs + coreferences + compounds + \
+    #     stem_relations
 
     ######################################
     # Calculate number of relations
