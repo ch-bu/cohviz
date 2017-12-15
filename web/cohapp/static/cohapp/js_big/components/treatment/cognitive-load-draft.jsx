@@ -25,7 +25,7 @@ class CognitiveLoadDraft extends React.Component {
     return (
       <div className="cognitiveload container">
         <div className="row load-question">
-          <p className="strong-p">Wie stark hast du dich beim Verfassen des Entwurfs angestrengt?</p>
+          <p className="strong-p">Wie stark hast du dich beim Verfassen deiner Erklärung angestrengt?</p>
           <div className="col s4 m2">
             <p>gar nicht angestrengt</p>
           </div>
