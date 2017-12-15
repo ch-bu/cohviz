@@ -18,7 +18,7 @@ class CognitiveLoadDraft extends React.Component {
     if (this.state.question1Clicked && this.state.question2Clicked) {
       button = <div className="container row">
           <a id="instruction-read" className="waves-effect waves-light btn"
-          onClick={this.buttonInteraction}>Weiter</a>
+          onClick={this.buttonInteraction}>STOP. Warten Sie auf weitere Instruktionen</a>
         </div>;
     }
 

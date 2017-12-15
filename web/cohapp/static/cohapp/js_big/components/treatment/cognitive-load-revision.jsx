@@ -21,7 +21,8 @@ class CognitiveLoadRevision extends React.Component {
         this.state.fourthQuestionClicked && this.state.accuracyRevisionLocalClicked &&
         this.state.accuracyRevisionGlobalClicked) {
       button = <div className="container row">
-          <a id="instruction-read" className="waves-effect waves-light btn" onClick={this.buttonInteraction}>Weiter</a>
+          <a id="instruction-read" className="waves-effect waves-light btn"
+          onClick={this.buttonInteraction}>STOP. Warten Sie auf weitere Instruktionen</a>
         </div>;
     }
 
