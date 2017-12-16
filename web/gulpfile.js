@@ -209,7 +209,7 @@ gulp.task('watch', ['sass', 'scripts-app'], function() {
     //     ]
     // });
 
-	gulp.watch('./cohapp/static/cohapp/scss/*.scss', ['sass']);
+	gulp.watch('./cohapp/static/cohapp/scss/**/*.scss', ['sass']);
 	gulp.watch('./cohapp/static/cohapp/js_big/app/**/*.js', ['scripts-app']);
   gulp.watch('./cohapp/static/cohapp/js_big/**/*.jsx', ['webpack']);
   gulp.watch('./cohapp/static/cohapp/js_big/app/views/treatments/*.js',

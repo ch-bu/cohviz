@@ -296,49 +296,6 @@ h1, h2, h3, h4, h5 {
   }
 }
 
-// Editor
-#editor {
-  position: relative;
-  min-height: 58vh;
-  font-size: $p-font-size;;
-
-  #editor-textinput {
-    font-family: Georgia;
-    min-height: 58vh;
-    padding: 0 10px 0 10px;
-    border-radius: 5px;
-    outline: 0px solid transparent;
-    // border-left: 2px dashed #ccc;
-
-    p {
-      font-size: $p-font-size;
-    }
-
-    p:first-child {
-      margin-top: 0;
-    }
-  }
-
-  #editor-medium-editor {
-    padding: 0;
-    margin-top: 0;
-  }
-
-  #editor-button-div {
-    position: absolute;
-    bottom: -30px;
-    left: 0;
-
-    a {
-      font-size: 1rem;
-    }
-  }
-
-  #cmap {
-    height: 80vh;
-    padding: 0;
-  }
-}
 
 #editor-new {
   display: grid;
@@ -434,60 +391,6 @@ h1, h2, h3, h4, h5 {
       height: 100%;
       width: 100%;
     }
-  }
-}
-
-#editor-landing-page {
-  @include margin-top();
-
-  position: relative;
-  // min-height: 58vh;
-  height: 90vh;
-  font-size: $p-font-size;;
-
-  #editor-textinput {
-    font-family: Georgia;
-    min-height: 58vh;
-    padding: 0 10px 0 10px;
-    border-radius: 5px;
-    outline: 0px solid transparent;
-
-    p {
-      font-size: $p-font-size;
-    }
-
-    p:first-child {
-      margin-top: 0;
-    }
-  }
-
-  #editor-medium-editor {
-    padding: 0;
-    margin-top: 0;
-  }
-
-  #editor-button-div {
-    position: absolute;
-    bottom: -50px;
-    left: 0;
-
-    a {
-      font-size: 1rem;
-    }
-  }
-
-  #cmap {
-    height: 80vh;
-    padding: 0;
-  }
-}
-
-
-.load-question {
-  margin-bottom: 40px;
-
-  p {
-    margin-bottom: 2px;
   }
 }
 
