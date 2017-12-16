@@ -14,7 +14,7 @@ class Editor extends React.Component {
   render() {
     // Store button and loading Ring in variables
     var button = <a className="waves-effect waves-light btn" id="editor-button"
-                   onClick={this.analyzeText}>Weiter</a>;
+                   onClick={this.analyzeText}>STOP. Warten Sie auf weitere Instruktionen</a>;
 
     return (
       <div className="row" id="editor">

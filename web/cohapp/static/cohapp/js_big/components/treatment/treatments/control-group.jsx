@@ -27,7 +27,7 @@ class ControlGroup extends React.Component {
 
         <div className="button">
           <a onClick={this.props.analyzeRevision}
-             className="waves-effect waves-light btn" id="editor-button">Finale Erklärung abschicken</a>
+             className="waves-effect waves-light btn" id="editor-button">STOP. Warten Sie auf weitere Instruktionen</a>
         </div>
 
         <div className="instruction"

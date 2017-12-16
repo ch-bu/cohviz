@@ -18,14 +18,14 @@ class CognitiveLoadDraft extends React.Component {
     if (this.state.question1Clicked && this.state.question2Clicked) {
       button = <div className="container row">
           <a id="instruction-read" className="waves-effect waves-light btn"
-          onClick={this.buttonInteraction}>Weiter</a>
+          onClick={this.buttonInteraction}>STOP. Warten Sie auf weitere Instruktionen</a>
         </div>;
     }
 
     return (
       <div className="cognitiveload container">
         <div className="row load-question">
-          <p className="strong-p">Wie stark hast du dich beim Verfassen des Entwurfs angestrengt?</p>
+          <p className="strong-p">Wie stark hast du dich beim Verfassen deiner Erklärung angestrengt?</p>
           <div className="col s4 m2">
             <p>gar nicht angestrengt</p>
           </div>
