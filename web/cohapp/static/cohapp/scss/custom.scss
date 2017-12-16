@@ -110,6 +110,38 @@ h1, h2, h3, h4, h5 {
   font-family: 'Playfair Display', serif;
 }
 
+nav {
+  background-color: rgb(31, 119, 180);
+  color: #fff;
+  box-sizing: border-box;
+  box-shadow: None;
+  font-weight: bold;
+
+  ul {
+    a {
+      color: #fff;
+      font-size: 1.2rem;
+      border-bottom: 3px solid rgb(31, 119, 180);
+
+      &:hover {
+        background-color: rgb(31, 119, 180);
+        border-bottom: 3px solid #000;
+      }
+    }
+  }
+
+  #nav-wrapper {
+    display: flex;
+    flex-direction: row;
+    padding: 0 15%;
+
+    .logo {
+      margin-right: auto;
+    }
+  }
+
+}
+
 
 // ******************** Login Page ******************************
 #login {

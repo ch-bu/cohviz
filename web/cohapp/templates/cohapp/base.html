@@ -22,15 +22,13 @@
   <body>
     {% block header %}
     <nav id="navigation">
-        <div class="nav-wrapper container">
-          <a href="{% url 'index' %}">CohViz</a>
-          <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li><a href="#about">About</a></li>
-            <li><a href="#howitworks">Wie es funktioniert?</a></li>
-            <li><a href="#changelog">Changelog</a></li>
-          </ul>
-        </div>
-     </nav>
+      <ul id="nav-wrapper">
+        <li class="logo"><a href="{% url 'index' %}">CohViz</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#howitworks">Wie es funktioniert?</a></li>
+        <li><a href="#changelog">Changelog</a></li>
+      </ul>
+    </nav>
     {% endblock %}
 
     {% block container %}
