@@ -1,20 +1,23 @@
 // ************** Navbar *************************
-nav {
+nav#navigation {
   background-color: $color-primary;
   color: #fff;
   box-shadow: None;
   font-weight: bold;
+  border-bottom: 4px solid black;
+  height: 6vh;
 
   ul#nav-wrapper {
     display: flex;
     flex-direction: row;
-    padding: 0 15%;
-
-    .logo {
-      margin-right: auto;
-    }
+    justify-content: space-between;
 
     li {
+
+      .logo a {
+        color: $color-button;
+      }
+
       a {
         color: #fff;
         font-size: 1.2rem;

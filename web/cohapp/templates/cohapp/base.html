@@ -7,7 +7,7 @@
 
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,800,300' rel='stylesheet' type='text/css'>
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display" rel="stylesheet">
-    <link href="http://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.css" rel="stylesheet"> <!-- Footer -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <title>{% block title %}Webseite Studie{% endblock %}</title>
 
@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="{% static 'cohapp/css/vendor/medium-editor.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'cohapp/css/vendor/materialize.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'cohapp/css/custom.css' %}" type="text/css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
   </head>
 
@@ -24,9 +23,7 @@
     <nav id="navigation">
       <ul id="nav-wrapper">
         <li class="logo"><a href="{% url 'index' %}">CohViz</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#howitworks">Wie es funktioniert?</a></li>
-        <li><a href="#changelog">Changelog</a></li>
+        <li><a href="#about"><i class="material-icons">menu</i></a></li>
       </ul>
     </nav>
     {% endblock %}

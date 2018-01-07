@@ -26,6 +26,12 @@ class LandingPage extends React.Component {
 
     return (
       <div id="application">
+        <nav id="navigation">
+          <ul id="nav-wrapper">
+            <li className="logo"><a href="{% url 'index' %}">CohViz</a></li>
+            <li><a href="#about"><i className="material-icons">menu</i></a></li>
+          </ul>
+        </nav>
         <div className="button">
           {this.state.loading ? <Preloader /> : button}
         </div>
@@ -38,7 +44,6 @@ class LandingPage extends React.Component {
         <div className="concept-map" ref={(el) => { this.cmap = el; }}>
           <svg  ref={(el) => { this.svg = el; }} ></svg>
         </div>
-        <div className="variables"></div>
       </div>
     )
   }
@@ -132,7 +137,7 @@ class LandingPage extends React.Component {
       .attr('class', 'overlay')
       .attr('width', width)
       .attr('height', height)
-      .style('fill', 'red')
+      .style('fill', '#333')
       .style('opacity', 0)
       .on('mousemove', mouseMoveHandler)
       .on('mouseleave', mouseLeaveHandler);
@@ -277,7 +282,7 @@ class LandingPage extends React.Component {
         .style('font-size', '20px');
 
       nodeSelected.select('circle')
-        .style('stroke', '#000')
+        .style('stroke', '#fff')
         .style('stroke-width', 1);
 
       self.highlighWordInText(nodeData.id);

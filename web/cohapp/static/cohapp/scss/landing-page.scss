@@ -1,16 +1,21 @@
 #landing-page {
 
   #application {
+    background-color: $color-primary;
     display: grid;
     grid-template-columns: 40vw 59vw;
-    grid-template-rows: 85vh 5vh;
-    grid-template-areas: "editor concept-map"
-                         "button concept-map";
+    grid-template-rows: 6vh 89vh 5vh;
+    grid-template-areas: "navigation navigation"
+                         "editor concept-map"
+                         "button button";
 
     #application-editor {
       overflow-y: scroll;
+      overflow-x: hidden;
       grid-area: editor;
-      background-color: #f7f9fa;
+      border-right: 4px solid black;
+      color: #fff;
+      background-color: $color-primary;
       padding: 5%;
       font-size: $p-font-size;
 
@@ -32,12 +37,12 @@
 
       // Scrollbar
       &::-webkit-scrollbar-track {
-        background-color: #f7f9fa;
+        background-color: $color-primary;
       }
 
       &::-webkit-scrollbar {
         width: 10px;
-        background-color: #f7f9fa;
+        background-color: $color-primary;
       }
 
       &::-webkit-scrollbar-thumb {
@@ -47,23 +52,38 @@
 
     }
 
-    .concept-map {
-      grid-area: concept-map;
+    #navigation {
+      grid-area: navigation;
     }
 
-    .variables {
-      grid-area: variables;
+    .concept-map {
+      grid-area: concept-map;
+
+      svg {
+        .node {
+          text {
+            fill: #fff;
+          }
+        }
+      }
     }
 
     .button {
+      position: relative;
+
+      button {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+      }
+
       grid-area: button;
       top: 0;
-      background-color: #f7f9fa;
-      padding-left: 5%;
+      border-top: 4px solid black;
+      background-color: $color-primary;
     }
-
-
-
   }
 
 
