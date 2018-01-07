@@ -1,0 +1,29 @@
+// ************** Navbar *************************
+nav {
+  background-color: $color-primary;
+  color: #fff;
+  box-shadow: None;
+  font-weight: bold;
+
+  ul#nav-wrapper {
+    display: flex;
+    flex-direction: row;
+    padding: 0 15%;
+
+    .logo {
+      margin-right: auto;
+    }
+
+    li {
+      a {
+        color: #fff;
+        font-size: 1.2rem;
+
+        &:hover {
+          color: #e5e5e5;
+          background-color: $color-primary;
+        }
+      }
+    }
+  }
+}

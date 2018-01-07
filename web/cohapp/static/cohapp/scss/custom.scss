@@ -1,16 +1,11 @@
 // Color
-$color-two: #b92980;
-$color-two-hover: #7a1b55;
+$color-primary: #1f77b4;
+$color-button: #26a69a;
 $color-green: #29b962;
 $color-red: #b92938;
 $color-grey-light: #ada8aa;
 $color-soft-red: #ffe9ec;
 $text-color: #fff;
-
-// Variable declaration
-$menu_transition_time: 0.3s;
-$menu_height_not_scroll: 75px;
-$menu_height_scroll: 50px;
 
 // Login Variables
 // Default medium-gray color
@@ -30,6 +25,7 @@ $p-font-size: 1.5rem;
 
 
 @import 'landing-page.scss';
+@import 'navbar.scss';
 
 // ******************* Mixins ***********************************
 
@@ -84,62 +80,17 @@ body {
   overflow-x: hidden;
 }
 
-.btn {
-  // background-color: #FFCF52;
-  // color: #000;
-}
-
-.btn:hover, .btn-large:hover {
-    // backround-color: #ffe7a8;
-}
-
 .strong-p {
   font-weight: bold;
   font-size: 1.4rem;
 }
 
-
-/**
- * General stuff
- */
 p {
   font-size: 1rem;
 }
 
 h1, h2, h3, h4, h5 {
   font-family: 'Playfair Display', serif;
-}
-
-nav {
-  background-color: rgb(31, 119, 180);
-  color: #fff;
-  box-sizing: border-box;
-  box-shadow: None;
-  font-weight: bold;
-
-  ul {
-    a {
-      color: #fff;
-      font-size: 1.2rem;
-      border-bottom: 3px solid rgb(31, 119, 180);
-
-      &:hover {
-        background-color: rgb(31, 119, 180);
-        border-bottom: 3px solid #000;
-      }
-    }
-  }
-
-  #nav-wrapper {
-    display: flex;
-    flex-direction: row;
-    padding: 0 15%;
-
-    .logo {
-      margin-right: auto;
-    }
-  }
-
 }
 
 
