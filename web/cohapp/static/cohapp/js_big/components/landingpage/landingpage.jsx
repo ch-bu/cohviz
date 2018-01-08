@@ -4,6 +4,7 @@ import {my_urls} from '../jsx-strings.jsx';
 import {Provider} from 'react-redux';
 import {LandingPageStore} from '../../store.jsx';
 import {connect} from 'react-redux';
+import {setLoading} from '../../actions/landingpage';
 
 class LandingPage extends React.Component {
   constructor(props) {
@@ -13,8 +14,7 @@ class LandingPage extends React.Component {
 
     this.state = {
       myText: "",
-      data: null,
-      loading: false
+      data: null
     };
 
     // Bind this to methods
@@ -38,7 +38,7 @@ class LandingPage extends React.Component {
           </ul>
         </nav>
         <div className="button">
-          {this.state.loading ? <Preloader /> : button}
+          {this.props.loading ? <Preloader /> : button}
         </div>
         <div id="application-editor">
           <div id="editor-medium-editor">
@@ -70,7 +70,7 @@ class LandingPage extends React.Component {
     var self = this;
 
     // Render loading ring
-    this.setState({'loading': true});
+    this.props.dispatch(setLoading(true));
 
     // Empty svg
     d3.select(this.svg).html('');
@@ -94,8 +94,10 @@ class LandingPage extends React.Component {
     }).catch(error => {
       console.log(error);
     }).then(data => {
-      console.log(data);
-      self.setState({'data': data, 'loading': false}, () => {
+      // Set loading to false
+      self.props.dispatch(setLoading(false));
+
+      self.setState({'data': data}, () => {
         self.renderCMap();
       })
     });
@@ -352,7 +354,10 @@ class LandingPage extends React.Component {
  * @return {[type]}       [description]
  */
 function mapStatetoProps(store) {
-  return store;
+  return {
+    textdata: store.textdata,
+    loading: store.general.loading
+  }
 }
 
 // Connect store to landing page
