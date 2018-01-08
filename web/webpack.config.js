@@ -22,8 +22,7 @@ module.exports = {
           babelrc: false,
           presets: [
             ['es2015', { modules: false }],
-            'react',
-          ]
+            'react']
         }
       }
     ]
@@ -43,6 +42,6 @@ module.exports = {
       include: /\.min\.js$/,
       minimize: true,
       comments: false
-    }),
+    })
   ]
 };

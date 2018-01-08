@@ -1,10 +1,15 @@
 import Preloader from '../preloader.jsx';
 import {getPlainText} from '../helperfunctions.js';
 import {my_urls} from '../jsx-strings.jsx';
+import {Provider} from 'react-redux';
+import store from '../../store.jsx';
+import {connect} from 'react-redux';
 
 class LandingPage extends React.Component {
   constructor(props) {
     super(props);
+
+    console.log(this.props);
 
     this.state = {
       myText: "",
@@ -339,11 +344,22 @@ class LandingPage extends React.Component {
       },
     });
   }
-
-
 }
 
-ReactDOM.render(
-  <LandingPage />,
+/**
+ * Maps the state to the props
+ * @param  {[type]} store [description]
+ * @return {[type]}       [description]
+ */
+function mapStatetoProps(store) {
+  return store;
+}
+
+// Connect store to landing page
+var ConnectedLandingPage = connect(mapStatetoProps)(LandingPage);
+
+ReactDOM.render(<Provider store={store}>
+    <ConnectedLandingPage />
+  </Provider>,
   document.getElementById('landing-page')
 );
