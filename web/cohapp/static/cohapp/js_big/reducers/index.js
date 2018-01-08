@@ -1,6 +1,8 @@
 import {combineReducers} from 'redux';
-import textdata from './textdata.jsx';
+import textdata from './landingpage/textdata.jsx';
 
-export default combineReducers({
+var LandingPageReducer =  combineReducers({
   textdata
 });
+
+export {LandingPageReducer};

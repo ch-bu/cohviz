@@ -1,5 +1,6 @@
 var initialState = {
     // Draft
+    'text': null,
     'clusters': null,
     'cohNotSentences': null,
     'cohSentences': null,
@@ -17,10 +18,11 @@ var initialState = {
     'numStemRelations': null,
     'wordClusterIndex': null,
     'wordLemmaRelations': null,
-    'word_pairs': null
+    'word_pairs': null,
+    'loading': null
 };
 
-export default function reducer(state={}, action) {
+export default function reducer(state=initialState, action) {
   switch(action.type) {
     case "ANALYZE_TEXT": {
       return state;

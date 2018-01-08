@@ -2,7 +2,7 @@ import Preloader from '../preloader.jsx';
 import {getPlainText} from '../helperfunctions.js';
 import {my_urls} from '../jsx-strings.jsx';
 import {Provider} from 'react-redux';
-import store from '../../store.jsx';
+import {LandingPageStore} from '../../store.jsx';
 import {connect} from 'react-redux';
 
 class LandingPage extends React.Component {
@@ -358,7 +358,7 @@ function mapStatetoProps(store) {
 // Connect store to landing page
 var ConnectedLandingPage = connect(mapStatetoProps)(LandingPage);
 
-ReactDOM.render(<Provider store={store}>
+ReactDOM.render(<Provider store={LandingPageStore}>
     <ConnectedLandingPage />
   </Provider>,
   document.getElementById('landing-page')

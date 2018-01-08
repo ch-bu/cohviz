@@ -1,4 +1,6 @@
 import {createStore} from 'redux';
-import reducer from './reducers';
+import {LandingPageReducer} from './reducers/';
 
-export default createStore(reducer);
+var LandingPageStore = createStore(LandingPageReducer);
+
+export {LandingPageStore};
