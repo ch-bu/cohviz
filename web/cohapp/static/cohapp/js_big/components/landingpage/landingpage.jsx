@@ -12,6 +12,7 @@ class LandingPage extends React.Component {
 
     this.state = {
       myText: this.props.textdata.text,
+      keystrokes: 0,
     };
 
     // Bind this to methods
@@ -19,6 +20,7 @@ class LandingPage extends React.Component {
     this.renderCMap = this.renderCMap.bind(this);
     this.highlighWordInText = this.highlighWordInText.bind(this);
     this.updateText = this.updateText.bind(this);
+    this.fetchNewTextData = this.fetchNewTextData.bind(this);
   }
 
   render() {
@@ -64,8 +66,48 @@ class LandingPage extends React.Component {
    * Update written text with every keystroke
    */
   updateText() {
+    var self = this;
+
     // Send action to receiver
     this.props.dispatch(updateText(this.textInput.innerHTML));
+
+    // Update keystrokes
+    this.setState({keystrokes: this.state.keystrokes + 1}, () => {
+      if (this.state.keystrokes == 20) {
+        self.fetchNewTextData();
+
+        self.setState({keystrokes: 0});
+      }
+    });
+  }
+
+  fetchNewTextData() {
+    var self = this;
+
+    // Get text
+    var divText = this.textInput.innerHTML;
+
+    // Get plain version of text
+    var textPlain = getPlainText(divText);
+
+    // Fetch data from server
+    fetch(my_urls.textanalyzer, {
+      method: 'POST',
+      credentials: 'same-origin',
+      body: JSON.stringify({'text': textPlain}),
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
+    }).then(response => {
+      return response.json();
+    }).catch(error => {
+      console.log(error);
+    }).then(data => {
+      // Update text data
+      self.props.dispatch(updateTextData(data));
+
+      console.log('new data available');
+    });
   }
 
   /**
