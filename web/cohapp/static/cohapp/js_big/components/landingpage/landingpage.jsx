@@ -4,30 +4,28 @@ import {my_urls} from '../jsx-strings.jsx';
 import {Provider} from 'react-redux';
 import {LandingPageStore} from '../../store.jsx';
 import {connect} from 'react-redux';
-import {setLoading} from '../../actions/landingpage';
+import {setLoading, updateTextData, updateText} from '../../actions/landingpage';
 
 class LandingPage extends React.Component {
   constructor(props) {
     super(props);
 
-    console.log(this.props);
-
     this.state = {
-      myText: "",
-      data: null
+      myText: this.props.textdata.text,
     };
 
     // Bind this to methods
     this.analyzeText = this.analyzeText.bind(this);
     this.renderCMap = this.renderCMap.bind(this);
     this.highlighWordInText = this.highlighWordInText.bind(this);
+    this.updateText = this.updateText.bind(this);
   }
 
   render() {
 
     var button = <button onClick={this.analyzeText}
           className="waves-effect waves-light btn"
-          id="editor-button">Analyze my text</button>;
+          id="editor-button">Text verarbeiten</button>;
 
     return (
       <div id="application">
@@ -43,6 +41,7 @@ class LandingPage extends React.Component {
         <div id="application-editor">
           <div id="editor-medium-editor">
             <div id="editor-textinput" ref={(el) => { this.textInput = el; }}
+              onKeyUp={this.updateText}
               dangerouslySetInnerHTML={this.returnInnerHTML()}></div>
           </div>
         </div>
@@ -59,6 +58,15 @@ class LandingPage extends React.Component {
    */
   returnInnerHTML() {
     return {__html: this.state.myText}
+  }
+
+  /**
+   * Update written text with every keystroke
+   */
+  updateText() {
+    // Send action to receiver
+    this.props.dispatch(updateText(this.textInput.innerHTML));
+    console.log(this.props.textdata.text);
   }
 
   /**
@@ -97,11 +105,12 @@ class LandingPage extends React.Component {
       // Set loading to false
       self.props.dispatch(setLoading(false));
 
-      self.setState({'data': data}, () => {
-        self.renderCMap();
-      })
-    });
+      // Update text data
+      self.props.dispatch(updateTextData(data));
 
+      // Render Cmap
+      self.renderCMap();
+    });
   }
 
 
@@ -164,9 +173,9 @@ class LandingPage extends React.Component {
       .range([0, width]);
 
     // Create force simulation
-    var simulation = d3.forceSimulation(self.state.data.nodes)
+    var simulation = d3.forceSimulation(self.props.textdata.nodes)
       .force('charge', d3.forceManyBody().strength(-250))
-      .force('link', d3.forceLink(self.state.data.links)
+      .force('link', d3.forceLink(self.props.textdata.links)
         .distance(80)
         .id(function(d) {
           return d.id;
@@ -193,7 +202,7 @@ class LandingPage extends React.Component {
       var link = g.append('g')
         .attr('class', 'links')
         .selectAll('line')
-        .data(self.state.data.links)
+        .data(self.props.textdata.links)
         .enter().append('line')
         .attr("x1", function(d) { return d.source.x; })
         .attr("y1", function(d) { return d.source.y; })
@@ -215,7 +224,7 @@ class LandingPage extends React.Component {
       var node = g.append('g')
         .attr('class', 'nodes')
         .selectAll('.node')
-        .data(self.state.data.nodes)
+        .data(self.props.textdata.nodes)
         .enter().append('g')
         .attr('id', function(d, i) {
           return 'node-' + d.id;
@@ -231,7 +240,7 @@ class LandingPage extends React.Component {
         .attr('cx', 0)
         .attr('cy', 0)
         .attr('fill', function(d, i) {
-          return colors[self.state.data['wordClusterIndex'][d.id]];
+          return colors[self.props.textdata['wordClusterIndex'][d.id]];
         });
         // .style('stroke', (d, i) => {
         //   // This node is a subject
@@ -325,12 +334,12 @@ class LandingPage extends React.Component {
     innerHTML =  innerHTML.replace(/<\/?span[^>]*>/g,"");
 
     // Get corresponding orthograpic text of node
-    var relations = this.state.data.lemmaWordRelations[nodeData];
+    var relations = this.props.textdata.lemmaWordRelations[nodeData];
 
     // Replace word with span
     for (var i = 0; i < relations.length; i++) {
       var re = new RegExp(relations[i], 'g');
-      innerHTML = innerHTML.replace(re, '<span class="cluster-' + this.state.data.wordClusterIndex[nodeData] + '">' + relations[i] + '</span>');
+      innerHTML = innerHTML.replace(re, '<span class="cluster-' + this.props.textdata.wordClusterIndex[nodeData] + '">' + relations[i] + '</span>');
     }
 
     this.setState({'myText': innerHTML});

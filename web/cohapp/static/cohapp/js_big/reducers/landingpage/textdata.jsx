@@ -1,6 +1,6 @@
 var initialState = {
     // Draft
-    'text': null,
+    'text': "",
     'clusters': null,
     'cohNotSentences': null,
     'cohSentences': null,
@@ -24,8 +24,11 @@ var initialState = {
 
 export default function reducer(state=initialState, action) {
   switch(action.type) {
-    case "ANALYZE_TEXT": {
-      return state;
+    case "UPDATE_TEXTDATA": {
+      return Object.assign({}, state, action.payload);
+    }
+    case "UPDATE_TEXT": {
+        return Object.assign({}, state, {'text': action.payload});
     }
   }
 
