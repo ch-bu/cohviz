@@ -372,6 +372,11 @@ function mapStatetoProps(store) {
 // Connect store to landing page
 var ConnectedLandingPage = connect(mapStatetoProps)(LandingPage);
 
+// Subscribe app to local storage
+LandingPageStore.subscribe(() => {
+  localStorage.setItem('landingpage', JSON.stringify(LandingPageStore.getState()));
+});
+
 ReactDOM.render(<Provider store={LandingPageStore}>
     <ConnectedLandingPage />
   </Provider>,
