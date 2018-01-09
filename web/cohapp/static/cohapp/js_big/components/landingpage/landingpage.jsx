@@ -66,7 +66,6 @@ class LandingPage extends React.Component {
   updateText() {
     // Send action to receiver
     this.props.dispatch(updateText(this.textInput.innerHTML));
-    console.log(this.props.textdata.text);
   }
 
   /**
@@ -354,6 +353,11 @@ class LandingPage extends React.Component {
         hideOnClick: true
       },
     });
+
+    // If textdata is not empty render Cmap
+    if (localStorage.getItem('landingpage')) {
+      this.renderCMap();
+    }
   }
 }
 
