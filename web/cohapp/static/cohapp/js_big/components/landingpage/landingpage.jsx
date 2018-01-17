@@ -21,6 +21,7 @@ class LandingPage extends React.Component {
     this.highlighWordInText = this.highlighWordInText.bind(this);
     this.updateText = this.updateText.bind(this);
     this.fetchNewTextData = this.fetchNewTextData.bind(this);
+    this.updateCMap = this.updateCMap.bind(this);
   }
 
   render() {
@@ -106,7 +107,7 @@ class LandingPage extends React.Component {
       // Update text data
       self.props.dispatch(updateTextData(data));
 
-      console.log('new data available');
+      self.updateCMap();
     });
   }
 
@@ -214,7 +215,7 @@ class LandingPage extends React.Component {
       .range([0, width]);
 
     // Create force simulation
-    var simulation = d3.forceSimulation(self.props.textdata.nodes)
+    self.simulation = d3.forceSimulation(self.props.textdata.nodes)
       .force('charge', d3.forceManyBody().strength(-250))
       .force('link', d3.forceLink(self.props.textdata.links)
         .distance(80)
@@ -235,12 +236,12 @@ class LandingPage extends React.Component {
     // Add timeout to process data
     d3.timeout(function() {
       // See https://github.com/d3/d3-force/blob/master/README.md#simulation_tick
-      for (var i = 0, n = Math.ceil(Math.log(simulation.alphaMin()) / Math.log(1 - simulation.alphaDecay())); i < n; ++i) {
-        simulation.tick();
+      for (var i = 0, n = Math.ceil(Math.log(self.simulation.alphaMin()) / Math.log(1 - self.simulation.alphaDecay())); i < n; ++i) {
+        self.simulation.tick();
       }
 
       // Add links
-      var link = g.append('g')
+      self.link = g.append('g')
         .attr('class', 'links')
         .selectAll('line')
         .data(self.props.textdata.links)
@@ -260,9 +261,8 @@ class LandingPage extends React.Component {
           }
         });
 
-      // Create g element that stores
-      // circles and text and call dragging on it
-      var node = g.append('g')
+      // Create g element for verteces
+      self.node = g.append('g')
         .attr('class', 'nodes')
         .selectAll('.node')
         .data(self.props.textdata.nodes)
@@ -276,30 +276,16 @@ class LandingPage extends React.Component {
         });
 
       // Append circle
-      var circle = node.append('circle')
+      self.circle = self.node.append('circle')
         .attr('r', 10)
         .attr('cx', 0)
         .attr('cy', 0)
         .attr('fill', function(d, i) {
           return colors[self.props.textdata['wordClusterIndex'][d.id]];
         });
-        // .style('stroke', (d, i) => {
-        //   // This node is a subject
-        //   // Make it black
-        //   if (self.state.data.subjects.indexOf(d.id) > -1) {
-        //     return 'black';
-        //   }
-        // })
-        // .style('stroke-width', (d, i) => {
-        //   // This node is a subject
-        //   // Give the node a width
-        //   if (self.state.data.subjects.indexOf(d.id) > -1) {
-        //     return 2;
-        //   }
-        // });
 
       // Append label to node container
-      var label = node.append('text')
+      var label = self.node.append('text')
         .attr('dy', -8)
         .attr('dx', 10)
         .style('opacity', 0.8)
@@ -307,9 +293,6 @@ class LandingPage extends React.Component {
         .text(function(d) {
           return d.id;
         });
-
-
-
     });
 
     function mouseMoveHandler() {
@@ -326,7 +309,7 @@ class LandingPage extends React.Component {
       var mouse = d3.mouse(this);
 
       // Find nearest point to mouse coordinate
-      var nearestPoint = simulation.find(mouse[0], mouse[1]);
+      var nearestPoint = self.simulation.find(mouse[0], mouse[1]);
 
       // Select element that is hovered
       var nodeSelected = g.select('#node-' + nearestPoint.id);
@@ -364,7 +347,83 @@ class LandingPage extends React.Component {
       // Update state
       self.setState({'myText': innerHTML});
     }
+  }
 
+  updateCMap() {
+    var self = this;
+
+    console.log(this.node);
+
+    // Update nodes
+    this.node = this.node.data(this.props.textdata.nodes, function(d) {
+      return d.id;
+    });
+
+    console.log(this.node);
+
+    this.node.exit().remove();
+
+    console.log(this.node);
+
+    var colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'];
+
+    this.node = this.node
+      .enter()
+      .append('g')
+      .attr('id', function(d, i) {
+        return 'node-' + d.id;
+      })
+      .attr('class', 'node')
+      .merge(this.node);
+
+    //   .merge(this.node)
+    // this.node.append('circle')
+    //   .attr('r', 10)
+    //   .attr('cx', 0)
+    //   .attr('cy', 0)
+    //   .attr('fill', function(d, i) {
+    //     return colors[self.props.textdata['wordClusterIndex'][d.id]];
+    //   });
+
+    // this.node.append('text')
+    //   .attr('dy', -8)
+    //   .attr('dx', 10)
+    //   .style('opacity', 0.8)
+    //   .attr('text-anchor', 'start')
+    //   .text(function(d) {
+    //     return d.id;
+    //   });
+
+    // this.node.merge(this.node);
+
+    // Update links
+    // this.link = this.link.data(this.props.textdata.links);
+
+    // this.link.exit().remove();
+    // this.link = this.link.enter().append('line').merge(this.link);
+
+    // this.simulation.nodes(this.node);
+    // this.simulation.force('link').links(this.link, function(d) {
+    //   return d.id;
+    // });
+    // this.simulation.alpha(1).restart();
+
+    // // See https://github.com/d3/d3-force/blob/master/README.md#simulation_tick
+    // for (var i = 0, n = Math.ceil(Math.log(this.simulation.alphaMin()) / Math.log(1 - this.simulation.alphaDecay())); i < n; ++i) {
+    //   this.simulation.tick();
+
+    //   this.node
+    //     .attr('cx', function(d) {
+    //       return d.x;
+    //     })
+    //     .attr('cy', function(d) {
+    //       return d.y;
+    //     });
+    // }
+
+    // this.node.attr('transform', function(d) {
+    //   return 'translate(' + d.x + ',' + d.y + ')';
+    // })
   }
 
   highlighWordInText(nodeData) {
