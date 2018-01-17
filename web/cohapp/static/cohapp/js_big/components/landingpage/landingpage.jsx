@@ -371,6 +371,7 @@ class LandingPage extends React.Component {
       })
       .attr('class', 'node');
 
+    // Add circles to new elements
     updateSelection.append('circle')
       .attr('r', 10)
       .attr('cx', 0)
@@ -379,6 +380,7 @@ class LandingPage extends React.Component {
         return colors[self.props.textdata['wordClusterIndex'][d.id]];
       });
 
+    // Add text to new elements
     updateSelection.append('text')
       .attr('dy', -8)
       .attr('dx', 10)
@@ -388,37 +390,44 @@ class LandingPage extends React.Component {
         return d.id;
       });
 
+    // Merge both selections
     this.node = updateSelection
       .merge(this.node);
 
+    d3.selectAll('circle')
+      .attr('fill', function(d, i) {
+        return colors[self.props.textdata['wordClusterIndex'][d.id]];
+      });
+
     // Update links
-    // this.link = this.link.data(this.props.textdata.links);
+    this.link = this.link.data(this.props.textdata.links, function(d) {
+      return d.id
+    });
 
-    // this.link.exit().remove();
-    // this.link = this.link.enter().append('line').merge(this.link);
+    // Remove unneeded links
+    this.link.exit().remove();
 
-    // this.simulation.nodes(this.node);
-    // this.simulation.force('link').links(this.link, function(d) {
-    //   return d.id;
-    // });
-    // this.simulation.alpha(1).restart();
+    // Add new links
+    this.link = this.link.enter().append('line').merge(this.link);
 
-    // // See https://github.com/d3/d3-force/blob/master/README.md#simulation_tick
-    // for (var i = 0, n = Math.ceil(Math.log(this.simulation.alphaMin()) / Math.log(1 - this.simulation.alphaDecay())); i < n; ++i) {
-    //   this.simulation.tick();
+    this.simulation.on('tick', ticked);
+    this.simulation.nodes(this.props.textdata.nodes, function(d) {
+      return d.id;
+    });
+    this.simulation.force('link').links(this.props.textdata.links);
+    this.simulation.alpha(1).restart();
 
-    //   this.node
-    //     .attr('cx', function(d) {
-    //       return d.x;
-    //     })
-    //     .attr('cy', function(d) {
-    //       return d.y;
-    //     });
-    // }
+    function ticked() {
+      self.node.attr('transform', function(d) {
+        return 'translate(' + d.x + ',' + d.y + ')';
+      });
 
-    // this.node.attr('transform', function(d) {
-    //   return 'translate(' + d.x + ',' + d.y + ')';
-    // })
+      self.link
+        .attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+    }
   }
 
   highlighWordInText(nodeData) {
