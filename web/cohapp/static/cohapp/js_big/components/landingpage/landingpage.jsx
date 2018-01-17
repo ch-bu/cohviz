@@ -352,49 +352,44 @@ class LandingPage extends React.Component {
   updateCMap() {
     var self = this;
 
-    console.log(this.node);
-
-    // Update nodes
+    // Update data for nodes
     this.node = this.node.data(this.props.textdata.nodes, function(d) {
       return d.id;
     });
 
-    console.log(this.node);
-
+    // Remove unused nodes
     this.node.exit().remove();
-
-    console.log(this.node);
 
     var colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'];
 
-    this.node = this.node
+    // Append new nodes and merge
+    var updateSelection = this.node
       .enter()
       .append('g')
       .attr('id', function(d, i) {
         return 'node-' + d.id;
       })
-      .attr('class', 'node')
+      .attr('class', 'node');
+
+    updateSelection.append('circle')
+      .attr('r', 10)
+      .attr('cx', 0)
+      .attr('cy', 0)
+      .attr('fill', function(d, i) {
+        return colors[self.props.textdata['wordClusterIndex'][d.id]];
+      });
+
+    updateSelection.append('text')
+      .attr('dy', -8)
+      .attr('dx', 10)
+      .style('opacity', 0.8)
+      .attr('text-anchor', 'start')
+      .text(function(d) {
+        return d.id;
+      });
+
+    this.node = updateSelection
       .merge(this.node);
-
-    //   .merge(this.node)
-    // this.node.append('circle')
-    //   .attr('r', 10)
-    //   .attr('cx', 0)
-    //   .attr('cy', 0)
-    //   .attr('fill', function(d, i) {
-    //     return colors[self.props.textdata['wordClusterIndex'][d.id]];
-    //   });
-
-    // this.node.append('text')
-    //   .attr('dy', -8)
-    //   .attr('dx', 10)
-    //   .style('opacity', 0.8)
-    //   .attr('text-anchor', 'start')
-    //   .text(function(d) {
-    //     return d.id;
-    //   });
-
-    // this.node.merge(this.node);
 
     // Update links
     // this.link = this.link.data(this.props.textdata.links);
