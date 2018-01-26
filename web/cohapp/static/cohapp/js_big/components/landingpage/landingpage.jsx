@@ -34,7 +34,7 @@ class LandingPage extends React.Component {
       <div id="application">
         <nav id="navigation">
           <ul id="nav-wrapper">
-            <li className="logo"><a href="{% url 'index' %}">CohViz</a></li>
+            <li className="logo"><a href="/">CohViz</a></li>
             <li><a href="#about"><i className="material-icons">menu</i></a></li>
           </ul>
         </nav>
