@@ -3,17 +3,17 @@
   #application {
     background-color: $color-primary;
     display: grid;
-    grid-template-columns: 41vw 59vw;
+    grid-template-columns: 20vw 20vw 60vw;
     grid-template-rows: 6vh 89vh 5vh;
-    grid-template-areas: "navigation navigation"
-                         "editor concept-map"
-                         "button button";
+    grid-template-areas: "navigation navigation navigation"
+                         "editor editor concept-map"
+                         "button button controller";
 
     #application-editor {
       overflow-y: scroll;
       overflow-x: hidden;
       grid-area: editor;
-      border-right: 4px solid black;
+      border-right: 2px solid black;
       color: #000;
       background-color: $color-primary;
       padding: 5%;
@@ -81,8 +81,20 @@
 
       grid-area: button;
       top: 0;
-      border-top: 4px solid black;
+      border-top: 2px solid black;
       background-color: $color-primary;
+    }
+
+    .controller {
+      grid-area: controller;
+      border-top: 2px solid black;
+      padding-left: 20px;
+      position: relative;
+      height: 100%;
+
+      .switch {
+        padding-top: 5px;
+      }
     }
   }
 

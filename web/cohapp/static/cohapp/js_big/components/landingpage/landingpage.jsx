@@ -13,6 +13,7 @@ class LandingPage extends React.Component {
     this.state = {
       myText: this.props.textdata.text,
       keystrokes: 0,
+      switchStatus: false
     };
 
     // Bind this to methods
@@ -22,6 +23,7 @@ class LandingPage extends React.Component {
     this.updateText = this.updateText.bind(this);
     this.fetchNewTextData = this.fetchNewTextData.bind(this);
     this.updateCMap = this.updateCMap.bind(this);
+    this.switchClicked = this.switchClicked.bind(this);
   }
 
   render() {
@@ -35,7 +37,6 @@ class LandingPage extends React.Component {
         <nav id="navigation">
           <ul id="nav-wrapper">
             <li className="logo"><a href="/">CohViz</a></li>
-            <li><a href="#about"><i className="material-icons">menu</i></a></li>
           </ul>
         </nav>
         <div className="button">
@@ -51,6 +52,17 @@ class LandingPage extends React.Component {
         <div className="concept-map" ref={(el) => { this.cmap = el; }}>
           <svg  ref={(el) => { this.svg = el; }} ></svg>
         </div>
+        <div className="controller">
+          <div className="switch">
+            <label>
+              do not automate
+              <input type="checkbox" onClick={this.switchClicked} />
+              <span className="lever"></span>
+              automate
+            </label>
+          </div>
+        </div>
+
       </div>
     )
   }
@@ -64,22 +76,34 @@ class LandingPage extends React.Component {
   }
 
   /**
+   * Enable automatic analysis of
+   * texts
+   */
+  switchClicked(el) {
+    this.setState({switchStatus: el.target.checked});
+  }
+
+  /**
    * Update written text with every keystroke
    */
   updateText() {
     var self = this;
 
-    // Send action to receiver
-    this.props.dispatch(updateText(this.textInput.innerHTML));
+    // Only update if user wants to update
+    // automatically
+    if (this.state.switchStatus) {
+      // Send action to receiver
+      this.props.dispatch(updateText(this.textInput.innerHTML));
 
-    // Update keystrokes
-    this.setState({keystrokes: this.state.keystrokes + 1}, () => {
-      if (this.state.keystrokes == 20) {
-        self.fetchNewTextData();
+      // Update keystrokes
+      this.setState({keystrokes: this.state.keystrokes + 1}, () => {
+        if (this.state.keystrokes == 20) {
+          self.fetchNewTextData();
 
-        self.setState({keystrokes: 0});
-      }
-    });
+          self.setState({keystrokes: 0});
+        }
+      });
+    }
   }
 
   fetchNewTextData() {
