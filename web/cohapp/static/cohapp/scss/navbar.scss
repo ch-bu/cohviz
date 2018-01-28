@@ -1,16 +1,17 @@
 // ************** Navbar *************************
 nav#navigation {
-  background-color: $color-primary;
+  // background: linear-gradient(to bottom, #fff, #fff, #fff, #f2f2f2);
+  background-color: #24292e;
   color: #000;
   box-shadow: None;
   font-weight: bold;
-  border-bottom: 2px solid black;
+  // border-bottom: 2px solid black;
   height: 6vh;
 
   ul#nav-wrapper {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    // justify-content: space-between;
 
     li {
 
@@ -19,12 +20,12 @@ nav#navigation {
       }
 
       a {
-        color: #000;
-        font-size: 1.2rem;
+        color: #fff;
+        font-size: 4vh;
+        font-weight: bold;
 
         &:hover {
-          color: #e5e5e5;
-          background-color: $color-primary;
+          color: #fff;
         }
       }
     }

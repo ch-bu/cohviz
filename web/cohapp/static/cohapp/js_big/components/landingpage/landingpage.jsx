@@ -30,7 +30,7 @@ class LandingPage extends React.Component {
 
     var button = <button onClick={this.analyzeText}
           className="waves-effect waves-light btn"
-          id="editor-button">Text verarbeiten</button>;
+          id="editor-button">Process text</button>;
 
     return (
       <div id="application">
@@ -55,14 +55,19 @@ class LandingPage extends React.Component {
         <div className="controller">
           <div className="switch">
             <label>
-              do not automate
+              not automatic
               <input type="checkbox" onClick={this.switchClicked} />
               <span className="lever"></span>
-              automate
+              automatic
             </label>
           </div>
         </div>
-
+        <div className="toggles">
+          <ul className="toggles-flex">
+            <li><a href="#">What is it?</a></li>
+            <li><a href="#">How does it work?</a></li>
+          </ul>
+        </div>
       </div>
     )
   }

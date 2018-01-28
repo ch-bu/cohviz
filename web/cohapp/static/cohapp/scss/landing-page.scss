@@ -5,7 +5,7 @@
     display: grid;
     grid-template-columns: 20vw 20vw 60vw;
     grid-template-rows: 6vh 89vh 5vh;
-    grid-template-areas: "navigation navigation navigation"
+    grid-template-areas: "navigation navigation toggles"
                          "editor editor concept-map"
                          "button button controller";
 
@@ -13,9 +13,9 @@
       overflow-y: scroll;
       overflow-x: hidden;
       grid-area: editor;
-      border-right: 2px solid black;
+      // border-right: 1px solid grey;
       color: #000;
-      background-color: $color-primary;
+      background-color: #f2f2f2;
       padding: 5%;
       font-size: $p-font-size;
 
@@ -37,12 +37,12 @@
 
       // Scrollbar
       &::-webkit-scrollbar-track {
-        background-color: $color-primary;
+        background-color: #f2f2f2;
       }
 
       &::-webkit-scrollbar {
         width: 10px;
-        background-color: $color-primary;
+        background-color: #f2f2f2;
       }
 
       &::-webkit-scrollbar-thumb {
@@ -81,19 +81,44 @@
 
       grid-area: button;
       top: 0;
-      border-top: 2px solid black;
       background-color: $color-primary;
     }
 
     .controller {
       grid-area: controller;
-      border-top: 2px solid black;
       padding-left: 20px;
       position: relative;
       height: 100%;
+      background-color: #f2f2f2;
 
       .switch {
-        padding-top: 5px;
+        padding-top: 10px;
+      }
+    }
+
+    .toggles {
+      background-color: #24292e;
+
+      .toggles-flex {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: now-wrap;
+        justify-content: space-between;
+        align-items: stretch;
+
+        li {
+          align-self: center;
+          padding-right: 10px;
+
+          &:hover {
+            background-color: #393e42;
+          }
+
+          a {
+            font-size: 2vh;
+            color: #fff;
+          }
+        }
       }
     }
   }
@@ -127,11 +152,7 @@
 
     .explanation-text {
       position: relative;
-      // top: 20%;
-      // left: 10%;
-      // margin-top: 10vh;
       color: #000;
-      // width: 40%;
       min-height: 40vh;
       z-index: 5;
 
