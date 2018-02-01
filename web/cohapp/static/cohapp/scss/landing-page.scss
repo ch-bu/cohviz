@@ -103,20 +103,27 @@
         display: flex;
         flex-direction: row;
         flex-wrap: now-wrap;
-        justify-content: space-between;
+        justify-content: flex-end;
         align-items: stretch;
+        margin: 0;
+        height: 100%;
 
         li {
           align-self: center;
-          padding-right: 10px;
+          padding-right: 15px;
 
           &:hover {
-            background-color: #393e42;
+
           }
 
           a {
             font-size: 2vh;
+            font-weight: 700;
             color: #fff;
+
+            &:hover {
+              color: #26a69a;
+            }
           }
         }
       }
