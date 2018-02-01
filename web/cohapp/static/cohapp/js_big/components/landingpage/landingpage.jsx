@@ -5,6 +5,7 @@ import {Provider} from 'react-redux';
 import {LandingPageStore} from '../../store.jsx';
 import {connect} from 'react-redux';
 import {setLoading, updateTextData, updateText} from '../../actions/landingpage';
+import WhatIsIt from './what-is-it.jsx';
 
 class LandingPage extends React.Component {
   constructor(props) {
@@ -28,6 +29,8 @@ class LandingPage extends React.Component {
 
   render() {
 
+    // <svg  ref={(el) => { this.svg = el; }} ></svg>
+
     var button = <button onClick={this.analyzeText}
           className="waves-effect waves-light btn"
           id="editor-button">Process text</button>;
@@ -50,7 +53,7 @@ class LandingPage extends React.Component {
           </div>
         </div>
         <div className="concept-map" ref={(el) => { this.cmap = el; }}>
-          <svg  ref={(el) => { this.svg = el; }} ></svg>
+          <WhatIsIt />
         </div>
         <div className="controller">
           <div className="switch">
