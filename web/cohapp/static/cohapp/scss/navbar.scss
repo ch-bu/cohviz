@@ -5,27 +5,35 @@ nav#navigation {
   color: #000;
   box-shadow: None;
   font-weight: bold;
-  // border-bottom: 2px solid black;
   height: 6vh;
 
   ul#nav-wrapper {
     display: flex;
     flex-direction: row;
-    // justify-content: space-between;
 
     li {
+      align-self: stretch;
 
-      .logo a {
-        color: $color-button;
+      &:first-child {
+        margin-right: auto;
       }
 
-      a {
+      a.logo {
         color: #fff;
-        font-size: 4vh;
+        font-size: 3.8vh;
         font-weight: bold;
 
         &:hover {
           color: #fff;
+        }
+      }
+
+      a {
+        font-size: 2vh;
+
+        &:hover {
+          color: $color-button;
+          background-color: rgba(0, 0, 0, 0);
         }
       }
     }

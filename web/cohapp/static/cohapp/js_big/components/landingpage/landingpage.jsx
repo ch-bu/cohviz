@@ -33,42 +33,40 @@ class LandingPage extends React.Component {
           id="editor-button">Process text</button>;
 
     return (
-      <div id="application">
+      <div>
         <nav id="navigation">
           <ul id="nav-wrapper">
-            <li className="logo"><a href="/">CohViz</a></li>
-          </ul>
-        </nav>
-        <div className="button">
-          {this.props.loading ? <Preloader /> : button}
-        </div>
-        <div id="application-editor">
-          <div id="editor-medium-editor">
-            <div id="editor-textinput" ref={(el) => { this.textInput = el; }}
-              onKeyUp={this.updateText}
-              dangerouslySetInnerHTML={this.returnInnerHTML()}></div>
-          </div>
-        </div>
-        <div className="concept-map" ref={(el) => { this.cmap = el; }}>
-          <svg  ref={(el) => { this.svg = el; }} ></svg>
-        </div>
-        <div className="controller">
-          <div className="switch">
-            <label>
-              not automatic
-              <input type="checkbox" onClick={this.switchClicked} />
-              <span className="lever"></span>
-              automatic
-            </label>
-          </div>
-        </div>
-        <div className="toggles">
-          <ul className="toggles-flex">
+            <li><a className="logo" href="/">CohViz</a></li>
             <li><a href="#">What is it?</a></li>
             <li><a href="#">Concept Map</a></li>
           </ul>
-        </div>
-      </div>
+        </nav>
+        <main id="application">
+          <div className="button">
+            {this.props.loading ? <Preloader /> : button}
+          </div>
+          <div id="application-editor">
+            <div id="editor-medium-editor">
+              <div id="editor-textinput" ref={(el) => { this.textInput = el; }}
+                onKeyUp={this.updateText}
+                dangerouslySetInnerHTML={this.returnInnerHTML()}></div>
+            </div>
+          </div>
+          <div className="concept-map" ref={(el) => { this.cmap = el; }}>
+            <svg  ref={(el) => { this.svg = el; }} ></svg>
+          </div>
+          <div className="controller">
+            <div className="switch">
+              <label>
+                not automatic
+                <input type="checkbox" onClick={this.switchClicked} />
+                <span className="lever"></span>
+                automatic
+              </label>
+            </div>
+          </div>
+        </main>
+    </div>
     )
   }
 
