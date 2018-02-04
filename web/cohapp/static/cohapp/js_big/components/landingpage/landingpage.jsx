@@ -28,9 +28,6 @@ class LandingPage extends React.Component {
   }
 
   render() {
-
-    // <svg  ref={(el) => { this.svg = el; }} ></svg>
-
     var button = <button onClick={this.analyzeText}
           className="waves-effect waves-light btn"
           id="editor-button">Process text</button>;
@@ -53,7 +50,7 @@ class LandingPage extends React.Component {
           </div>
         </div>
         <div className="concept-map" ref={(el) => { this.cmap = el; }}>
-          <WhatIsIt />
+          <svg  ref={(el) => { this.svg = el; }} ></svg>
         </div>
         <div className="controller">
           <div className="switch">
@@ -68,7 +65,7 @@ class LandingPage extends React.Component {
         <div className="toggles">
           <ul className="toggles-flex">
             <li><a href="#">What is it?</a></li>
-            <li><a href="#">How does it work?</a></li>
+            <li><a href="#">Concept Map</a></li>
           </ul>
         </div>
       </div>

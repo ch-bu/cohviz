@@ -39,9 +39,11 @@
     "handlebars": "^4.0.5",
     "main-bower-files": "^2.13.1",
     "prop-types": "^15.6.0",
-    "react": "^15.6.2",
+    "react": "^16.2.0",
     "react-dom": "^15.6.1",
+    "react-modal": "^3.1.11",
     "react-redux": "^5.0.6",
+    "react-router-dom": "^4.2.2",
     "redux": "^3.7.2",
     "webpack": "^3.0.0",
     "whatwg-fetch": "^2.0.3"
