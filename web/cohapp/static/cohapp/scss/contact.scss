@@ -1,0 +1,39 @@
+#contact {
+  // background-color: #a62672;
+  background: linear-gradient(141deg, #9a26a6 0%, #c746d5 75%, #d676e0 95%);
+  min-height: 94vh;
+
+  .contact-wrapper {
+    width: 40%;
+    margin: 0 auto;
+
+    border-radius: 6px;
+    padding: 10px;
+
+    h2 {
+      color: #fff;
+    }
+
+    p {
+      color: #fff;
+      font-size: 1.7rem;
+    }
+
+    form {
+      input {
+        color: #fff;
+        font-size: 1.5rem;
+      }
+
+      textarea {
+        font-size: 1.5rem;
+        color: #fff;
+      }
+
+      button {
+        margin-top: 20px;
+      }
+    }
+  }
+
+}

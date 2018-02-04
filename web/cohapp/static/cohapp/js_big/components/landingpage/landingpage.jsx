@@ -1,7 +1,8 @@
 import {Provider} from 'react-redux';
 import {LandingPageStore} from '../../store.jsx';
 import {connect} from 'react-redux';
-import WhatIsIt from './what-is-it.jsx';
+import About from './about.jsx';
+import Contact from './contact.jsx';
 import Application from './application.jsx';
 import { HashRouter, Route, Switch, NavLink, withRouter } from 'react-router-dom';
 
@@ -17,12 +18,13 @@ class LandingPage extends React.Component {
           <ul id="nav-wrapper">
             <li><NavLink className="logo" to="/">CohViz</NavLink></li>
             <li><NavLink to="/">Application</NavLink></li>
-            <li><NavLink to="/about">What is it?</NavLink></li>
+            <li><NavLink to="/contact">Contact</NavLink></li>
           </ul>
         </nav>
         <main>
             <Switch>
-              <Route path="/about" component={WhatIsIt} />
+              <Route path="/about" component={About} />
+              <Route path="/contact" component={Contact} />
               <Route path="/" component={Application} />
             </Switch>
         </main>
