@@ -29,7 +29,7 @@ class WhatIsIt extends React.Component {
             </ul>
           </div>
 
-          <div class="whatisit-contact">
+          <div className="whatisit-contact">
             <h2>Contact</h2>
             <p>If you are interested in using CohVis and have further questions,
             feel free to contact us. We are glad to hear from you.</p>
