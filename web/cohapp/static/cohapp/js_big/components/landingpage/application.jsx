@@ -9,8 +9,6 @@ class Application extends React.Component {
   constructor(props) {
     super(props);
 
-    console.log(this.props);
-
     this.state = {
       myText: this.props.textdata.text,
       keystrokes: 0,
@@ -37,7 +35,7 @@ class Application extends React.Component {
       <div>
         <div id="application">
           <div className="button">
-            {this.props.loading ? <Preloader /> : button}
+            {this.props.app.loading ? <Preloader /> : button}
           </div>
           <div id="application-editor">
             <div id="editor-medium-editor">
@@ -86,12 +84,12 @@ class Application extends React.Component {
   updateText() {
     var self = this;
 
+    // Send action to receiver
+    this.props.dispatch(updateText(this.textInput.innerHTML));
+
     // Only update if user wants to update
     // automatically
     if (this.state.switchStatus) {
-      // Send action to receiver
-      this.props.dispatch(updateText(this.textInput.innerHTML));
-
       // Update keystrokes
       this.setState({keystrokes: this.state.keystrokes + 1}, () => {
         if (this.state.keystrokes == 20) {
@@ -495,7 +493,7 @@ class Application extends React.Component {
 function mapStatetoProps(store) {
   return {
     textdata: store.textdata,
-    loading: store.general.loading
+    app: store.general
   }
 }
 

@@ -39,18 +39,18 @@ class LandingPage extends React.Component {
 function mapStatetoProps(store) {
   return {
     textdata: store.textdata,
-    loading: store.general.loading
+    app: store.general
   }
 }
-
-// Connect store to landing page
-// https://github.com/ReactTraining/react-router/issues/4671
-var ConnectedLandingPage = withRouter(connect(mapStatetoProps)(LandingPage));
 
 // Subscribe app to local storage
 LandingPageStore.subscribe(() => {
   localStorage.setItem('landingpage', JSON.stringify(LandingPageStore.getState()));
 });
+
+// Connect store to landing page
+// https://github.com/ReactTraining/react-router/issues/4671
+var ConnectedLandingPage = withRouter(connect(mapStatetoProps)(LandingPage));
 
 ReactDOM.render(<Provider store={LandingPageStore}>
     <HashRouter basename="/">
