@@ -6,10 +6,24 @@
   #application {
     background-color: $color-primary;
     display: grid;
-    grid-template-columns: 20vw 20vw 60vw;
-    grid-template-rows: 89vh 5vh;
-    grid-template-areas: "editor editor concept-map"
-                         "button button controller";
+    grid-template-columns: 98vw;
+    grid-template-rows: 60vh 60vh 5vh 5vh;
+    grid-template-areas: "editor"
+                         "concept-map"
+                         "button"
+                         "controller";
+
+    @media (min-width: $breakpoint_one) {
+      width: 70%;
+    }
+
+    @media (min-width: $breakpoint_two) {
+      grid-template-columns: 20vw 20vw 60vw;
+      grid-template-rows: 89vh 5vh;
+      grid-template-areas: "editor editor concept-map"
+                           "button button controller";
+    }
+
 
     #application-editor {
       overflow-y: scroll;
@@ -128,39 +142,6 @@
         padding-top: 10px;
       }
     }
-
-    // .toggles {
-    //   background-color: #24292e;
-
-    //   .toggles-flex {
-    //     display: flex;
-    //     flex-direction: row;
-    //     flex-wrap: now-wrap;
-    //     justify-content: flex-end;
-    //     align-items: stretch;
-    //     margin: 0;
-    //     height: 100%;
-
-    //     li {
-    //       align-self: center;
-    //       padding-right: 15px;
-
-    //       &:hover {
-
-    //       }
-
-    //       a {
-    //         font-size: 2vh;
-    //         font-weight: 700;
-    //         color: #fff;
-
-    //         &:hover {
-    //           color: #26a69a;
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
   }
 
 
