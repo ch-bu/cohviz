@@ -10,9 +10,10 @@ nav#navigation {
   ul#nav-wrapper {
     display: flex;
     flex-direction: row;
+    position: relative;
+    height: 100%;
 
     li {
-      align-self: stretch;
 
       &:first-child {
         margin-right: auto;
@@ -29,7 +30,10 @@ nav#navigation {
       }
 
       a {
-        font-size: 2vh;
+        display: block;
+        height: 100%;
+        top: 20%;
+        font-size: 130%;
 
         &:hover {
           color: $color-button;
