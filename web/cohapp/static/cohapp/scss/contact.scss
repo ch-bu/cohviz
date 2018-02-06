@@ -1,33 +1,36 @@
 #contact {
   // background-color: #a62672;
-  background: linear-gradient(141deg, #9a26a6 0%, #c746d5 75%, #d676e0 95%);
+  // background: linear-gradient(141deg, #9a26a6 0%, #c746d5 75%, #d676e0 95%);
+  background: linear-gradient(141deg, #fdfbfb 0%, #ebedee 100%);
   min-height: 94vh;
 
   .contact-wrapper {
-    width: 40%;
+    width: 90%;
     margin: 0 auto;
 
     border-radius: 6px;
     padding: 10px;
 
-    h2 {
-      color: #fff;
+    @media (min-width: $breakpoint_one) {
+      width: 70%;
     }
 
+    @media (min-width: $breakpoint_two) {
+      width: 40%;
+    }
+
+
     p {
-      color: #fff;
       font-size: 1.7rem;
     }
 
     form {
       input {
-        color: #fff;
         font-size: 1.5rem;
       }
 
       textarea {
         font-size: 1.5rem;
-        color: #fff;
       }
 
       button {
