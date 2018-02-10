@@ -5,6 +5,7 @@ import About from './about.jsx';
 import Contact from './contact.jsx';
 import Application from './application.jsx';
 import { HashRouter, Route, Switch, NavLink, withRouter } from 'react-router-dom';
+import { push as Menu } from 'react-burger-menu';
 
 class LandingPage extends React.Component {
   constructor(props) {
@@ -14,14 +15,11 @@ class LandingPage extends React.Component {
   render() {
     return (
       <div>
-        <nav id="navigation">
-          <ul id="nav-wrapper">
-            <li><NavLink className="logo" to="/">CohViz</NavLink></li>
-            <li><NavLink to="/">Application</NavLink></li>
-            <li><NavLink to="/contact">Contact</NavLink></li>
-          </ul>
-        </nav>
-        <main>
+        <Menu right pageWrapId={"page-wrap"}>
+            <NavLink to="/">Application</NavLink>
+            <NavLink to="/contact">Contact</NavLink>
+        </Menu>
+        <main id="page-wrap">
             <Switch>
               <Route path="/about" component={About} />
               <Route path="/contact" component={Contact} />

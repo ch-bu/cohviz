@@ -1,46 +1,8 @@
-// ************** Navbar *************************
-nav#navigation {
-  // background: linear-gradient(to bottom, #fff, #fff, #fff, #f2f2f2);
-  background-color: #24292e;
-  color: #000;
-  box-shadow: None;
-  font-weight: bold;
-  height: 6vh;
+nav {
+  box-shadow: none;
 
-  ul#nav-wrapper {
-    display: flex;
-    flex-direction: row;
-    position: relative;
-    height: 100%;
-
-    li {
-
-      &:first-child {
-        margin-right: auto;
-      }
-
-      a.logo {
-        transform: rotate(-8deg);
-        color: #92d2cc;
-        font-size: 3.8vh;
-        font-weight: bold;
-
-        &:hover {
-          color: #fff;
-        }
-      }
-
-      a {
-        display: block;
-        height: 100%;
-        top: 20%;
-        font-size: 130%;
-
-        &:hover {
-          color: $color-button;
-          background-color: rgba(0, 0, 0, 0);
-        }
-      }
-    }
+  a {
+    display: block;
+    font-size: 1.9rem;
   }
 }

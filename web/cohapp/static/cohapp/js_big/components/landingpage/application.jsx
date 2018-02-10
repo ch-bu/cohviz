@@ -38,6 +38,7 @@ class Application extends React.Component {
             {this.props.app.loading ? <Preloader /> : button}
           </div>
           <div id="application-editor">
+            <h1 id="cohviz-logo">CohViz</h1>
             <div id="editor-medium-editor">
               <div id="editor-textinput" ref={(el) => { this.textInput = el; }}
                 onKeyUp={this.updateText}
