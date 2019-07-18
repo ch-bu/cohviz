@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
   },
   "author": "",
   "license": "ISC",
@@ -46,7 +47,9 @@
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
     "redux": "^3.7.2",
-    "webpack": "^3.0.0",
+    "styled-components": "^4.3.2",
+    "webpack": "^3.12.0",
+    "webpack-dev-server": "^3.7.2",
     "whatwg-fetch": "^2.0.3"
   }
 }
