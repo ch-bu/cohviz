@@ -11,20 +11,29 @@ import {setLoading, updateTextData, updateText} from '../../actions/landingpage'
 
 const Container = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+
+  @media only screen and (min-width: 1400px) {
+    flex-direction: row;
+  }
 `;
 
 const TextInput = styled.div`
-  width: 40%
-  height: 80vh;
-  background-color: steelblue;
+  width: 100%;
+  min-height: 30vh;
+  background-color: #3E5AA7;
+
+  @media only screen and (min-width: 1400px) {
+    width: 40%;
+    height: 80vh;
+  }
 
   .textarea {
-    margin: 5% 10%;
-    padding: 10px;
-    background-color: #fff;
+    margin: 10% 10%;
+    padding: 15px;
+    background-color: rgba(255,255,255,.9);
     height: 90%;
-    max-height: 90%;
+    max-height: 80%;
     overflow-y: scroll;
     
     p {
@@ -34,27 +43,39 @@ const TextInput = styled.div`
 `;
 
 const Render = styled.div`
-  width: 5%;
-  height: 80vh;
+  width: 100%;
+  min-height: 5vh;
   display: flex;
   flex-direction: column;
   align-items: stretch;
 
+  @media only screen and (min-width: 1400px) {
+    width: 5%;
+    height: 80vh;
+  }
+
   svg {
-    color: #7a7a7a;
+    color: #313131;
     align-self: center;
-    /* height: 100%;
-    width: 100%; */
     font-size: 4rem;
     height: 100%;
     cursor: pointer;
+    
+    &:hover {
+      color: #7c7c7c;
+    }
   }
 `;
 
 const ConceptMap = styled.div`
-  width: 55%;
+  width: 100%;
   height: 80vh;
-  background-color: #f9f9f9;
+  background-color: rgb(249, 249, 249);
+  box-shadow: 0 2px 4px 0 rgba(17, 22, 26, 0.16), 0 2px 4px 0 rgba(17, 22, 26, 0.08), 0 4px 8px 0 rgba(17, 22, 26, 0.08);
+
+  @media only screen and (min-width: 1400px) {
+    width: 55%;
+  }
 `;
 
 class Application extends React.Component {

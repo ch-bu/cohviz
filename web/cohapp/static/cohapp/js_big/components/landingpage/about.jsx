@@ -1,60 +1,60 @@
-class WhatIsIt extends React.Component {
+import styled from 'styled-components';
+
+const Container = styled.div`
+  background-color: rgb(249, 249, 249);
+  min-height: 80vh;
+  width: 100%;
+  font-family: "Open Sans";
+  box-shadow: 0 2px 4px 0 rgba(17, 22, 26, 0.16), 0 2px 4px 0 rgba(17, 22, 26, 0.08), 0 4px 8px 0 rgba(17, 22, 26, 0.08);
+
+  .textcontainer {
+    margin: 0 auto;
+    width: 70%;
+    padding-top: 5vh;
+
+    h2 {
+      text-align: center;
+      font-family: "Open Sans";
+    }
+
+    p {
+      font-size: 1.3rem;
+    }
+    
+    a {
+      font-size: 1.3rem;
+      color: rgba(0, 0, 0, 0.87);
+      border-bottom: 2px solid #5773c1;
+
+      &:hover {
+        background-color: #ebeef6;
+      }
+    }
+  }
+`;
+
+class About extends React.Component {
   constructor(props) {
     super(props);
   }
 
   render() {
     return (
-      <div id="whatisit">
-        <div className="whatisit-container">
-          <div className="whatisit-general">
-            <h1>What is it?</h1>
+      <Container>
+        <div className="textcontainer">
+          <h2>About</h2>
 
-            <p>CohViz is an empirically tested web-app
-            that makes use of concepts maps to visualize text cohesion.
-            Nodes represent concepts of the text and edges represent
-            their corresponding grammatical relationship (e.g., subject - object).</p>
-
-            <ul>
-              <li>Lachner, A., Burkhart, C., & Nückles, M. (2017). Mind the gap! Automated concept map
-              feedback supports students in writing cohesive explanations. Journal of Experimental Psychology:
-              Applied, 23(1), 29-46.</li>
-              <li>Lachner, A., Burkhart, C., & Nückles, M. (2017). Formative computer-based feedback in
-              the university classroom: Specific concept maps scaffold students\' writing.
-              Computers in Human Behavior, 72, 459-469.</li>
-              <li>Lachner, A., Backfisch, I., & Nückles, M. (2017). Does the accuracy matter?
-              Accurate concept map feedback helps students improve the
-              cohesion of their explanations. Educational Technology
-              Research and Development, 1-17.</li>
-            </ul>
-          </div>
-
-          <div className="whatisit-contact">
-            <h2>Contact</h2>
-            <p>If you are interested in using CohVis and have further questions,
-            feel free to contact us. We are glad to hear from you.</p>
-
-            <form action="https://formspree.io/christian.burkhart@ezw.uni-freiburg.de" method="POST">
-              <div>
-                <div >
-                  <input name="name" type="text" placeholder="Your name" data-cip-id="cIPJQ342845639"></input>
-                </div>
-                <div >
-                  <input type="email" name="email" placeholder="Your e-mail" data-cip-id="cIPJQ342845640"></input>
-                </div>
-                <div >
-                  <textarea name="nachricht" rows="4" cols="10" placeholder="Your message"></textarea>
-                </div>
-                <div>
-                  <button class="waves-effect waves-light btn" type="submit">Send</button>
-                </div>
-              </div>
-            </form>
-          </div>
+          <p>CohViz is a web app which provides students with automated concept-map like representations of their explanatory texts. Nodes within the concept map show the concepts in the explanation, and links show the structural relationships between these concepts.</p>
+          
+          <p>The concept maps can be used to inspect one’s text with regard to its local and global cohesion. Local cohesion refers to textual relations that make connections between adjacent sentences explicit. Local cohesion is achieved either by considering relatively simple syntactic cohesive ties, such as connectives (e.g., therefore, and, because), or by considering more advanced cohesive ties like reiterating arguments. Global cohesion refers to the overall text organization, so that the key relations of the central ideas are made explicit. This can particularly be established by structuring the relevant concepts of the text in a way that is in accordance with the genre-typical rhetorical structure of the text.</p>
+            
+          <p>Regarding local cohesion, the concept map depicts students’ local cohesion gaps as isolated fragments within the concept maps. With regard to the global cohesion, the concept map depicts the structural relationships between the concepts of the explanation. As such, the visualization of one’s own explanation may encourage the individual writer to evaluate her or his global structure of the text (e.g., missing concepts or relations), and thus facilitate identifying problems in global cohesion.</p>
         </div>
-      </div>
+      </Container>
     )
   }
 }
 
-export default WhatIsIt;
+export default About;
+
+
