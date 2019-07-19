@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import React from 'react';
 
 const Container = styled.div`
   background-color: rgb(249, 249, 249);
