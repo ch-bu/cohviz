@@ -3,7 +3,7 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    treatment: './cohapp/static/cohapp/js_big/components/treatment/treatment.jsx',
+    // treatment: './cohapp/static/cohapp/js_big/components/treatment/treatment.jsx',
     landingpage: './cohapp/static/cohapp/js_big/components/landingpage/landingpage.jsx'
   },
   output: {

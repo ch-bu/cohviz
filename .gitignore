@@ -39,3 +39,5 @@ web/npm-debug.log
 
 # Ignore language models
 languagemodels/
+
+web/.npm

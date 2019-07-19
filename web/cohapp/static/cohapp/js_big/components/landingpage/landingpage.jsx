@@ -4,8 +4,49 @@ import {connect} from 'react-redux';
 import About from './about.jsx';
 import Contact from './contact.jsx';
 import Application from './application.jsx';
+import React from 'react';
+import ReactDOM from 'react-dom';
 import { HashRouter, Route, Switch, NavLink, withRouter } from 'react-router-dom';
-// import { push as Menu } from 'react-burger-menu';
+import styled from 'styled-components';
+
+const Container = styled.div`
+  border-top: 15px solid steelblue;
+  width: 100vw;
+  margin: 0;
+`;
+
+const App = styled.div`
+  margin: 0 auto;
+  width: 80vw;
+`;
+
+const Menu = styled.div`
+  width: 100%;
+  height: 120px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  .logo h1 {
+    font-size: 3rem !important;
+    font-weight: bold;
+    font-family: "Open Sans";
+  }
+
+  .navigation a {
+    color: #000;
+    font-size: 20px;
+    margin-left: 12px;
+    padding: 10px;
+    /* border-bottom: 2px solid #fff; */
+
+    &:hover {
+      color: #ccc;
+      /* border-bottom: 2px solid #000; */
+    }
+  }
+`;
 
 class LandingPage extends React.Component {
   constructor(props) {
@@ -14,19 +55,25 @@ class LandingPage extends React.Component {
 
   render() {
     return (
-      <div>
-        {/* <Menu right pageWrapId={"page-wrap"}> */}
-          <NavLink to="/">Application</NavLink>
-          <NavLink to="/contact">Contact</NavLink>
-        {/* </Menu> */}
-        <main id="page-wrap">
+      <Container>
+        <App>
+          <Menu>
+            <div className="logo">
+              <h1>CohViz</h1>
+            </div>
+            <div className="navigation">
+              <NavLink to="/">Application</NavLink>
+              <NavLink to="/contact">Contact</NavLink>
+            </div>
+          </Menu>
+
           <Switch>
             <Route path="/about" component={About} />
             <Route path="/contact" component={Contact} />
             <Route path="/" component={Application} />
           </Switch>
-        </main>
-    </div>
+        </App>
+    </Container>
     )
   }
 }

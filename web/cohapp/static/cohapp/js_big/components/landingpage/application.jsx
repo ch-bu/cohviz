@@ -3,7 +3,59 @@ import { withRouter } from 'react-router-dom';
 import {my_urls} from '../jsx-strings.jsx';
 import {getPlainText} from '../helperfunctions.js';
 import Preloader from '../preloader.jsx';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { IoIosArrowForward } from "react-icons/io";
+import styled from 'styled-components';
 import {setLoading, updateTextData, updateText} from '../../actions/landingpage';
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const TextInput = styled.div`
+  width: 40%
+  height: 80vh;
+  background-color: steelblue;
+
+  .textarea {
+    margin: 5% 10%;
+    padding: 10px;
+    background-color: #fff;
+    height: 90%;
+    max-height: 90%;
+    overflow-y: scroll;
+    
+    p {
+      font-size: 1.2rem;
+    }
+  }
+`;
+
+const Render = styled.div`
+  width: 5%;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  svg {
+    color: #7a7a7a;
+    align-self: center;
+    /* height: 100%;
+    width: 100%; */
+    font-size: 4rem;
+    height: 100%;
+    cursor: pointer;
+  }
+`;
+
+const ConceptMap = styled.div`
+  width: 55%;
+  height: 80vh;
+  background-color: #f9f9f9;
+`;
 
 class Application extends React.Component {
   constructor(props) {
@@ -27,13 +79,28 @@ class Application extends React.Component {
   }
 
   render() {
-    var button = <button onClick={this.analyzeText}
-          className="waves-effect waves-light btn"
-          id="editor-button">Process text</button>;
+    // var button = <button onClick={this.analyzeText}
+    //       className="waves-effect waves-light btn"
+    //       id="editor-button">Process text</button>;
 
     return (
-      <div>
-        <div id="application">
+      <Container>
+        <TextInput>
+          <div className="textarea" ref={(el) => { this.textInput = el; }}
+                onKeyUp={this.updateText}
+                dangerouslySetInnerHTML={this.returnInnerHTML()}>
+          </div>
+        </TextInput>
+
+        <Render>
+          <IoIosArrowForward onClick={this.analyzeText} />
+        </Render>
+
+
+        <ConceptMap ref={(el) => { this.cmap = el; }}>
+          <svg  ref={(el) => { this.svg = el; }} ></svg>
+        </ConceptMap>
+        {/* <div id="application">
           <div className="button">
             {this.props.app.loading ? <Preloader /> : button}
           </div>
@@ -58,8 +125,8 @@ class Application extends React.Component {
               </label>
             </div>
           </div>
-        </div>
-      </div>
+        </div> */}
+      </Container>
     )
   }
 
