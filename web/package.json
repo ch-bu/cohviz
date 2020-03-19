@@ -37,7 +37,7 @@
     "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^1.5.1",
     "gulp-wrap": "^0.13.0",
-    "handlebars": "^4.0.5",
+    "handlebars": "^4.3.0",
     "main-bower-files": "^2.13.1",
     "prop-types": "^15.6.0",
     "react": "^16.3.0",
