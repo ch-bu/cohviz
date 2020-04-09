@@ -8,11 +8,17 @@ class CognitiveLoadRevision extends React.Component {
       fourthQuestionClicked: false,
       accuracyRevisionLocalClicked: false,
       accuracyRevisionGlobalClicked: false,
+      // Nützlichkeit des Feedbacks
       g06fu1fbClicked: false,
       g8fu3fbClicked: false,
       g07fu2fbClicked: false,
       g10fu5fbClicked: false,
-      g9fu4fbClicked: false
+      g9fu4fbClicked: false,
+      // Emotionale Erregung
+      g11eda5Clicked: false,
+      g12eda6Clicked: false,
+      g13eda7Clicked: false,
+      g14eda8Clicked: false,
     };
 
     this.buttonInteraction = this.buttonInteraction.bind(this);
@@ -209,6 +215,83 @@ class CognitiveLoadRevision extends React.Component {
           </div>
         </div>
 
+
+        <div className="container">
+          <h2>Emotionale Erregung</h2>
+          <p>Inwiefern hast du folgende Gefühle während der Überarbeitung des Textes empfunden?</p>
+        </div>
+
+        <div className="container row">
+          <p className="strong-p">Zufriedenheit/Glück.</p>
+          <div className="col s4 m2">
+            <p>überhaupt nicht</p>
+          </div>
+          <div className="col s4 m3">
+            <p className="range-field">
+              <input ref={(el) => { this.g11eda5 = el; }}
+                type="range" id="accuracyGlobal" min="1" max="9"
+                onMouseDown={() => this.setState({g11eda5Clicked: true})} />
+            </p>
+          </div>
+          <div className="col s4 m2">
+            <p>extrem</p>
+          </div>
+        </div>
+
+
+
+        <div className="container row">
+          <p className="strong-p">Aufregung/Enthusiasmus</p>
+          <div className="col s4 m2">
+            <p>überhaupt nicht</p>
+          </div>
+          <div className="col s4 m3">
+            <p className="range-field">
+              <input ref={(el) => { this.g12eda6 = el; }}
+                type="range" id="accuracyGlobal" min="1" max="9"
+                onMouseDown={() => this.setState({g12eda6Clicked: true})} />
+            </p>
+          </div>
+          <div className="col s4 m2">
+            <p>extrem</p>
+          </div>
+        </div>
+
+
+        <div className="container row">
+          <p className="strong-p">Nervosität</p>
+          <div className="col s4 m2">
+            <p>überhaupt nicht</p>
+          </div>
+          <div className="col s4 m3">
+            <p className="range-field">
+              <input ref={(el) => { this.g13eda7 = el; }}
+                type="range" id="accuracyGlobal" min="1" max="9"
+                onMouseDown={() => this.setState({g13eda7Clicked: true})} />
+            </p>
+          </div>
+          <div className="col s4 m2">
+            <p>extrem</p>
+          </div>
+        </div>
+
+        <div className="container row">
+          <p className="strong-p">Besorgtheit</p>
+          <div className="col s4 m2">
+            <p>überhaupt nicht</p>
+          </div>
+          <div className="col s4 m3">
+            <p className="range-field">
+              <input ref={(el) => { this.g14eda8 = el; }}
+                type="range" id="accuracyGlobal" min="1" max="9"
+                onMouseDown={() => this.setState({g14eda8Clicked: true})} />
+            </p>
+          </div>
+          <div className="col s4 m2">
+            <p>extrem</p>
+          </div>
+        </div>
+
         {button}
       </div>
     )
@@ -226,6 +309,10 @@ class CognitiveLoadRevision extends React.Component {
                 'g07fu2fb': this.g07fu2fb.value,
                 'g10fu5fb': this.g10fu5fb.value,
                 'g9fu4fb': this.g9fu4fb.value,
+                'g11eda5': this.g11eda5.value,
+                'g12eda6': this.g12eda6.value,
+                'g13eda7': this.g13eda7.value,
+                'g14eda8': this.g14eda8.value,
                 };
 
     // Update draft in parent

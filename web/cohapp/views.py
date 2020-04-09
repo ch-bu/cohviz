@@ -421,11 +421,15 @@ def csv_text_view(request, experiment_password):
                          inst.cld_draft_question1,
                          inst.cld_draft_question2,
                          inst.cld_draft_question4,
-                         inst.g06fu1fb,
-                         inst.g8fu3fb,
-                         inst.g07fu2fb,
-                         inst.g10fu5fb,
-                         inst.g9fu4fb])
+                         None,
+                         None,
+                         None,
+                         None,
+                         None,
+                         None,
+                         None,
+                         None,
+                         None])
         # Mental effort data between draft and revision
         writer.writerow([inst.subject.user,
                          inst.subject.group,
@@ -446,6 +450,10 @@ def csv_text_view(request, experiment_password):
                          inst.cld_middle_question1,
                          inst.cld_middle_question2,
                          inst.cld_middle_question4,
+                         None,
+                         None,
+                         None,
+                         None,
                          None,
                          None,
                          None,
@@ -475,6 +483,10 @@ def csv_text_view(request, experiment_password):
                          inst.g8fu3fb,
                          inst.g07fu2fb,
                          inst.g10fu5fb,
-                         inst.g9fu4fb])
+                         inst.g9fu4fb,
+                         inst.g11eda5,
+                         inst.g12eda6,
+                         inst.g13eda7,
+                         inst.g14eda8])
 
     return response

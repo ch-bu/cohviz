@@ -45,4 +45,6 @@ class TextDataAdmin(admin.ModelAdmin):
                        'cld_middle_question1', 'cld_middle_question2',
                        'cld_middle_question4', 
                        'g06fu1fb', 'g8fu3fb', 'g07fu2fb',
-                       'g10fu5fb', 'g9fu4fb')
+                       'g10fu5fb', 'g9fu4fb',
+                       'g11eda5', 'g12eda6', 'g13eda7', 
+                       'g14eda8')
