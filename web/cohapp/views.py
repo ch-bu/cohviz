@@ -398,7 +398,8 @@ def csv_text_view(request, experiment_password):
                      'cld_question1',
                      'cld_question2',
                      'cld_question4',
-                     'g06fu1fb', 'g8fu3fb', 'g07fu2fb', 'g10fu5fb', 'g9fu4fb'])
+                     'g06fu1fb', 'g8fu3fb', 'g07fu2fb', 'g10fu5fb', 'g9fu4fb',
+                     'g11eda5', 'g12eda6', 'g13eda7', 'g14eda8'])
 
     for inst in text_data:
         # Draft
