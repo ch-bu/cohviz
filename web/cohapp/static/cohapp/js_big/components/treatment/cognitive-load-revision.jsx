@@ -29,7 +29,7 @@ class CognitiveLoadRevision extends React.Component {
     return (
       <div className="cognitiveload">
         <div className="container row">
-          <p className="strong-p">Wie stark hast du dich bei der Überarbeitung deiner Erklärung angestrengt?</p>
+          <p className="strong-p">Wie stark hast du dich bei der Überarbeitung deines argumentativen Textes mental angestrengt?</p>
           <div className="col s4 m2">
             <p>gar nicht angestrengt</p>
           </div>
@@ -42,13 +42,13 @@ class CognitiveLoadRevision extends React.Component {
             </p>
           </div>
           <div className="col s4 m2">
-            <p>sehr stark angestrengt</p>
+            <p>sehr angestrengt</p>
           </div>
         </div>
         <div className="container row">
-          <p className="strong-p">Wie schwierig war es für dich, deine Erklärung zu überarbeiten?</p>
+          <p className="strong-p">Wie schwierig war es für dich, den argumentativen Text zu überarbeiten?</p>
           <div className="col s4 m2">
-            <p>sehr schwierig</p>
+            <p>gar nicht schwierig</p>
           </div>
           <div className="col s4 m3">
             <p className="range-field">
@@ -59,18 +59,18 @@ class CognitiveLoadRevision extends React.Component {
             </p>
           </div>
           <div className="col s4 m2">
-            <p>gar nicht schwierig</p>
+            <p>sehr schwierig</p>
           </div>
         </div>
         <div className="container row">
-          <p className="strong-p">Wie hoch schätzt du die Verständlichkeit deiner überarbeiteten Erklärung ein?</p>
+          <p className="strong-p">Wie hoch schätzt du die Verständlichkeit deines überarbeiteten argumentativen Textes ein?</p>
           <div className="col s4 m2">
             <p>0% (gar nicht verständlich)</p>
           </div>
           <div className="col s4 m3">
             <p className="range-field">
               <input ref={(el) => { this.fourthQuestion = el; }}
-                type="range" id="question4" min="0" max="100"
+                type="range" id="question4" min="1" max="9"
                 onMouseDown={() => this.setState({fourthQuestionClicked: true})} />
             </p>
           </div>
@@ -79,7 +79,7 @@ class CognitiveLoadRevision extends React.Component {
           </div>
         </div>
         <div className="container row">
-          <p className="strong-p">Wie hoch schätzt du die lokale Kohäsion deiner überarbeiteten Erklärung ein?</p>
+          <p className="strong-p">Wie hoch schätzt du die lokale Kohäsion deines überarbeiteten argumentativen Textes ein?</p>
           <div className="col s4 m2">
             <p>0% (gar nicht lokal kohäsiv)</p>
           </div>
@@ -87,7 +87,7 @@ class CognitiveLoadRevision extends React.Component {
             <form action="#">
             <p className="range-field">
               <input ref={(el) => { this.accuracyRevisionLocal = el; }}
-                type="range" id="accuracyLocal" min="0" max="100"
+                type="range" id="accuracyLocal" min="1" max="9"
                 onMouseDown={() => this.setState({accuracyRevisionLocalClicked: true})} />
             </p>
             </form>
@@ -97,14 +97,14 @@ class CognitiveLoadRevision extends React.Component {
           </div>
         </div>
         <div className="container row">
-          <p className="strong-p">Wie hoch schätzt du die globale Kohäsion deiner überarbeiteten Erklärung ein?</p>
+          <p className="strong-p">Wie hoch schätzt du die globale Kohäsion deines überarbeiteten argumentativen Textes ein?</p>
           <div className="col s4 m2">
             <p>gar nicht global kohäsiv</p>
           </div>
           <div className="col s4 m3">
             <p className="range-field">
               <input ref={(el) => { this.accuracyRevisionGlobal = el; }}
-                type="range" id="accuracyGlobal" min="0" max="100"
+                type="range" id="accuracyGlobal" min="1" max="9"
                 onMouseDown={() => this.setState({accuracyRevisionGlobalClicked: true})} />
             </p>
           </div>
