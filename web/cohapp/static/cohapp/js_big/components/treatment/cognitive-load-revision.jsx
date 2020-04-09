@@ -22,6 +22,7 @@ class CognitiveLoadRevision extends React.Component {
     };
 
     this.buttonInteraction = this.buttonInteraction.bind(this);
+    this.renderNuetzlichkeit = this.renderNuetzlichkeit.bind(this);
   }
 
   render() {
