@@ -82,7 +82,7 @@ class Treatment extends React.Component {
     }).then(function(data) {
       self.setState({measurement: data[0],
                      showInstruction: true,
-                     group: data[0].group});
+                     group: data[0]['next_measure']});
     });
 
     // Bind this to methods
