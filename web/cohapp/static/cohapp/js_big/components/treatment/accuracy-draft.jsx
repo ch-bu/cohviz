@@ -25,14 +25,14 @@ class AccuracyDraft extends React.Component {
     return (
       <div className="cognitiveload container">
         <div className="row load-question">
-          <p className="strong-p">Wie hoch schätzt du die Verständlichkeit deiner jetzigen Erklärung ein?</p>
+          <p className="strong-p">Wie hoch schätzt du die Verständlichkeit deines jetzigen argumentativen Textes ein?</p>
           <div className="col s4 m2">
             <p>0% (gar nicht verständlich)</p>
           </div>
           <div className="col s4 m3">
             <p className="range-field">
               <input ref={(el) => { this.fourthQuestion = el; }}
-                type="range" id="question4" min="0" max="100"
+                type="range" id="question4" min="1" max="9"
                 onMouseDown={() => this.setState({cognitiveloadClicked: true})} />
             </p>
           </div>
@@ -41,7 +41,7 @@ class AccuracyDraft extends React.Component {
           </div>
         </div>
         <div className="row load-question">
-          <p className="strong-p">Wie hoch schätzt du die lokale Kohäsion deiner jetzigen Erklärung ein?</p>
+          <p className="strong-p">Wie hoch schätzt du die lokale Kohäsion deines jetzigen argumentativen Textes ein?</p>
           <div className="col s4 m2">
             <p>0% (gar nicht lokal kohäsiv)</p>
           </div>
@@ -49,7 +49,7 @@ class AccuracyDraft extends React.Component {
             <form action="#">
             <p className="range-field">
               <input ref={(el) => { this.firstQuestion = el; }}
-                type="range" id="question1" min="0" max="100"
+                type="range" id="question1" min="1" max="9"
                 onMouseDown={() => this.setState({accuracyLocalClicked: true})} />
             </p>
             </form>
@@ -59,14 +59,14 @@ class AccuracyDraft extends React.Component {
           </div>
         </div>
         <div className="row load-question">
-          <p className="strong-p">Wie hoch schätzt du die globale Kohäsion deiner jetzigen Erklärung ein?</p>
+          <p className="strong-p">Wie hoch schätzt du die globale Kohäsion deines jetzigen argumentativen Textes ein?</p>
           <div className="col s4 m2">
             <p>0% (gar nicht global kohäsiv)</p>
           </div>
           <div className="col s4 m3">
             <p className="range-field">
               <input ref={(el) => { this.secondQuestion = el; }}
-                type="range" id="question2" min="0" max="100"
+                type="range" id="question2" min="1" max="9"
                 onMouseDown={() => this.setState({accuracyGlobalClicked: true})} />
             </p>
           </div>
