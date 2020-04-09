@@ -43,4 +43,5 @@ class TextDataAdmin(admin.ModelAdmin):
                        'cld_revision_question1', 'cld_revision_question2',
                        'cld_revision_question4',
                        'cld_middle_question1', 'cld_middle_question2',
-                       'cld_middle_question4',)
+                       'cld_middle_question4', 
+                       'g06fu1fb')
