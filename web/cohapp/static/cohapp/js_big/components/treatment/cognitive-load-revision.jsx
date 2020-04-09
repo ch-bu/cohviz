@@ -44,6 +44,7 @@ class CognitiveLoadRevision extends React.Component {
       nuetzlichkeit = renderNuetzlichkeit(true)
     }
 
+    console.log(this.props.group);
     console.log(nuetzlichkeit);
 
 
