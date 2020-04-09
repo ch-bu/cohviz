@@ -397,7 +397,8 @@ def csv_text_view(request, experiment_password):
                      'accuracyGlobal',
                      'cld_question1',
                      'cld_question2',
-                     'cld_question4'])
+                     'cld_question4',
+                     'g06fu1fb', 'g8fu3fb', 'g07fu2fb', 'g10fu5fb', 'g9fu4fb'])
 
     for inst in text_data:
         # Draft
@@ -419,7 +420,12 @@ def csv_text_view(request, experiment_password):
                          inst.accuracy_draft_global,
                          inst.cld_draft_question1,
                          inst.cld_draft_question2,
-                         inst.cld_draft_question4])
+                         inst.cld_draft_question4,
+                         inst.g06fu1fb,
+                         inst.g8fu3fb,
+                         inst.g07fu2fb,
+                         inst.g10fu5fb,
+                         inst.g9fu4fb])
         # Mental effort data between draft and revision
         writer.writerow([inst.subject.user,
                          inst.subject.group,
@@ -439,7 +445,12 @@ def csv_text_view(request, experiment_password):
                          None,
                          inst.cld_middle_question1,
                          inst.cld_middle_question2,
-                         inst.cld_middle_question4])
+                         inst.cld_middle_question4,
+                         None,
+                         None,
+                         None,
+                         None,
+                         None])
         # Revision
         writer.writerow([inst.subject.user,
                          inst.subject.group,
@@ -459,6 +470,11 @@ def csv_text_view(request, experiment_password):
                          inst.accuracy_revision_global,
                          inst.cld_revision_question1,
                          inst.cld_revision_question2,
-                         inst.cld_revision_question4])
+                         inst.cld_revision_question4,
+                         inst.g06fu1fb,
+                         inst.g8fu3fb,
+                         inst.g07fu2fb,
+                         inst.g10fu5fb,
+                         inst.g9fu4fb])
 
     return response
