@@ -21,6 +21,7 @@ class Treatment extends React.Component {
       // Meta variables
       user: null,
       measurement: null,
+      group: null,
       // Display variables
       showEditor: false,
       showInstruction: false,
@@ -80,7 +81,8 @@ class Treatment extends React.Component {
       return response.json();
     }).then(function(data) {
       self.setState({measurement: data[0],
-                     showInstruction: true});
+                     showInstruction: true,
+                     group: data[0].group});
     });
 
     // Bind this to methods
@@ -148,7 +150,7 @@ class Treatment extends React.Component {
                                instruction={this.state.user.instruction_second} />;
         // Render cognitive load revision
         } else if (this.state.showCognitiveLoadRevision) {
-          template = <CognitiveLoadRevision updateRevision={this.updateCognitiveLoadRevision} />;
+          template = <CognitiveLoadRevision group={this.state.group} updateRevision={this.updateCognitiveLoadRevision} />;
         }
       }
     }
