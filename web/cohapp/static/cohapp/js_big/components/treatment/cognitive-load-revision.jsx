@@ -7,7 +7,8 @@ class CognitiveLoadRevision extends React.Component {
       secondQuestionClicked: false,
       fourthQuestionClicked: false,
       accuracyRevisionLocalClicked: false,
-      accuracyRevisionGlobalClicked: false
+      accuracyRevisionGlobalClicked: false,
+      g06fu1fbClicked: false,
     };
 
     this.buttonInteraction = this.buttonInteraction.bind(this);
@@ -112,6 +113,25 @@ class CognitiveLoadRevision extends React.Component {
             <p>vollkommen global kohäsiv</p>
           </div>
         </div>
+
+
+        <div className="container row">
+          <h2>Nützlichkeit des Feedbacks</h2>
+          <p className="strong-p">Ich habe das Feedback als hilfreich bei der Überarbeitung meines Textes hinsichtlich der Kohäsion meines Textes empfunden.</p>
+          <div className="col s4 m2">
+            <p>trifft gar nicht zu</p>
+          </div>
+          <div className="col s4 m3">
+            <p className="range-field">
+              <input ref={(el) => { this.g06fu1fb = el; }}
+                type="range" id="accuracyGlobal" min="1" max="9"
+                onMouseDown={() => this.setState({g06fu1fbClicked: true})} />
+            </p>
+          </div>
+          <div className="col s4 m2">
+            <p>trifft voll und ganz zu</p>
+          </div>
+        </div>
         {button}
       </div>
     )
@@ -123,7 +143,8 @@ class CognitiveLoadRevision extends React.Component {
                 'secondQuestion': this.secondQuestion.value,
                 'fourthQuestion': this.fourthQuestion.value,
                 'accuracyRevisionLocal': this.accuracyRevisionLocal.value,
-                'accuracyRevisionGlobal': this.accuracyRevisionGlobal.value};
+                'accuracyRevisionGlobal': this.accuracyRevisionGlobal.value,
+                'g06fu1fb': this.g06fu1fb.value};
 
     // Update draft in parent
     this.props.updateRevision(data);
