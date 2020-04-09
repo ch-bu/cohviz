@@ -9,6 +9,10 @@ class CognitiveLoadRevision extends React.Component {
       accuracyRevisionLocalClicked: false,
       accuracyRevisionGlobalClicked: false,
       g06fu1fbClicked: false,
+      g8fu3fbClicked: false,
+      g07fu2fbClicked: false,
+      g10fu5fbClicked: false,
+      g9fu4fbClicked: false
     };
 
     this.buttonInteraction = this.buttonInteraction.bind(this);
@@ -114,9 +118,13 @@ class CognitiveLoadRevision extends React.Component {
           </div>
         </div>
 
+        
+        <div className="container">
+          <h2>Nützlichkeit des Feedbacks</h2>
+        </div>
 
         <div className="container row">
-          <h2>Nützlichkeit des Feedbacks</h2>
+         
           <p className="strong-p">Ich habe das Feedback als hilfreich bei der Überarbeitung meines Textes hinsichtlich der Kohäsion meines Textes empfunden.</p>
           <div className="col s4 m2">
             <p>trifft gar nicht zu</p>
@@ -132,6 +140,75 @@ class CognitiveLoadRevision extends React.Component {
             <p>trifft voll und ganz zu</p>
           </div>
         </div>
+
+        <div className="container row">
+          <p className="strong-p">Durch das Feedback habe ich keine neuen Erkenntnisse in Bezug auf das Schreiben von kohäsiven Texten gewonnen.</p>
+          <div className="col s4 m2">
+            <p>trifft gar nicht zu</p>
+          </div>
+          <div className="col s4 m3">
+            <p className="range-field">
+              <input ref={(el) => { this.g8fu3fb = el; }}
+                type="range" id="accuracyGlobal" min="1" max="9"
+                onMouseDown={() => this.setState({g8fu3fbClicked: true})} />
+            </p>
+          </div>
+          <div className="col s4 m2">
+            <p>trifft voll und ganz zu</p>
+          </div>
+        </div>
+
+        <div className="container row">
+          <p className="strong-p">Das Feedback hat mir geholfen die Kohäsion meines Textes zu verbessern.</p>
+          <div className="col s4 m2">
+            <p>trifft gar nicht zu</p>
+          </div>
+          <div className="col s4 m3">
+            <p className="range-field">
+              <input ref={(el) => { this.g07fu2fb = el; }}
+                type="range" id="accuracyGlobal" min="1" max="9"
+                onMouseDown={() => this.setState({g07fu2fbClicked: true})} />
+            </p>
+          </div>
+          <div className="col s4 m2">
+            <p>trifft voll und ganz zu</p>
+          </div>
+        </div>
+
+        <div className="container row">
+          <p className="strong-p">Die Überarbeitung des Textes ist mir dank des Feedbacks leichtgefallen.</p>
+          <div className="col s4 m2">
+            <p>trifft gar nicht zu</p>
+          </div>
+          <div className="col s4 m3">
+            <p className="range-field">
+              <input ref={(el) => { this.g10fu5fb = el; }}
+                type="range" id="accuracyGlobal" min="1" max="9"
+                onMouseDown={() => this.setState({g10fu5fbClicked: true})} />
+            </p>
+          </div>
+          <div className="col s4 m2">
+            <p>trifft voll und ganz zu</p>
+          </div>
+        </div>
+
+        <div className="container row">
+          <p className="strong-p">Ich konnte mit dem Feedback nichts anfangen, weil ich die Concept Map nicht verstanden habe.</p>
+          <div className="col s4 m2">
+            <p>trifft gar nicht zu</p>
+          </div>
+          <div className="col s4 m3">
+            <p className="range-field">
+              <input ref={(el) => { this.g9fu4fb = el; }}
+                type="range" id="accuracyGlobal" min="1" max="9"
+                onMouseDown={() => this.setState({g9fu4fbClicked: true})} />
+            </p>
+          </div>
+          <div className="col s4 m2">
+            <p>trifft voll und ganz zu</p>
+          </div>
+        </div>
+
         {button}
       </div>
     )
@@ -144,7 +221,12 @@ class CognitiveLoadRevision extends React.Component {
                 'fourthQuestion': this.fourthQuestion.value,
                 'accuracyRevisionLocal': this.accuracyRevisionLocal.value,
                 'accuracyRevisionGlobal': this.accuracyRevisionGlobal.value,
-                'g06fu1fb': this.g06fu1fb.value};
+                'g06fu1fb': this.g06fu1fb.value,
+                'g8fu3fb': this.g8fu3fb.value,
+                'g07fu2fb': this.g07fu2fb.value,
+                'g10fu5fb': this.g10fu5fb.value,
+                'g9fu4fb': this.g9fu4fb.value,
+                };
 
     // Update draft in parent
     this.props.updateRevision(data);

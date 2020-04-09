@@ -458,7 +458,11 @@ class Treatment extends React.Component {
           'post_num_concepts': this.state.revisionAnalyzed.numConcepts,
           'post_local_cohesion': this.state.revisionAnalyzed['local cohesion'],
           // Nuetzlichkeit Fragebogen
-          'g06fu1fb': this.state.cognitiveLoadRevision['g06fu1fb']
+          'g06fu1fb': this.state.cognitiveLoadRevision['g06fu1fb'],
+          'g8fu3fb': this.state.cognitiveLoadRevision['g8fu3fb'],
+          'g07fu2fb': this.state.cognitiveLoadRevision['g07fu2fb'],
+          'g10fu5fb': this.state.cognitiveLoadRevision['g10fu5fb'],
+          'g9fu4fb': this.state.cognitiveLoadRevision['g9fu4fb'],
       };
 
       // Analyze Text from server
