@@ -41,7 +41,7 @@ class CognitiveLoadRevision extends React.Component {
     var nuetzlichkeit = '';
 
     if ((this.props.group == "cmap" || this.props.group == "cmap-integrated")) {
-      nuetzlichkeit = renderNuetzlichkeit(true)
+      nuetzlichkeit = this.renderNuetzlichkeit(true)
     }
 
     console.log(this.props.group);
