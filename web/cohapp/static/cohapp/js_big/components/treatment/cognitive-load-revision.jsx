@@ -39,7 +39,7 @@ class CognitiveLoadRevision extends React.Component {
 
     var nuetzlichkeit = '';
 
-    if ((this.props.group == 1 | this.props.group == 3) == 1) {
+    if ((this.props.group == 1 || this.props.group == 3)) {
       nuetzlichkeit = renderNuetzlichkeit(true)
     }
 
@@ -313,7 +313,8 @@ class CognitiveLoadRevision extends React.Component {
   }
 
   buttonInteraction() {
-    let iscmap = (this.props.group == 1 | this.props.group == 3) == 1;
+    let iscmap = (this.props.group == 1 || this.props.group == 3);
+
     // Data of all questions
     var data = {'firstQuestion': this.firstQuestion.value,
                 'secondQuestion': this.secondQuestion.value,
