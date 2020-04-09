@@ -45,7 +45,7 @@ class CognitiveLoadDraft extends React.Component {
         <div className="row load-question">
           <p className="strong-p">Wie schwierig war es für dich, den argumentativen Text verfassen?</p>
           <div className="col s4 m2">
-            <p>sehr schwierig</p>
+            <p>gar nicht schwierig</p>
           </div>
           <div className="col s4 m3">
             <p className="range-field">
@@ -55,7 +55,7 @@ class CognitiveLoadDraft extends React.Component {
             </p>
           </div>
           <div className="col s4 m2">
-            <p>gar nicht schwierig</p>
+            <p>sehr schwierig</p>
           </div>
         </div>
         {button}
