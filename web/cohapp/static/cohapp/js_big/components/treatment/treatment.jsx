@@ -454,7 +454,9 @@ class Treatment extends React.Component {
           'post_num_coherent_sentences': this.state.revisionAnalyzed.cohSentences,
           'post_num_non_coherent_sentences': this.state.revisionAnalyzed.cohNotSentences,
           'post_num_concepts': this.state.revisionAnalyzed.numConcepts,
-          'post_local_cohesion': this.state.revisionAnalyzed['local cohesion']
+          'post_local_cohesion': this.state.revisionAnalyzed['local cohesion'],
+          // Nuetzlichkeit Fragebogen
+          'g06fu1fb': this.state.cognitiveLoadRevision['g06fu1fb']
       };
 
       // Analyze Text from server

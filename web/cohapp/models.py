@@ -250,6 +250,28 @@ class TextData(models.Model):
     # 1: Sehr verständlich; 5 gar nicht verständlich
     cld_revision_question4 = models.PositiveSmallIntegerField(default=0)
 
+    # ************************* Nützlichkeit des Feedbacks ***************************
+    # Ich habe das Feedback als hilfreich bei der Überarbeitung
+    # meines Textes hinsichtlich der Kohäsion meines Textes empfunden
+    g06fu1fb = models.PositiveSmallIntegerField(default=0)
+
+    # Durch das Feedback habe ich keine neuen Erkenntnisse
+    # in Bezug auf das Schreiben von kohäsiven Texten gewonnen.
+    g8fu3fb = models.PositiveSmallIntegerField(default=0)
+
+    # Das Feedback hat mir geholfen, die Kohäsion meines
+    # Textes zu verbesssern.
+    g07fu2fb = models.PositiveSmallIntegerField(default=0)
+
+    # Die Überarbeitung des Textes ist mir dank des Feedbacks
+    # leichtgefallen
+    g10fu5fb = models.PositiveSmallIntegerField(default=0)
+
+    # Ich konnte mit dem Feedbcak nichts anfangen, weil ich die 
+    # Concept Map nicht verstanden habe.
+    g9fu4fb = models.PositiveSmallIntegerField(default=0)
+
+
     def __str__(self):
         return (self.experiment.name + " " +
                 self.pre_text[:10].encode('ascii', errors='replace'))
