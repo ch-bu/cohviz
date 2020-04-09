@@ -43,6 +43,8 @@ class CognitiveLoadRevision extends React.Component {
       nuetzlichkeit = renderNuetzlichkeit(true)
     }
 
+    console.log(nuetzlichkeit);
+
 
     return (
       <div className="cognitiveload">
@@ -131,6 +133,8 @@ class CognitiveLoadRevision extends React.Component {
           </div>
         </div>
 
+
+        {nuetzlichkeit}
         
 
         <div className="container">
@@ -155,9 +159,6 @@ class CognitiveLoadRevision extends React.Component {
           </div>
         </div>
 
-        {nuetzlichkeit}
-
-
         <div className="container row">
           <p className="strong-p">Aufregung/Enthusiasmus</p>
           <div className="col s4 m2">
@@ -174,7 +175,6 @@ class CognitiveLoadRevision extends React.Component {
             <p>extrem</p>
           </div>
         </div>
-
 
         <div className="container row">
           <p className="strong-p">Nervosität</p>
