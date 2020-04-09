@@ -70,7 +70,7 @@ class Treatment extends React.Component {
     }).then(function(response) {
       return response.json();
     }).then(function(data) {
-      self.setState({user: data});
+      self.setState({user: data, group: data['next_measure']});
     });
 
     // Fetch measurement data
@@ -81,8 +81,7 @@ class Treatment extends React.Component {
       return response.json();
     }).then(function(data) {
       self.setState({measurement: data[0],
-                     showInstruction: true,
-                     group: data[0]['next_measure']});
+                     showInstruction: true});
     });
 
     // Bind this to methods
