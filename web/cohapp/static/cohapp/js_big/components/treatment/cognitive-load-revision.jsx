@@ -313,17 +313,18 @@ class CognitiveLoadRevision extends React.Component {
   }
 
   buttonInteraction() {
+    let iscmap = (this.props.group == 1 | this.props.group == 3) == 1;
     // Data of all questions
     var data = {'firstQuestion': this.firstQuestion.value,
                 'secondQuestion': this.secondQuestion.value,
                 'fourthQuestion': this.fourthQuestion.value,
                 'accuracyRevisionLocal': this.accuracyRevisionLocal.value,
                 'accuracyRevisionGlobal': this.accuracyRevisionGlobal.value,
-                'g06fu1fb': this.g06fu1fb.value ? this.g06fu1fb.value : 0,
-                'g8fu3fb': this.g8fu3fb.value ? this.g8fu3fb.value : 0,
-                'g07fu2fb': this.g07fu2fb.value ? this.g07fu2fb.value : 0,
-                'g10fu5fb': this.g10fu5fb.value ? this.g10fu5fb.value : 0,
-                'g9fu4fb': this.g9fu4fb.value ? this.g9fu4fb.value : 0,
+                'g06fu1fb': iscmap ? this.g06fu1fb.value : 0,
+                'g8fu3fb': iscmap ? this.g8fu3fb.value : 0,
+                'g07fu2fb': iscmap ? this.g07fu2fb.value : 0,
+                'g10fu5fb': iscmap ? this.g10fu5fb.value : 0,
+                'g9fu4fb': iscmap ? this.g9fu4fb.value : 0,
                 'g11eda5': this.g11eda5.value,
                 'g12eda6': this.g12eda6.value,
                 'g13eda7': this.g13eda7.value,
