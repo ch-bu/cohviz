@@ -31,7 +31,10 @@ class CognitiveLoadRevision extends React.Component {
     var button = '';
     if (this.state.firstQuestionClicked && this.state.secondQuestionClicked &&
         this.state.fourthQuestionClicked && this.state.accuracyRevisionLocalClicked &&
-        this.state.accuracyRevisionGlobalClicked) {
+        this.state.accuracyRevisionGlobalClicked && this.state.g06fu1fbClicked &&
+        this.state.g8fu3fbClicked && this.state.g07fu2fbClicked && this.state.g10fu5fbClicked &&
+        this.state.g9fu4fbClicked && this.state.g11eda5Clicked && this.state.g12eda6Clicked &&
+        this.state.g13eda7Clicked && this.state.g14eda8Clicked) {
       button = <div className="container row">
           <a id="instruction-read" className="waves-effect waves-light btn"
           onClick={this.buttonInteraction}>Weiter</a>
@@ -43,10 +46,6 @@ class CognitiveLoadRevision extends React.Component {
     if ((this.props.group == "cmap" || this.props.group == "cmap-integrated")) {
       nuetzlichkeit = this.renderNuetzlichkeit(true)
     }
-
-    console.log(this.props.group);
-    console.log(nuetzlichkeit);
-
 
     return (
       <div className="cognitiveload">
@@ -140,7 +139,7 @@ class CognitiveLoadRevision extends React.Component {
         
 
         <div className="container">
-          <h2>Emotionale Erregung</h2>
+          <h2 style={{fontSize: '2.2rem'}}>Emotionale Erregung</h2>
           <p>Inwiefern hast du folgende Gefühle während der Überarbeitung des Textes empfunden?</p>
         </div>
 
@@ -220,7 +219,7 @@ class CognitiveLoadRevision extends React.Component {
   renderNuetzlichkeit(show) {
     if (show) {
       return (<div><div className="container">
-            <h2>Nützlichkeit des Feedbacks</h2>
+            <h2 style={{fontSize: '2.2rem'}}>Nützlichkeit des Feedbacks</h2>
           </div>
 
           <div className="container row">
