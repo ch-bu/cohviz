@@ -273,7 +273,7 @@ class Treatment extends React.Component {
     this.setState({seenRevisionPrompt: true,
                    // Set time for revision
                    durationRevision: new Date()}, () => {
-      this.renderAccuracyDraft();
+      this.renderRevision();
     })
   }
 
