@@ -145,7 +145,7 @@ class CognitiveLoadRevision extends React.Component {
         </div>
 
         <div className="container row">
-          <p className="strong-p">Zufriedenheit/Glück.</p>
+          <p className="strong-p">Zufriedenheit/Glück</p>
           <div className="col s4 m2">
             <p>überhaupt nicht</p>
           </div>
