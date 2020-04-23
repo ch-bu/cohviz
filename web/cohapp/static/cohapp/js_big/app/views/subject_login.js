@@ -27,7 +27,7 @@ app.SubjectLoginView = Backbone.View.extend({
 			.replace(/ß/g,"ss").toLowerCase();
 
 		// Check if string is valid
-		var regex = /^([a-z]{2,4}(0[1-9]|[12]\d|3[01])[a-z]{2,4}[0-9]{1}[0-9]{1})$/;
+		var regex = /^([a-z]{2,4}(0[1-9]|[12]\d|3[01])[a-z]{2,4}[a-z]{2,4})$/;
 
 		// Check if username is valid
 		if (username.length == 8 && regex.test(tidyUsername)) {

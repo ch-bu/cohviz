@@ -218,7 +218,7 @@ def login_experiment(request, experiment_password):
         username = request.POST['username'].lower()
 
         # Check if username matches regular expression
-        pattern = re.compile("^[a-z]{2,4}(0[1-9]|[12]\d|3[01])[a-z]{2,4}[0-9]{1}[0-9]{1}")
+        pattern = re.compile("^[a-z]{2,4}(0[1-9]|[12]\d|3[01])[a-z]{2,4}[a-z]{2,4}")
 
         # Check if username is valid
         if pattern.match(username):
