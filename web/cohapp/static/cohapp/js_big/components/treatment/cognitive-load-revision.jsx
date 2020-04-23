@@ -34,7 +34,7 @@ class CognitiveLoadRevision extends React.Component {
         this.state.accuracyRevisionGlobalClicked) {
       button = <div className="container row">
           <a id="instruction-read" className="waves-effect waves-light btn"
-          onClick={this.buttonInteraction}>STOP. Warten Sie auf weitere Instruktionen</a>
+          onClick={this.buttonInteraction}>Weiter</a>
         </div>;
     }
 

@@ -28,7 +28,7 @@ class MeasureIntegrated extends React.Component {
 
         <div className="button">
           <a onClick={this.props.analyzeRevision}
-             className="waves-effect waves-light btn" id="editor-button">STOP. Warten Sie auf weitere Instruktionen</a>
+             className="waves-effect waves-light btn" id="editor-button">Weiter</a>
         </div>
 
         <div className="instruction"

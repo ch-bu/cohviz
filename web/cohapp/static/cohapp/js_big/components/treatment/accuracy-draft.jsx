@@ -18,7 +18,7 @@ class AccuracyDraft extends React.Component {
         this.state.cognitiveloadClicked) {
         button = <div className="container row">
                   <a id="instruction-read" className="waves-effect waves-light btn"
-                  onClick={this.buttonInteraction}>STOP. Warten Sie auf weitere Instruktionen</a>
+                  onClick={this.buttonInteraction}>Weiter</a>
                 </div>;
     }
 
