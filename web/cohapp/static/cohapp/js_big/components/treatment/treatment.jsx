@@ -125,6 +125,9 @@ class Treatment extends React.Component {
         // Render cognitive load draft
         } else if (this.state.showCognitiveLoadDraft) {
           template = <CognitiveLoadDraft updateDraft={this.updateCognitiveLoadDraft} />;
+        // Render accuracy statements
+        } else if (this.state.showAccuracyDraft) {
+        template = <AccuracyDraft updateAccuracyDraft={this.updateAccuracyDraft} />
         // Render prompt for revision
         } else if (this.state.showRevisionPrompt) {
           template = <Instruction
@@ -132,9 +135,6 @@ class Treatment extends React.Component {
               renderNextState={this.userClickedRevisionPrompt}
               seenInstruction={this.state.seenInstruction}
               draftAnalyzed={this.state.draftAnalyzed} />;
-        // Render accuracy statements
-        } else if (this.state.showAccuracyDraft) {
-          template = <AccuracyDraft updateAccuracyDraft={this.updateAccuracyDraft} />
         // Render editor to revise draft
         } else if (this.state.showRevision) {
           template = <Revision measurement={this.state.user.next_measure}
@@ -325,7 +325,7 @@ class Treatment extends React.Component {
   updateCognitiveLoadDraft(data) {
     this.setState({cognitiveLoadDraft: data,
                    showCognitiveLoadDraft: false,
-                   showRevisionPrompt: true});
+                   showAccuracyDraft: true});
   }
 
   /**
@@ -357,7 +357,7 @@ class Treatment extends React.Component {
                    accuracyDraftGlobal: data['accuracyGlobal'],
                    cognitiveloadUnderstandabilityDraft: data['cognitiveloadUnderstandabilityDraft'],
                    showAccuracyDraft: false,
-                   showRevision: true});
+                   showRevisionPrompt: true});
   }
 
   /**
