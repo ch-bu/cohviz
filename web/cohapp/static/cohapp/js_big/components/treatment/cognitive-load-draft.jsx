@@ -66,7 +66,7 @@ class CognitiveLoadDraft extends React.Component {
           </div>
         </div>
 
-        <div className="container">
+        <div className="container row">
           <h2 style={{fontSize: '2.2rem'}}>Emotionale Erregung</h2>
           <p>Inwiefern hast du folgende Gefühle während der Verfassens des Textes empfunden?</p>
         </div>

@@ -141,7 +141,7 @@ class CognitiveLoadRevision extends React.Component {
         {nuetzlichkeit}
         
 
-        <div className="container">
+        <div className="container row">
           <h2 style={{fontSize: '2.2rem'}}>Emotionale Erregung</h2>
           <p>Inwiefern hast du folgende Gefühle während der Überarbeitung des Textes empfunden?</p>
         </div>
