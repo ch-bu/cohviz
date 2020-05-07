@@ -341,8 +341,6 @@ class Treatment extends React.Component {
   updateCognitiveLoadRevision(data) {
     var self = this;
 
-    console.log(data);
-
     // Update state and send data to server
     this.setState({cognitiveLoadRevision: data,
                    showCognitiveLoadRevision: false});

@@ -2,18 +2,21 @@ class CognitiveLoadRevision extends React.Component {
   constructor(props) {
     super(props);
 
+    const isCmap = (this.props.group == "cmap" || this.props.group == "cmap-integrated");
+
     this.state = {
+      isCmap: isCmap,
       firstQuestionClicked: false,
       secondQuestionClicked: false,
       fourthQuestionClicked: false,
       accuracyRevisionLocalClicked: false,
       accuracyRevisionGlobalClicked: false,
       // Nützlichkeit des Feedbacks
-      g06fu1fbClicked: false,
-      g8fu3fbClicked: false,
-      g07fu2fbClicked: false,
-      g10fu5fbClicked: false,
-      g9fu4fbClicked: false,
+      g06fu1fbClicked: isCmap ? false : true,
+      g8fu3fbClicked: isCmap ? false : true,
+      g07fu2fbClicked: isCmap ? false : true,
+      g10fu5fbClicked: isCmap ? false : true,
+      g9fu4fbClicked: isCmap ? false : true,
       // Emotionale Erregung
       g11eda5Clicked: false,
       g12eda6Clicked: false,
