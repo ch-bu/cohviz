@@ -271,7 +271,20 @@ class TextData(models.Model):
     # Concept Map nicht verstanden habe.
     g9fu4fb = models.PositiveSmallIntegerField(default=0)
 
-    # ********************* Emotionale Erregung II ****************************
+    # ********************* Emotionale Erregung Draft ***************************
+    # Zufriedenheit/Glück
+    emo1_draft = models.PositiveSmallIntegerField(default=0)
+    
+    # Aufregung / Enthusiasmus
+    emo2_draft = models.PositiveSmallIntegerField(default=0)
+
+    # Nervosität
+    emo3_draft = models.PositiveSmallIntegerField(default=0)
+
+    # Besorgtheit
+    emo4_draft = models.PositiveSmallIntegerField(default=0)
+
+    # ********************* Emotionale Erregung Revision *************************
     # Zufriedenheit/Glück
     g11eda5 = models.PositiveSmallIntegerField(default=0)
     

@@ -462,11 +462,17 @@ class Treatment extends React.Component {
           'g07fu2fb': this.state.cognitiveLoadRevision['g07fu2fb'],
           'g10fu5fb': this.state.cognitiveLoadRevision['g10fu5fb'],
           'g9fu4fb': this.state.cognitiveLoadRevision['g9fu4fb'],
+          // Emotionale Erregung Draft
+          'emo1_draft': this.state.cognitiveLoadRevision['emo1_draft'],
+          'emo2_draft': this.state.cognitiveLoadRevision['emo2_draft'],
+          'emo3_draft': this.state.cognitiveLoadRevision['emo3_draft'],
+          'emo4_draft': this.state.cognitiveLoadRevision['emo4_draft'],
           // Emotionale Erregung
           'g11eda5': this.state.cognitiveLoadRevision['g11eda5'],
           'g12eda6': this.state.cognitiveLoadRevision['g12eda6'],
           'g13eda7': this.state.cognitiveLoadRevision['g13eda7'],
           'g14eda8': this.state.cognitiveLoadRevision['g14eda8'],
+
       };
 
       // Analyze Text from server

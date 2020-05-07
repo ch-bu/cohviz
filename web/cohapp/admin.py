@@ -47,4 +47,5 @@ class TextDataAdmin(admin.ModelAdmin):
                        'g06fu1fb', 'g8fu3fb', 'g07fu2fb',
                        'g10fu5fb', 'g9fu4fb',
                        'g11eda5', 'g12eda6', 'g13eda7', 
-                       'g14eda8')
+                       'g14eda8', 'emo1_draft', 'emo2_draft', 
+                       'emo3_draft', 'emo4_draft')

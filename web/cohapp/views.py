@@ -218,7 +218,8 @@ def login_experiment(request, experiment_password):
         username = request.POST['username'].lower()
 
         # Check if username matches regular expression
-        pattern = re.compile("^[a-z]{2,4}(0[1-9]|[12]\d|3[01])[a-z]{2,4}[a-z]{2,4}")
+        pattern = re.compile("^[a-z]{2,4}(0[1-9]|[12]\d|3[01])[a-z]{2,4}[a-z]{2,4}") # New Login
+        # pattern = re.compile("^[a-z]{2,4}(0[1-9]|[12]\d|3[01])[a-z]{2,4}[0-9]{1}[0-9]{1}") # Old Login
 
         # Check if username is valid
         if pattern.match(username):
@@ -397,7 +398,7 @@ def csv_text_view(request, experiment_password):
                      'accuracyGlobal',
                      'cld_question1',
                      'cld_question2',
-                     'cld_question4',
+                     'cld_question4', 'emo1_draft', 'emo2_draft', 'emo3_draft', 'emo4_draft',
                      'g06fu1fb', 'g8fu3fb', 'g07fu2fb', 'g10fu5fb', 'g9fu4fb',
                      'g11eda5', 'g12eda6', 'g13eda7', 'g14eda8'])
 
@@ -422,6 +423,10 @@ def csv_text_view(request, experiment_password):
                          inst.cld_draft_question1,
                          inst.cld_draft_question2,
                          inst.cld_draft_question4,
+                         inst.emo1_draft,
+                         inst.emo2_draft,
+                         inst.emo3_draft,
+                         inst.emo4_draft,
                          None,
                          None,
                          None,
@@ -451,6 +456,7 @@ def csv_text_view(request, experiment_password):
                          inst.cld_middle_question1,
                          inst.cld_middle_question2,
                          inst.cld_middle_question4,
+                         None, None, None, None, # Emotions Draft
                          None,
                          None,
                          None,
@@ -480,6 +486,7 @@ def csv_text_view(request, experiment_password):
                          inst.cld_revision_question1,
                          inst.cld_revision_question2,
                          inst.cld_revision_question4,
+                         None, None, None, None, # Emotions Draft
                          inst.g06fu1fb,
                          inst.g8fu3fb,
                          inst.g07fu2fb,
