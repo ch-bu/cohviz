@@ -64,7 +64,7 @@ cd /code/cohapp/coherenceanalyzer/
 mongod --dbpath ./mongod &
 ```
 
-Your application should be running on `localhost:8084`. 
+Your application should be running on `localhost:8080`. 
 
 In order to stop the application run
 
@@ -72,7 +72,6 @@ In order to stop the application run
 docker-compose stop
 ```
 
-
 ## License
 
-This project is licensed under the MIT License - see the [license.txt](license.txt) file for details
+This project is licensed under the MIT License - see the [license](LICENSE) file for details.

